@@ -15,3 +15,8 @@ git push -uf origin main
 - Daisy UI : https://daisyui.com/
 
 - Tailwind (A MUST WATCH VIDEO) - https://www.youtube.com/watch?v=X6FIydgCzzY
+
+
+##### Notion Workspace
+
+- https://www.notion.so/Meeting-M-O-M-e4c039032707445fb0ede9a5074dca37?pvs=4
