@@ -20,3 +20,8 @@ git push -uf origin main
 ##### Notion Workspace
 
 - https://www.notion.so/Meeting-M-O-M-e4c039032707445fb0ede9a5074dca37?pvs=4
+
+
+##### Wireframe
+
+- https://www.figma.com/file/mUL9jkeoZYasACQbwSixAv/Plant-Recognition?type=design&node-id=0%3A1&mode=design&t=jP1DME0Lbuo9G4ju-1
