@@ -7,6 +7,9 @@ git remote add origin https://git.shefcompsci.org.uk/acp23rk/msc11-plant-recogni
 git branch -M main
 git push -uf origin main
 ```
+### Bootstrap Components
+
+- https://getbootstrap.com/docs/5.2/getting-started/introduction/
 
 ##### Notion Workspace
 
