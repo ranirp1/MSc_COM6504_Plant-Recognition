@@ -7,23 +7,105 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq7V2FOQKf5fzQmZUu9gT0j/c5GL/FB2Fmdns1b6S2Ys/kS0H9IODG5K2" crossorigin="anonymous">
     <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .green-box {
+            background-color:#b8f687;
+            padding: 10px;
+            width: 200px;
+            position: fixed;
+            top: 90px; /* Adjust to leave space for header */
+            left: 0;
+            bottom: 5px; /* Expand to the bottom of the screen */
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        button {
+            background-color: #ffffff;
+            border: #70cf24;
+            padding: 10px;
+            cursor: pointer;
+            margin-bottom: 50px;
+            font-size: 18px;
+        }
+
+        .intro-container {
+            background-color: #b8f687;
+            padding: 10px;
+            position: fixed;
+            text-align:center;
+            width:20%;
+            top: 100px; /* Adjust to leave space for header */
+            left: 250px; /* Adjust to align with green box */
+            font-size: 20px;
+            color: #3c3b3b;
+            margin: 0;
+        }
+
+        main {
+            flex: 1;
+            padding-left: 220px; /* Adjust the padding to accommodate the fixed green box */
+            padding-top: 100px; /* Adjust to leave space for header */
+            overflow-y: auto; /* Enable scrolling for main content */
+        }
+
+        .paragraph-component {
+            background-color: #f0f0f0;
+            padding: 20px;
+            position: fixed;
+            top: calc(80px + 20px + 60px); /* Adjust to leave space for header, introduction container, and user profile */
+            left: calc(230px + 20px); /* Adjust to align with the introduction container */
+            right: 20px; /* Add padding from the right side */
+            overflow-y: auto; /* Enable scrolling if content exceeds the container height */
+            font-size: 20px;
+            color: #3c3b3b;
+            line-height: 1.5;
+        }
+
+        .recent_sightings {
+            padding: 10px;
+            position: fixed;
+            width:20%;
+            top: calc(40vh + 20px); /* Position at the center of the viewport */
+            left: 250px; /* Align with the green box */
+            font-size: 20px;
+            color: #3c3b3b;
+            margin: 0;
+
+        }
+
         header {
             background-color: #b8f687;
-            padding-top: 5px;
-            padding-bottom: 5px;
+            padding: 20px; /* Increase padding for better appearance */
             text-align: center;
-            position: relative;
+            position: fixed;
+            width: 100%; /* Cover entire screen */
+            top: 0;
+            left: 0;
         }
 
         h1 {
             font-size: 40px;
             color: #434242;
+            margin: 0; /* Remove margin to avoid space between header and buttons */
         }
 
         .user-profile {
             position: absolute;
             top: 50%;
-            right: 20px;
+            right: 80px;
             transform: translateY(-50%);
             width: 60px;
             height: 60px;
@@ -33,101 +115,50 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 30px;
+            font-size: 25px;
         }
+
+
+
+
     </style>
 </head>
-
 <body>
-   <div class="container">
-       <header class="d-flex flex-column align-items-center pt-3 position-relative">
-           <h1 class="p-1 text-bg-primary">Plant Recognition</h1>
-           <div class="user-profile">PR</div>
-       </header>
-   </div>
+<header class="d-flex flex-column align-items-center pt-3 position-relative">
+    <h1 class="p-1 text-bg-primary">Plant Recognition</h1>
+    <div class="user-profile">PR</div>
+</header>
 
-   <div class="container mt-4">
-       <div class="row">
-           <div class="col-md-3">
-               <div class="bg-light p-4">
-                   <div class="d-flex flex-column">
-                       <button type="button" class="btn btn-primary mb-3">HomePage</button>
-                       <button type="button" class="btn btn-secondary mb-3">All Plant Sightings</button>
-                       <button type="button" class="btn btn-success">New Plant Sightings</button>
-                   </div>
-               </div>
-           </div>
-       </div>
-   </div>
-
-<main>
-    <div class="container">
-        <div class="row align-items-center">  <div class="col-md-6">
-            <img src="Images/0.jpg" alt="Image of the plant" class="img-fluid">
-        </div>
-            <div class="col-md-6">
-                <h2>Plant Details</h2>
-                <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Egestas sed tempus urna et. Dictum at tempor commodo ullamcorper a lacus vestibulum. Cursus vitae congue
-                    mauris rhoncus aenean vel elit scelerisque. Vivamus at augue eget arcu dictum varius duis at.
-                    Id eu nisi nunc mi ipsum. Dictum varius duis at consectetur lorem donec massa sapien faucibus.
-                    Ullamcorper dignissim cras tincidunt lobortis feugiat vivamus at augue.</p>
-            </div>
-        </div>
+<div class="container">
+    <div class="green-box">
+        <!-- Buttons -->
+        <button type="button">HomePage</button>
+        <button type="button">All Plant Sightings</button>
+        <button type="button">New Plant Sightings</button>
     </div>
 
-    <div id="carouselExampleIndicators" class="carousel slide" data-mdb-ride="carousel" data-mdb-carousel-init>
-        <div class="carousel-indicators">
-            <button
-                    type="button"
-                    data-mdb-target="#carouselExampleIndicators"
-                    data-mdb-slide-to="0"
-                    class="active"
-                    aria-current="true"
-                    aria-label="Slide 1"
-            ></button>
-            <button
-                    type="button"
-                    data-mdb-target="#carouselExampleIndicators"
-                    data-mdb-slide-to="1"
-                    aria-label="Slide 2"
-            ></button>
-            <button
-                    type="button"
-                    data-mdb-target="#carouselExampleIndicators"
-                    data-mdb-slide-to="2"
-                    aria-label="Slide 3"
-            ></button>
-        </div>
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="Images/1.jpg" class="d-block w-100" alt="Wild Landscape"/>
-            </div>
-            <div class="carousel-item">
-                <img src="Images/2.jpg" class="d-block w-100" alt="Camera"/>
-            </div>
-            <div class="carousel-item">
-                <img src="Images/3.jpg" class="d-block w-100" alt="Exotic Fruits"/>
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-mdb-target="#carouselExampleIndicators" data-mdb-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-mdb-target="#carouselExampleIndicators" data-mdb-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
+    <div class="intro-container">
+        <div class="Intro"> Introduction Text </div>
+    </div>
+
+    <div class="paragraph-component">
+        <p>Classifying organisms based on similarities helps provide order to the thousands of living organisms on earth.
+            Plant biologists have described various situations in which plants exhibit different behaviours based on identity.
+            Plant identification tool helps you discover the names and care needs of any houseplant, garden variety, or wildflower.
+            Explore our extensive plant database and find the perfect fit for your needs.
+            Explore by name, image, or browse curated collections.</p>
+    </div>
+
+    <div class="recent_sightings">
+     <h3 class="p-1 text-bg-primary"> Recent Sightings: </h3>
     </div>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-PRSTvJWBpWHVA6qHyzoMebtOjjH8a1pb89SSidpz3shj4u3GvR3/4oMUdd9ss2xG"
-            crossorigin="anonymous"></script>
 
-</main>
+    <main>
 
 
-
+    </main>
+</div>
 </body>
 </html>
