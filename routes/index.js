@@ -11,4 +11,9 @@ router.get('/plantdetails', function(req, res, next) {
   res.render('plantdetails', { title: 'Express' });
 });
 
+/* All Plant Page */
+router.get('/main', function(req, res, next) {
+  res.render('main', { title: 'Express' });
+});
+
 module.exports = router;
