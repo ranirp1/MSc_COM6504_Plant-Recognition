@@ -20,7 +20,7 @@ let upload = multer({ storage: storage });
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('loginpage', { title: 'Express' });
 });
 
 /* Plant Details */
@@ -47,3 +47,7 @@ router.get('/display', function(req, res, next) {
 });
 
 module.exports = router;
+
+
+
+
