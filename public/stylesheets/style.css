@@ -1,10 +1,67 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
-  color: #00B7FF;
+    color: #00B7FF;
+}
+.form-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.form-container .col-md-6 {
+  flex: 1;
+}
+
+body {
+  /*background-color: #e8f5e9;*/
+  /* Light green background */
+  /*color: #333;*/
+  /* Dark text for better contrast */
+}
+
+.btn-primary {
+  background-color: #4caf50;
+  border-color: #4caf50;
+}
+
+.btn-primary:hover {
+  background-color: #388e3c;
+  border-color: #388e3c;
+}
+
+#map {
+  height: 350px;
+  width: 730px;
+  margin-bottom: 40px;
+}
+
+.map-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+#imagePreviewCard {
+  display: none;
+  /* Initially hide the card */
+}
+
+#imagePreviewCard.show {
+  display: block;
+  /* Show the card when image previewed */
+}
+
+#imagePreview {
+  max-width: 100%;
+  height: 300px;
+  width: 100px;
+  margin-top: 20px;
 }
 
 header {
