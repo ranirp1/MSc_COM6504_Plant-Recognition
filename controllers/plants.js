@@ -1,23 +1,36 @@
 // Import the student model
-const studentModel = require('../models/students');
+const plantModel = require('../models/plants');
 
 // Function to create new students
-exports.create = function (userData, filePath) {
-    // Create a new student instance using the provided user data
-    let student = new studentModel({
-        first_name: userData.first_name,
-        last_name: userData.last_name,
-        dob: userData.dob,
+exports.create = function (plantData, filePath) {
+    // Create a new plant instance using the provided user data
+    let plant = new plantModel({
+        dos: plantData.dos,
+        location: plantData.location,
+        description: plantData.description,
+        plant_size: plantData.plant_size,
+        flowers: plantData.flowers,
+        leaves: plantData.leaves,
+        fruits_or_seeds: plantData.fruits_or_seeds,
+        sun_exposure: plantData.sun_exposure,
+        flower_colour: plantData.flower_colour,
+        name: plantData.name,
+        plant_status: plantData.plant_status,
+        scientific_name: plantData.scientific_name,
+        english_description: plantData.english_description,
+        URI: plantData.URI,
         img: filePath,
+        owner_nickname: plantData.owner_nickname,
+        chat: plantData.chat,
     });
 
-    // Save the student to the database and handle success or failure
-    return student.save().then(student => {
-        // Log the created student
-        console.log(student);
+    // Save the plant to the database and handle success or failure
+    return plant.save().then(plant => {
+        // Log the created plant
+        console.log(plant);
 
-        // Return the student data as a JSON string
-        return JSON.stringify(student);
+        // Return the plant data as a JSON string
+        return JSON.stringify(plant);
     }).catch(err => {
         // Log the error if saving fails
         console.log(err);
@@ -27,12 +40,12 @@ exports.create = function (userData, filePath) {
     });
 };
 
-// Function to get all students
+// Function to get all plants
 exports.getAll = function () {
-    // Retrieve all students from the database
-    return studentModel.find({}).then(students => {
-        // Return the list of students as a JSON string
-        return JSON.stringify(students);
+    // Retrieve all plants from the database
+    return plantModel.find({}).then(plants => {
+        // Return the list of plants as a JSON string
+        return JSON.stringify(plants);
     }).catch(err => {
         // Log the error if retrieval fails
         console.log(err);
