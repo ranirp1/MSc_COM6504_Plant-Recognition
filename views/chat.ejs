@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+    <script src="/javascripts/chat.js"></script>
+</head>
+<body onload="init()">
+<div class="card text-center p-2" id="initial_form" style="display: block">
+    <form onsubmit="return false;">
+        <p><label for="name"> Your name </label>
+            <input type="text" id="name" name="name">
+        </p>
+<!--        <p>-->
+<!--            <label for="roomNo"> Your room </label>-->
+<!--            <input type="text" id="roomNo" name="roomNo">-->
+<!--        </p>-->
+        <div class="card-footer text-muted">
+            <button id="connect" type="button" class="btn btn-primary" onclick="connectToRoom()">Lets Chat!!</button>
+        </div>
+    </form>
+</div>
+<div class="card text-center" id="chat_interface" style="display: none">
+    <div class="card-header">
+        <div id="who_you_are" style="display: inline"></div>, you are in room: <div id="in_room" style="display: inline"></div>
+    </div>
+    <div id="history" class="boxed"></div>
+    <div id="input" class="bottom boxed">
+        <form onsubmit="return false;" style="width: 100%">
+            <div class="card-footer text-muted">
+            <p>
+                <label for="name"> chat: </label>
+                <input type="text" id="chat_input" name="chat_input" style="width: 80%">
+                <button id="chat_send" type="button" class="btn btn-primary" onclick="sendChatText()">Send</button>
+            </p>
+            </div>
+
+        </form>
+    </div>
+</div>
+</body>
+</html>
