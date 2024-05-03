@@ -63,3 +63,10 @@ body {
   width: 100px;
   margin-top: 20px;
 }
+
+header {
+  background-color: #F0F8FF;
+  padding: 20px;
+  text-align: center;
+}
+
