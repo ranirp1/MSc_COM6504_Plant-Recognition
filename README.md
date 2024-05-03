@@ -7,6 +7,30 @@ git remote add origin https://git.shefcompsci.org.uk/acp23rk/msc11-plant-recogni
 git branch -M main
 git push -uf origin main
 ```
+
+### plants document example
+
+{
+"_id": {
+"$oid": "" #This will be a new one when creating a document in Compass, remove this comment before adding
+},
+"dos": {
+"$date": "2024-04-30T00:00:00.000Z"
+},
+"location": "Sheffield, UK",
+"description": "This is African Iris",
+"plant_size": "Height 2m, Width 2m",
+"flowers": true,
+"leaves": false,
+"fruits_or_seeds": false,
+"sun_exposure": "Full coverage",
+"flower_colour": "Red",
+"name": "african_iris",
+"plant_status": false,
+"img": "public/images/uploads/african_iris.jpg",
+"__v": 0
+}
+
 ### Bootstrap Components
 
 - https://getbootstrap.com/docs/5.2/getting-started/introduction/
