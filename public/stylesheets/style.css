@@ -16,6 +16,13 @@ a {
   flex: 1;
 }
 
+.container.shadow.mt-4 {
+  /*max-width: 80%;*/
+  padding-right: 10%;
+  padding-left: 5%;
+  padding-bottom: 3%;
+}
+
 body {
   /*background-color: #e8f5e9;*/
   /* Light green background */
@@ -35,7 +42,7 @@ body {
 
 #map {
   height: 350px;
-  width: 730px;
+  width: 650px;
   margin-bottom: 40px;
 }
 
@@ -49,6 +56,8 @@ body {
 
 #imagePreviewCard {
   display: none;
+  height: 390px;
+  width: 650px;
   /* Initially hide the card */
 }
 
@@ -69,4 +78,5 @@ header {
   padding: 20px;
   text-align: center;
 }
+
 
