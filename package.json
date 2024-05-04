@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "body-parser": "^1.20.2",
     "bootstrap": "^5.3.3",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
@@ -13,7 +14,9 @@
     "es-define-property": "^1.0.0",
     "express": "^4.19.2",
     "http-errors": "~1.6.3",
+    "mongoose": "^8.3.3",
     "morgan": "~1.9.1",
+    "multer": "^1.4.5-lts.1",
     "socket.io": "^4.7.5"
   }
 }
