@@ -4,27 +4,15 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
-var { initDatabase } = require('./indexdb/database');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
+import { db } from './databases/indexdb';
+
 var app = express();
 
-// Initialize IndexedDB
-initDatabase()
-    .then(() => {
-      console.log('IndexedDB initialized successfully.');
-      // Continue with server setup
-      startServer();
-    })
-    .catch(error => {
-      console.error('Failed to initialize IndexedDB:', error);
-    });
-
-function startServer()
-{
-  // view engine setup
+// view engine setup
   app.set('views', path.join(__dirname, 'views'));
   app.set('view engine', 'ejs');
 
@@ -59,12 +47,6 @@ function startServer()
     res.render('error');
   });
 
-  // Start the server
-    var port = process.env.PORT || 3000;
-    app.listen(port, () => {
-      console.log(`Server is running on port ${port}`);
-    });
-}
 
 module.exports = app;
 
