@@ -34,14 +34,15 @@ router.get('/main', function(req, res, next) {
 });
 
 router.get('/newplant', function(req,res){
-  let plant = plants.create(description="This is a plant description", name="African Iris", img="public/images/uploads/african_iris.jpg");
+  // let plant = plants.create(description="This is a plant description", name="African Iris", img="public/images/uploads/african_iris.jpg");
+  res.render('newPlant', { title: 'Express' });
 })
 
 router.get('/display', function(req, res, next) {
   let result = plants.getAll()
   result.then(plants => {
     let data = JSON.parse(plants);
-    console.log("jjujuju", data.length)
+    // console.log("jjujuju", data.length)
     res.render('display', { title: 'View All Plants', data: data});
   })
 });
