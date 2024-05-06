@@ -47,8 +47,8 @@ let PlantSchema = new Schema(
         img: {type: String },
         // Define the plant owner/user's nickname field with type String
         owner_nickname: {type: String},
-        // Define the plant's chat field with type String
-        chat: {type: String},
+        // Define the plant's chat field with type array of String
+        chat: { type: [String] }
     }
 );
 
