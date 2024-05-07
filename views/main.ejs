@@ -31,7 +31,13 @@
                         <div class="card-body">
                             <p class="card-text"><%= plant.description %></p>
                             <div class="d-flex justify-content-between align-items-center">
-                                <button type="submit" class="btn btn-sm btn-outline-secondary">View</button>
+                                <div class="btn-group">
+                                    <form action="/plantdetails" method="POST">
+                                        <!-- Hidden input field to store plant ID -->
+                                        <input type="hidden" name="plantId" value="<%= plant._id %>"/>
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary">View</button>
+                                    </form>
+                                </div>
                                 <% if (plant.dos) { %>
                                     <small class="text-muted"><%= getTimeElapsed(plant.dos) %></small>
                                 <% } %>
