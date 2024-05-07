@@ -19,6 +19,32 @@ var storage = multer.diskStorage({
 });
 let upload = multer({ storage: storage });
 
+/**
+ * used to return dynamic time when plant was submitted
+ */
+const getTimeElapsed = (plantDOS) => {
+  // console.log("Hello")
+  // Converting into date object
+  var plantDate = new Date(plantDOS);
+  // Current time
+  var currentDate = new Date();
+
+  // Calculating time difference
+  var timeDifference = currentDate - plantDate;
+  var minutes = Math.floor(timeDifference / (1000 * 60));
+  var hours = Math.floor(timeDifference / (1000 * 60 * 60));
+  var days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+
+  // Checking time difference for return
+  if (minutes < 60) {
+    return minutes + ' mins ago';
+  } else if (hours < 24) {
+    return hours + ' hours ago';
+  } else {
+    return days + ' days ago';
+  }
+}
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('loginpage', { title: 'Express' });
@@ -39,7 +65,7 @@ router.get('/main', function(req, res, next) {
   let result = plants.getAll()
   result.then(plants => {
     let data = JSON.parse(plants);
-    res.render('main', { title: 'View All Plants', data: data});
+    res.render('main', { title: 'View All Plants', data: data, getTimeElapsed: getTimeElapsed});
   })
 });
 
