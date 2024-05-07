@@ -56,11 +56,6 @@ router.get('/plantdetails', function(req, res, next) {
   res.render('plantdetails', { title: 'Express' });
 });
 
-router.post('/plantdetails', function(req, res, next) {
-  const plantId = req.body.plantId;
-  res.render('plantdetails', { title: 'Express' , plantId: plantId});
-});
-
 /* All Plant Page */
 router.get('/main', function(req, res, next) {
   let result = plants.getAll()
@@ -114,8 +109,8 @@ router.post('/savePlant', upload.single('imageUpload'), async function(req, res,
 
 const plantdetails = require('../controllers/plants');
 
-router.get('/plantdetails/:id', (req, res) => {
-  const plantId = req.params.id;
+router.post('/plantdetails', function(req, res) {
+  const plantId = req.body.plantId;
   plantdetails.getById(plantId)
     .then((plant) => {
       if (plant) {
