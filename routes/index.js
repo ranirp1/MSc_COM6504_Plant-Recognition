@@ -3,6 +3,7 @@ var router = express.Router();
 var plants = require('../controllers/plants')
 var multer = require('multer');
 
+
 // storage defines the storage options to be used for file upload with multer
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -28,9 +29,18 @@ router.get('/plantdetails', function(req, res, next) {
   res.render('plantdetails', { title: 'Express' });
 });
 
+router.post('/plantdetails', function(req, res, next) {
+  const plantId = req.body.plantId;
+  res.render('plantdetails', { title: 'Express' , plantId: plantId});
+});
+
 /* All Plant Page */
 router.get('/main', function(req, res, next) {
-  res.render('main', { title: 'Express' });
+  let result = plants.getAll()
+  result.then(plants => {
+    let data = JSON.parse(plants);
+    res.render('main', { title: 'View All Plants', data: data});
+  })
 });
 
 router.get('/newplant', function(req,res){
@@ -73,14 +83,7 @@ router.post('/savePlant', upload.single('imageUpload'), async function(req, res,
   }
 });
 
-router.get('/display', function(req, res, next) {
-  let result = plants.getAll()
-  result.then(plants => {
-    let data = JSON.parse(plants);
-    // console.log("jjujuju", data.length)
-    res.render('display', { title: 'View All Plants', data: data});
-  })
-});
+
 
 module.exports = router;
 
