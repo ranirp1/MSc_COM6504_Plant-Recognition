@@ -159,11 +159,9 @@
         function getCurrentLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function (position) {
-                    coordinates = position.coords.latitude + ", " + position.coords.longitude; // Update the coordinates variable
-                    console.log("Coordinates:", coordinates); // Print the coordinates to the console
-                    // Set the marker to the current location
+                    coordinates = position.coords.latitude + ", " + position.coords.longitude;
+                    console.log("Coordinates:", coordinates);
                     marker.setPosition({ lat: position.coords.latitude, lng: position.coords.longitude });
-                    //Update the hidden location field with co-ordinates
                     document.getElementById("location").value = coordinates;
                 });
             } else {
@@ -174,16 +172,18 @@
         google.maps.event.addListener(marker, 'dragend', function (event) {
             coordinates = event.latLng.lat() + ", " + event.latLng.lng(); // Update the coordinates variable
             console.log("Coordinates:", coordinates); // Print the coordinates to the console
+            document.getElementById("location").value = coordinates;
         });
 
         // Check if the checkbox is checked
         var currentLocationCheckbox = document.getElementById('currentLocationCheckbox');
-        currentLocationCheckbox.addEventListener('change', function() {
+        currentLocationCheckbox.addEventListener('change', function () {
             if (this.checked) {
                 getCurrentLocation();
-                marker.setDraggable(false); // Disable dragging when checkbox is checked
+                // Disable marker dragging
+                marker.setDraggable(false);
             } else {
-                // Re-enable dragging when checkbox is unchecked
+                // Enable marker dragging
                 marker.setDraggable(true);
             }
         });
