@@ -82,6 +82,26 @@ router.get('/display', function(req, res, next) {
   })
 });
 
+const plantdetails = require('../controllers/plants');
+
+router.get('/plantdetails/:id', (req, res) => {
+  const plantId = req.params.id;
+  plantdetails.getById(plantId)
+    .then((plant) => {
+      if (plant) {
+        //res.json(plant);// Send the retrieved plant data in JSON format
+        //console.log(res.locals.plant);
+        res.render('plantdetails', { plant: plant }); 
+      } else {
+        res.status(404).send("Plant not found."); // Send a 404 Not Found response
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error retrieving plant."); // Send a 500 Internal Server Error response
+    });
+});
+
 module.exports = router;
 
 
