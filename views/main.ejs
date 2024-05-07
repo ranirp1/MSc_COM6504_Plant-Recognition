@@ -33,7 +33,7 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <button type="submit" class="btn btn-sm btn-outline-secondary">View</button>
                                 <% if (plant.dos) { %>
-                                    <small class="text-muted">9 mins</small>
+                                    <small class="text-muted"><%= getTimeElapsed(plant.dos) %></small>
                                 <% } %>
                             </div>
                         </div>
