@@ -38,6 +38,41 @@ router.get('/newplant', function(req,res){
   res.render('newPlant', { title: 'Express' });
 })
 
+// Route handler for saving plant data
+router.post('/savePlant', upload.single('imageUpload'), async function(req, res, next) {
+  try {
+
+    const { dateTime, description, location, currentLocationCheckbox, plantSize, plantType, fruitType, leavesType, sunExposureType, plantName , plantColor} = req.body;
+    const filePath = req.file.path; // Get the path to the uploaded image file
+
+    // Call the create function from the controller to save the plant data
+    const result = await plants.create({
+      dos: dateTime,
+      description : description,
+      location: currentLocationCheckbox === 'on' ? 'Current Location' : location,
+      plant_size: plantSize,
+      flowers: plantType === 'withFlower',
+      fruits_or_seeds: fruitType === 'withFruitSeed',
+      leaves: leavesType === 'withLeaves',
+      sun_exposure: sunExposureType,
+      name: plantName,
+      flower_colour: plantColor
+    }, filePath);
+
+   // console.log(result)
+
+    // Handle the result
+    if (result) {
+      res.status(201).send("Plant saved successfully!");
+    } else {
+      res.status(500).send("Error saving plant");
+    }
+  } catch (error) {
+    console.error("Error saving plant:", error);
+    res.status(500).send("Error saving plant");
+  }
+});
+
 router.get('/display', function(req, res, next) {
   let result = plants.getAll()
   result.then(plants => {
