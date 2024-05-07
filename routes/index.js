@@ -3,6 +3,7 @@ var router = express.Router();
 var plants = require('../controllers/plants')
 var multer = require('multer');
 
+
 // storage defines the storage options to be used for file upload with multer
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -19,6 +20,32 @@ var storage = multer.diskStorage({
 
 let upload = multer({ storage: storage });
 
+/**
+ * used to return dynamic time when plant was submitted
+ */
+const getTimeElapsed = (plantDOS) => {
+  // console.log("Hello")
+  // Converting into date object
+  var plantDate = new Date(plantDOS);
+  // Current time
+  var currentDate = new Date();
+
+  // Calculating time difference
+  var timeDifference = currentDate - plantDate;
+  var minutes = Math.floor(timeDifference / (1000 * 60));
+  var hours = Math.floor(timeDifference / (1000 * 60 * 60));
+  var days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+
+  // Checking time difference for return
+  if (minutes < 60) {
+    return minutes + ' mins ago';
+  } else if (hours < 24) {
+    return hours + ' hours ago';
+  } else {
+    return days + ' days ago';
+  }
+}
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('loginpage', { title: 'Express' });
@@ -31,7 +58,11 @@ router.get('/plantdetails', function(req, res, next) {
 
 /* All Plant Page */
 router.get('/main', function(req, res, next) {
-  res.render('main', { title: 'Express' });
+  let result = plants.getAll()
+  result.then(plants => {
+    let data = JSON.parse(plants);
+    res.render('main', { title: 'View All Plants', data: data, getTimeElapsed: getTimeElapsed});
+  })
 });
 
 router.get('/newplant', function(req,res){
@@ -74,19 +105,12 @@ router.post('/savePlant', upload.single('imageUpload'), async function(req, res,
   }
 });
 
-router.get('/display', function(req, res, next) {
-  let result = plants.getAll()
-  result.then(plants => {
-    let data = JSON.parse(plants);
-    // console.log("jjujuju", data.length)
-    res.render('display', { title: 'View All Plants', data: data});
-  })
-});
+
 
 const plantdetails = require('../controllers/plants');
 
-router.get('/plantdetails/:id', (req, res) => {
-  const plantId = req.params.id;
+router.post('/plantdetails', function(req, res) {
+  const plantId = req.body.plantId;
   plantdetails.getById(plantId)
     .then((plant) => {
       if (plant) {
