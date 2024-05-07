@@ -14,32 +14,31 @@
 <main class="container py-4">
     <div class="row">
         <div class="col-md-6">
-            <img src="images/african iris.jpg" alt="Plant Image" class="img-fluid rounded mb-3">
-            <p class = "mt-2">Monstera Deliciosa, also known as the Swiss Cheese Plant, is a popular houseplant known for its large, split-leaf foliage. It's a relatively low-maintenance plant that thrives in bright, indirect light and moderately moist soil. Be sure to allow the top inch of soil to dry before watering again.</p>
+            <img src="<%= plant.img %>" alt="Plant Image" class="img-fluid rounded mb-3">
+            <p class = "mt-2"><%= plant.description %></p>
             <h4>Sighted by - </h4>
         </div>
         <div class="col-md-6">
-            <h1>African iris</h1>
+            <h1><%= plant.name %></h1>
             <p class="text-muted">Swiss Cheese Plant</p>
             <hr>
             <ul class="list-group">
-                <li class="list-group-item">ID: <%= plantId %> </li>
-                <li class="list-group-item">Location: </li>
-                <li class="list-group-item">Date and Time: </li>
-                <li class="list-group-item">Plant Size: </li>
+                <li class="list-group-item">Location: <%= plant.location %></li>
+                <li class="list-group-item">Date and Time: <%= plant.dos %></li>
+                <li class="list-group-item">Plant Size: <%= plant.plant_size %></li>
                 <li class="list-group-item">Characteristics:
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Flowers - </li>
-                        <li class="list-group-item">Leaves - </li>
-                        <li class="list-group-item">Fruits or Seeds - </li>
-                        <li class="list-group-item">Sun exposure - </li>
-                        <li class="list-group-item">Colour of flowers - </li>
+                        <li class="list-group-item">Flowers - <%= plant.flowers %></li>
+                        <li class="list-group-item">Leaves - <%= plant.leaves %></li>
+                        <li class="list-group-item">Fruits or Seeds - <%= plant.fruits_or_seeds %></li>
+                        <li class="list-group-item">Sun exposure - <%= plant.sun_exposure %></li>
+                        <li class="list-group-item">Colour of flowers - <%= plant.flower_colour %></li>
                     </ul>
                 </li>
                 <li class="list-group-item">Identification:
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Name - </li>
-                        <li class="list-group-item">Status - </li>
+                        <li class="list-group-item">Name - <%= plant.name %></li>
+                        <li class="list-group-item">Status - <%= plant.plant_status %></li>
                         <li class="list-group-item">Information - </li>
                     </ul>
                 </li>

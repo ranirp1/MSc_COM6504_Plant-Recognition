@@ -1,7 +1,7 @@
-// Import the student model
+// Import the plant model
 const plantModel = require('../models/plants');
 
-// Function to create new students
+// Function to create new plants
 exports.create = function (plantData, filePath) {
     // Create a new plant instance using the provided user data
     let plant = new plantModel({
@@ -21,7 +21,7 @@ exports.create = function (plantData, filePath) {
         URI: plantData.URI,
         img: filePath,
         owner_nickname: plantData.owner_nickname,
-        chat: plantData.chat,
+        chat: plantData.chat || []
     });
 
     // Save the plant to the database and handle success or failure
@@ -54,4 +54,27 @@ exports.getAll = function () {
         return null;
     });
 };
+
+//function to get plant based on id
+exports.getById = function (plantId) {
+    // Validate the provided plant ID (optional)
+    // You can add checks here to ensure the ID is a valid format (e.g., ObjectId)
+  
+    // Find the plant with the specified ID
+    return plantModel.findById(plantId)
+      .then((plant) => {
+        // Check if a plant was found
+        if (!plant) {
+          return null; // Return null if plant not found
+        }
+  
+        // Return the plant object as it is (no need for JSON.stringify)
+        return plant;
+      })
+      .catch((err) => {
+        console.error("Error finding plant by ID:", err);
+        return null; // Return null in case of an error
+      });
+  };
+  
 
