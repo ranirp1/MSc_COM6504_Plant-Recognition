@@ -42,14 +42,14 @@ router.get('/newplant', function(req,res){
 router.post('/savePlant', upload.single('imageUpload'), async function(req, res, next) {
   try {
 
-    const { dateTime, description, location, currentLocationCheckbox, plantSize, plantType, fruitType, leavesType, sunExposureType, plantName , plantColor} = req.body;
+    const { dateTime, description, location, plantSize, plantType, fruitType, leavesType, sunExposureType, plantName , plantColor} = req.body;
     const filePath = req.file.path; // Get the path to the uploaded image file
 
     // Call the create function from the controller to save the plant data
     const result = await plants.create({
       dos: dateTime,
       description : description,
-      location: currentLocationCheckbox === 'on' ? 'Current Location' : location,
+      location: location,
       plant_size: plantSize,
       flowers: plantType === 'withFlower',
       fruits_or_seeds: fruitType === 'withFruitSeed',
