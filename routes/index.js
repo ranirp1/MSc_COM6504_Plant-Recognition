@@ -95,7 +95,7 @@ router.post('/savePlant', upload.single('imageUpload'), async function(req, res,
 
     // Handle the result
     if (result) {
-      res.status(201).send("Plant saved successfully!");
+      res.json({ success: true });
     } else {
       res.status(500).send("Error saving plant");
     }
