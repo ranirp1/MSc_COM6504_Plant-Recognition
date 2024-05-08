@@ -174,7 +174,13 @@
             });
     });
 
-    function previewImage(event) {
+
+    document.getElementById('plantColor').addEventListener('change', function() {
+        var selectedColor = this.value;
+        console.log("Selected Color:", selectedColor);
+    });
+
+        function previewImage(event) {
         var reader = new FileReader();
         reader.onload = function () {
             var output = document.getElementById('imagePreview');
