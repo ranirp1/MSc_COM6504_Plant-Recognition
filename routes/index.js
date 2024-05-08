@@ -127,6 +127,29 @@ router.post('/plantdetails', function(req, res) {
     });
 });
 
+
+const chat = require('../controllers/chat');
+
+router.post('/plantdetails/:plantId/chat', function(req, res) {
+  const plantId = req.params.plantId;
+  const chatData = req.body;
+
+  chat.create(plantId, chatData)
+    .then((plant) => {
+      if (plant) {
+        res.status(201).send("Chat message saved successfully!");
+      } else {
+        res.status(404).send("Plant not found.");
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error saving chat message.");
+    });
+});
+
+
+
 module.exports = router;
 
 
