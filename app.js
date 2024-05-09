@@ -8,9 +8,10 @@ var bodyParser = require('body-parser');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
-import { db } from './databases/indexdb';
 
 var app = express();
+
+const openDatabase = require('./indexdb/indexdb');
 
 // view engine setup
   app.set('views', path.join(__dirname, 'views'));
@@ -47,6 +48,14 @@ var app = express();
     res.render('error');
   });
 
+(async () => {
+  try {
+    const db = await openDatabase();
+    console.log('IndexedDB is working!');
+  } catch (error) {
+    console.error('Error:', error);
+  }
+})();
 
 module.exports = app;
 
