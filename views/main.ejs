@@ -92,6 +92,22 @@
         renderData(plantData);
     }
 
+    // Function to generate tags based on plant data
+    function generateTags(plant) {
+        let tags = '';
+        if (plant.leaves) {
+            tags += '<span class="tag badge bg-success" style="margin-right: 5px;">Leaves</span>';
+        } else {
+            tags += '<span class="tag badge bg-danger" style="margin-right: 5px;">No Leaves</span>';
+        }
+        if (plant.fruits_or_seeds) {
+            tags += '<span class="tag badge bg-success" style="margin-right: 5px;">Fruits</span>';
+        } else {
+            tags += '<span class="tag badge bg-danger" style="margin-right: 5px;">No Fruits</span>';
+        }
+        return tags;
+    }
+
     // Function to render data
     function renderData(data) {
         // Clear existing HTML
@@ -116,6 +132,8 @@
                                 </div>
                                 ${plant.dos ? `<small class="text-muted">${getTimeElapsed(plant.dos)}</small>` : ''}
                             </div>
+<!--                        <br/>-->
+                        <div style="margin-top: 15px;">Tags: ${generateTags(plant)}</div>
                         </div>
                     </div>
                 </div>
