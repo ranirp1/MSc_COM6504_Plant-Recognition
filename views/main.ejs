@@ -28,25 +28,27 @@
             <input class="form-check-input" type="radio" name="sortOrder" value="other"/> Other Sorting Scheme
         </label>
     </div>
-    <!-- Add filter dropdown buttons -->
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownLeaves" data-bs-toggle="dropdown" aria-expanded="false">
-            Leaves
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownLeaves">
-            <li><a class="dropdown-item" href="#" id="hasLeaves">Has Leaves</a></li>
-            <li><a class="dropdown-item" href="#" id="noLeaves">No Leaves</a></li>
-        </ul>
-    </div>
 
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownFruits" data-bs-toggle="dropdown" aria-expanded="false">
-            Fruits
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownFruits">
-            <li><a class="dropdown-item" href="#" id="hasFruits">Has Fruits</a></li>
-            <li><a class="dropdown-item" href="#" id="noFruits">No Fruits</a></li>
-        </ul>
+    <div class="d-flex">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownLeaves" data-bs-toggle="dropdown" aria-expanded="false">
+                Leaves
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownLeaves">
+                <li><a class="dropdown-item" href="#" id="hasLeaves">Has Leaves</a></li>
+                <li><a class="dropdown-item" href="#" id="noLeaves">No Leaves</a></li>
+            </ul>
+        </div>
+
+        <div class="dropdown ms-2">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownFruits" data-bs-toggle="dropdown" aria-expanded="false">
+                Fruits
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownFruits">
+                <li><a class="dropdown-item" href="#" id="hasFruits">Has Fruits</a></li>
+                <li><a class="dropdown-item" href="#" id="noFruits">No Fruits</a></li>
+            </ul>
+        </div>
     </div>
 </div>
 <div class="album py-5 bg-light"><!--    style="background-color:#70A300">-->
