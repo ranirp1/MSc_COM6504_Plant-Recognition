@@ -124,22 +124,55 @@
         });
     }
 
-    // Function to filter data based on dropdown selection
+    // Define an array to hold active filters
+    let activeFilters = [];
+
     function filterData() {
-        console.log("Filter data function called")
         let filteredData = plantData;
-        if (this.id === 'hasLeaves') {
+        if (activeFilters.includes('hasLeaves')) {
             filteredData = filteredData.filter(plant => plant.leaves);
-        } else if (this.id === 'noLeaves') {
+        }
+        if (activeFilters.includes('noLeaves')) {
             filteredData = filteredData.filter(plant => !plant.leaves);
-        } else if (this.id === 'hasFruits') {
+        }
+        if (activeFilters.includes('hasFruits')) {
             filteredData = filteredData.filter(plant => plant.fruits_or_seeds);
-        } else if (this.id === 'noFruits') {
+        }
+        if (activeFilters.includes('noFruits')) {
             filteredData = filteredData.filter(plant => !plant.fruits_or_seeds);
         }
         renderData(filteredData);
-        this.closest('.dropdown').querySelector('.dropdown-toggle').click();
+        // this.closest('.dropdown').querySelector('.dropdown-toggle').click();
     }
+
+    // Function to toggle active filters
+    function toggleFilter(filter) {
+        const index = activeFilters.indexOf(filter);
+        if (index === -1) {
+            activeFilters.push(filter);
+        } else {
+            activeFilters.splice(index, 1);
+        }
+        console.log(activeFilters)
+        filterData();
+    }
+
+    // // Function to filter data based on dropdown selection
+    // function filterData() {
+    //     console.log("Filter data function called")
+    //     let filteredData = plantData;
+    //     if (this.id === 'hasLeaves') {
+    //         filteredData = filteredData.filter(plant => plant.leaves);
+    //     } else if (this.id === 'noLeaves') {
+    //         filteredData = filteredData.filter(plant => !plant.leaves);
+    //     } else if (this.id === 'hasFruits') {
+    //         filteredData = filteredData.filter(plant => plant.fruits_or_seeds);
+    //     } else if (this.id === 'noFruits') {
+    //         filteredData = filteredData.filter(plant => !plant.fruits_or_seeds);
+    //     }
+    //     renderData(filteredData);
+    //     this.closest('.dropdown').querySelector('.dropdown-toggle').click();
+    // }
 
     // Set event listener for dropdown button clicks
     document.querySelectorAll('.dropdown-toggle').forEach(function(button) {
@@ -156,7 +189,10 @@
         // item.addEventListener('click', filterData.bind(item));
         item.addEventListener('click', function(event) {
             event.preventDefault(); // Prevent default link behavior
-            filterData.call(this); // Call filterData with 'this' referring to the clicked item
+            toggleFilter(this.id); // Toggle the filter based on clicked item
+            // Hide the dropdown menu after a selection is made
+            this.closest('.dropdown').querySelector('.dropdown-toggle').click();
+            // filterData.call(this); // Call filterData with 'this' referring to the clicked item
         });
     });
 
