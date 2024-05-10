@@ -28,6 +28,26 @@
             <input class="form-check-input" type="radio" name="sortOrder" value="other"/> Other Sorting Scheme
         </label>
     </div>
+    <!-- Add filter dropdown buttons -->
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownLeaves" data-bs-toggle="dropdown" aria-expanded="false">
+            Leaves
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownLeaves">
+            <li><a class="dropdown-item" href="#" id="hasLeaves">Has Leaves</a></li>
+            <li><a class="dropdown-item" href="#" id="noLeaves">No Leaves</a></li>
+        </ul>
+    </div>
+
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownFruits" data-bs-toggle="dropdown" aria-expanded="false">
+            Fruits
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownFruits">
+            <li><a class="dropdown-item" href="#" id="hasFruits">Has Fruits</a></li>
+            <li><a class="dropdown-item" href="#" id="noFruits">No Fruits</a></li>
+        </ul>
+    </div>
 </div>
 <div class="album py-5 bg-light"><!--    style="background-color:#70A300">-->
     <div class="container">
@@ -101,6 +121,42 @@
             plantCards.innerHTML += cardHtml;
         });
     }
+
+    // Function to filter data based on dropdown selection
+    function filterData() {
+        console.log("Filter data function called")
+        let filteredData = plantData;
+        if (this.id === 'hasLeaves') {
+            filteredData = filteredData.filter(plant => plant.leaves);
+        } else if (this.id === 'noLeaves') {
+            filteredData = filteredData.filter(plant => !plant.leaves);
+        } else if (this.id === 'hasFruits') {
+            filteredData = filteredData.filter(plant => plant.fruits_or_seeds);
+        } else if (this.id === 'noFruits') {
+            filteredData = filteredData.filter(plant => !plant.fruits_or_seeds);
+        }
+        renderData(filteredData);
+        this.closest('.dropdown').querySelector('.dropdown-toggle').click();
+    }
+
+    // Set event listener for dropdown button clicks
+    document.querySelectorAll('.dropdown-toggle').forEach(function(button) {
+        button.addEventListener('click', function () {
+            // Toggle the dropdown menu
+            console.log("Clicked the button - function")
+            let dropdownMenu = this.nextElementSibling;
+            dropdownMenu.classList.toggle('show');
+        });
+    });
+
+    // Set event listener for dropdown item clicks
+    document.querySelectorAll('.dropdown-item').forEach(function(item) {
+        // item.addEventListener('click', filterData.bind(item));
+        item.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default link behavior
+            filterData.call(this); // Call filterData with 'this' referring to the clicked item
+        });
+    });
 
     // Set event listener for radio button change
     document.querySelectorAll('input[type="radio"][name="sortOrder"]').forEach(function(radio) {
