@@ -129,20 +129,31 @@
 
     function filterData() {
         let filteredData = plantData;
-        if (activeFilters.includes('hasLeaves')) {
-            filteredData = filteredData.filter(plant => plant.leaves);
+        if (activeFilters.includes('hasLeaves') && activeFilters.includes('noLeaves')) {
+            // Remove both filters if both are selected
+            activeFilters = activeFilters.filter(filter => filter !== 'hasLeaves' && filter !== 'noLeaves');
         }
-        if (activeFilters.includes('noLeaves')) {
-            filteredData = filteredData.filter(plant => !plant.leaves);
+        if (activeFilters.includes('hasFruits') && activeFilters.includes('noFruits')) {
+            // Remove both filters if both are selected
+            activeFilters = activeFilters.filter(filter => filter !== 'hasFruits' && filter !== 'noFruits');
         }
-        if (activeFilters.includes('hasFruits')) {
-            filteredData = filteredData.filter(plant => plant.fruits_or_seeds);
-        }
-        if (activeFilters.includes('noFruits')) {
-            filteredData = filteredData.filter(plant => !plant.fruits_or_seeds);
-        }
+        filteredData = filteredData.filter(plant => {
+            // Filter data based on active filters
+            if (activeFilters.includes('hasLeaves')) {
+                return plant.leaves;
+            }
+            if (activeFilters.includes('noLeaves')) {
+                return !plant.leaves;
+            }
+            if (activeFilters.includes('hasFruits')) {
+                return plant.fruits_or_seeds;
+            }
+            if (activeFilters.includes('noFruits')) {
+                return !plant.fruits_or_seeds;
+            }
+            return true; // Show all if no filter is selected
+        });
         renderData(filteredData);
-        // this.closest('.dropdown').querySelector('.dropdown-toggle').click();
     }
 
     // Function to toggle active filters
@@ -150,6 +161,18 @@
         const index = activeFilters.indexOf(filter);
         if (index === -1) {
             activeFilters.push(filter);
+            if (filter === 'hasLeaves' && activeFilters.includes('noLeaves')) {
+                activeFilters.splice(activeFilters.indexOf('noLeaves'), 1);
+            }
+            if (filter === 'noLeaves' && activeFilters.includes('hasLeaves')) {
+                activeFilters.splice(activeFilters.indexOf('hasLeaves'), 1);
+            }
+            if (filter === 'hasFruits' && activeFilters.includes('noFruits')) {
+                activeFilters.splice(activeFilters.indexOf('noFruits'), 1);
+            }
+            if (filter === 'noFruits' && activeFilters.includes('hasFruits')) {
+                activeFilters.splice(activeFilters.indexOf('hasFruits'), 1);
+            }
         } else {
             activeFilters.splice(index, 1);
         }
@@ -172,6 +195,35 @@
     //     }
     //     renderData(filteredData);
     //     this.closest('.dropdown').querySelector('.dropdown-toggle').click();
+    // }
+
+    // function filterData() {
+    //     let filteredData = plantData;
+    //     if (activeFilters.includes('hasLeaves')) {
+    //         filteredData = filteredData.filter(plant => plant.leaves);
+    //     }
+    //     if (activeFilters.includes('noLeaves')) {
+    //         filteredData = filteredData.filter(plant => !plant.leaves);
+    //     }
+    //     if (activeFilters.includes('hasFruits')) {
+    //         filteredData = filteredData.filter(plant => plant.fruits_or_seeds);
+    //     }
+    //     if (activeFilters.includes('noFruits')) {
+    //         filteredData = filteredData.filter(plant => !plant.fruits_or_seeds);
+    //     }
+    //     renderData(filteredData);
+    //     // this.closest('.dropdown').querySelector('.dropdown-toggle').click();
+    // }
+
+    // function toggleFilter(filter) {
+    //     const index = activeFilters.indexOf(filter);
+    //     if (index === -1) {
+    //         activeFilters.push(filter);
+    //     } else {
+    //         activeFilters.splice(index, 1);
+    //     }
+    //     console.log(activeFilters)
+    //     filterData();
     // }
 
     // Set event listener for dropdown button clicks
