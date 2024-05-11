@@ -28,8 +28,8 @@
             <input class="form-check-input" type="radio" name="sortOrder" value="other"/> Other Sorting Scheme
         </label>
     </div>
-
-    <div class="d-flex">
+    <h5 class="jumbotron-heading" style="margin-left: 200px;">Filters: </h5>
+    <div class="d-flex" style="margin-left: 200px; margin-top: 10px; ">
         <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownLeaves" data-bs-toggle="dropdown" aria-expanded="false">
                 Leaves
@@ -48,6 +48,10 @@
                 <li><a class="dropdown-item" href="#" id="hasFruits">Has Fruits</a></li>
                 <li><a class="dropdown-item" href="#" id="noFruits">No Fruits</a></li>
             </ul>
+        </div>
+<!--        <button id="resetButton" class="btn btn-primary btn-sm">Reset Filters</button>-->
+        <div class="ms-auto">
+            <button id="resetButton" class="btn btn-primary btn-sm">Reset Filters</button>
         </div>
     </div>
 </div>
@@ -147,30 +151,6 @@
 
     function filterData() {
         let filteredData = plantData;
-        // if (activeFilters.includes('hasLeaves') && activeFilters.includes('noLeaves')) {
-        //     // Remove both filters if both are selected
-        //     activeFilters = activeFilters.filter(filter => filter !== 'hasLeaves' && filter !== 'noLeaves');
-        // }
-        // if (activeFilters.includes('hasFruits') && activeFilters.includes('noFruits')) {
-        //     // Remove both filters if both are selected
-        //     activeFilters = activeFilters.filter(filter => filter !== 'hasFruits' && filter !== 'noFruits');
-        // }
-        // filteredData = filteredData.filter(plant => {
-        //     // Filter data based on active filters
-        //     if (activeFilters.includes('hasLeaves')) {
-        //         return plant.leaves;
-        //     }
-        //     if (activeFilters.includes('noLeaves')) {
-        //         return !plant.leaves;
-        //     }
-        //     if (activeFilters.includes('hasFruits')) {
-        //         return plant.fruits_or_seeds;
-        //     }
-        //     if (activeFilters.includes('noFruits')) {
-        //         return !plant.fruits_or_seeds;
-        //     }
-        //     return true; // Show all if no filter is selected
-        // });
         // Filter data based on active filters
         filteredData = filteredData.filter(plant => {
             if (activeFilters.includes('hasLeaves') && !plant.leaves) {
@@ -201,6 +181,13 @@
         });
         console.log(filteredData.length)
         renderData(filteredData);
+        if (filteredData.length === 0) {
+            var plantCards = document.getElementById('plantCards');
+            var cardHtml = `
+            <h4 class="jumbotron-heading">No plants due to filters, please reset the filters to see plants again</h4>
+            `;
+            plantCards.innerHTML += cardHtml;
+        }
     }
 
     // Function to toggle active filters
@@ -227,51 +214,13 @@
         filterData();
     }
 
-    // // Function to filter data based on dropdown selection
-    // function filterData() {
-    //     console.log("Filter data function called")
-    //     let filteredData = plantData;
-    //     if (this.id === 'hasLeaves') {
-    //         filteredData = filteredData.filter(plant => plant.leaves);
-    //     } else if (this.id === 'noLeaves') {
-    //         filteredData = filteredData.filter(plant => !plant.leaves);
-    //     } else if (this.id === 'hasFruits') {
-    //         filteredData = filteredData.filter(plant => plant.fruits_or_seeds);
-    //     } else if (this.id === 'noFruits') {
-    //         filteredData = filteredData.filter(plant => !plant.fruits_or_seeds);
-    //     }
-    //     renderData(filteredData);
-    //     this.closest('.dropdown').querySelector('.dropdown-toggle').click();
-    // }
-
-    // function filterData() {
-    //     let filteredData = plantData;
-    //     if (activeFilters.includes('hasLeaves')) {
-    //         filteredData = filteredData.filter(plant => plant.leaves);
-    //     }
-    //     if (activeFilters.includes('noLeaves')) {
-    //         filteredData = filteredData.filter(plant => !plant.leaves);
-    //     }
-    //     if (activeFilters.includes('hasFruits')) {
-    //         filteredData = filteredData.filter(plant => plant.fruits_or_seeds);
-    //     }
-    //     if (activeFilters.includes('noFruits')) {
-    //         filteredData = filteredData.filter(plant => !plant.fruits_or_seeds);
-    //     }
-    //     renderData(filteredData);
-    //     // this.closest('.dropdown').querySelector('.dropdown-toggle').click();
-    // }
-
-    // function toggleFilter(filter) {
-    //     const index = activeFilters.indexOf(filter);
-    //     if (index === -1) {
-    //         activeFilters.push(filter);
-    //     } else {
-    //         activeFilters.splice(index, 1);
-    //     }
-    //     console.log(activeFilters)
-    //     filterData();
-    // }
+    // Add event listener for reset button
+    document.getElementById('resetButton').addEventListener('click', function() {
+        // Clear active filters
+        activeFilters = [];
+        // Call filterData function to display all plants
+        filterData();
+    });
 
     // Set event listener for dropdown button clicks
     document.querySelectorAll('.dropdown-toggle').forEach(function(button) {
