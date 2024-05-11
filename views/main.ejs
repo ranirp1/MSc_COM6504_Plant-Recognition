@@ -147,30 +147,59 @@
 
     function filterData() {
         let filteredData = plantData;
-        if (activeFilters.includes('hasLeaves') && activeFilters.includes('noLeaves')) {
-            // Remove both filters if both are selected
-            activeFilters = activeFilters.filter(filter => filter !== 'hasLeaves' && filter !== 'noLeaves');
-        }
-        if (activeFilters.includes('hasFruits') && activeFilters.includes('noFruits')) {
-            // Remove both filters if both are selected
-            activeFilters = activeFilters.filter(filter => filter !== 'hasFruits' && filter !== 'noFruits');
-        }
+        // if (activeFilters.includes('hasLeaves') && activeFilters.includes('noLeaves')) {
+        //     // Remove both filters if both are selected
+        //     activeFilters = activeFilters.filter(filter => filter !== 'hasLeaves' && filter !== 'noLeaves');
+        // }
+        // if (activeFilters.includes('hasFruits') && activeFilters.includes('noFruits')) {
+        //     // Remove both filters if both are selected
+        //     activeFilters = activeFilters.filter(filter => filter !== 'hasFruits' && filter !== 'noFruits');
+        // }
+        // filteredData = filteredData.filter(plant => {
+        //     // Filter data based on active filters
+        //     if (activeFilters.includes('hasLeaves')) {
+        //         return plant.leaves;
+        //     }
+        //     if (activeFilters.includes('noLeaves')) {
+        //         return !plant.leaves;
+        //     }
+        //     if (activeFilters.includes('hasFruits')) {
+        //         return plant.fruits_or_seeds;
+        //     }
+        //     if (activeFilters.includes('noFruits')) {
+        //         return !plant.fruits_or_seeds;
+        //     }
+        //     return true; // Show all if no filter is selected
+        // });
+        // Filter data based on active filters
         filteredData = filteredData.filter(plant => {
-            // Filter data based on active filters
-            if (activeFilters.includes('hasLeaves')) {
-                return plant.leaves;
+            if (activeFilters.includes('hasLeaves') && !plant.leaves) {
+                return false; // If 'hasLeaves' filter is active but the plant has no leaves, exclude it
             }
-            if (activeFilters.includes('noLeaves')) {
-                return !plant.leaves;
+            if (activeFilters.includes('noLeaves') && plant.leaves) {
+                return false; // If 'noLeaves' filter is active but the plant has leaves, exclude it
             }
-            if (activeFilters.includes('hasFruits')) {
-                return plant.fruits_or_seeds;
+            if (activeFilters.includes('hasFruits') && !plant.fruits_or_seeds) {
+                return false; // If 'hasFruits' filter is active but the plant has no fruits, exclude it
             }
-            if (activeFilters.includes('noFruits')) {
-                return !plant.fruits_or_seeds;
+            if (activeFilters.includes('noFruits') && plant.fruits_or_seeds) {
+                return false; // If 'noFruits' filter is active but the plant has fruits, exclude it
             }
-            return true; // Show all if no filter is selected
+
+            // Check for plants that have both leaves and fruits
+            if (activeFilters.includes('hasLeaves') && activeFilters.includes('hasFruits')) {
+                return plant.leaves && plant.fruits_or_seeds;
+            }
+
+            // Check for plants that have no leaves and no fruits
+            if (activeFilters.includes('noLeaves') && activeFilters.includes('noFruits')) {
+                return !plant.leaves && !plant.fruits_or_seeds;
+            }
+
+            // Check for mix and match of other filters
+            return true;
         });
+        console.log(filteredData.length)
         renderData(filteredData);
     }
 
@@ -248,7 +277,7 @@
     document.querySelectorAll('.dropdown-toggle').forEach(function(button) {
         button.addEventListener('click', function () {
             // Toggle the dropdown menu
-            console.log("Clicked the button - function")
+            // console.log("Clicked the button - function")
             let dropdownMenu = this.nextElementSibling;
             dropdownMenu.classList.toggle('show');
         });
