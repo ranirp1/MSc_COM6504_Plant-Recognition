@@ -283,77 +283,18 @@
         filterData();
     }
 
-    // function filterData() {
-    //     let filteredData = plantData;
-    //     // Filter data based on active filters
-    //     filteredData = filteredData.filter(plant => {
-    //         if (activeFilters.includes('hasLeaves') && !plant.leaves) {
-    //             return false; // If 'hasLeaves' filter is active but the plant has no leaves, exclude it
-    //         }
-    //         if (activeFilters.includes('noLeaves') && plant.leaves) {
-    //             return false; // If 'noLeaves' filter is active but the plant has leaves, exclude it
-    //         }
-    //         if (activeFilters.includes('hasFruits') && !plant.fruits_or_seeds) {
-    //             return false; // If 'hasFruits' filter is active but the plant has no fruits, exclude it
-    //         }
-    //         if (activeFilters.includes('noFruits') && plant.fruits_or_seeds) {
-    //             return false; // If 'noFruits' filter is active but the plant has fruits, exclude it
-    //         }
-    //
-    //         // Check for plants that have both leaves and fruits
-    //         if (activeFilters.includes('hasLeaves') && activeFilters.includes('hasFruits')) {
-    //             return plant.leaves && plant.fruits_or_seeds;
-    //         }
-    //
-    //         // Check for plants that have no leaves and no fruits
-    //         if (activeFilters.includes('noLeaves') && activeFilters.includes('noFruits')) {
-    //             return !plant.leaves && !plant.fruits_or_seeds;
-    //         }
-    //
-    //         // Check for mix and match of other filters
-    //         return true;
-    //     });
-    //     console.log(filteredData.length)
-    //     renderData(filteredData);
-    //     if (filteredData.length === 0) {
-    //         var plantCards = document.getElementById('plantCards');
-    //         var cardHtml = `
-    //         <h4 class="jumbotron-heading">No plants due to filters, please reset the filters to see plants again</h4>
-    //         `;
-    //         plantCards.innerHTML += cardHtml;
-    //     }
-    // }
-
-    // Function to toggle active filters
-    // function toggleFilter(filter) {
-    //     const index = activeFilters.indexOf(filter);
-    //     if (index === -1) {
-    //         activeFilters.push(filter);
-    //         if (filter === 'hasLeaves' && activeFilters.includes('noLeaves')) {
-    //             activeFilters.splice(activeFilters.indexOf('noLeaves'), 1);
-    //         }
-    //         if (filter === 'noLeaves' && activeFilters.includes('hasLeaves')) {
-    //             activeFilters.splice(activeFilters.indexOf('hasLeaves'), 1);
-    //         }
-    //         if (filter === 'hasFruits' && activeFilters.includes('noFruits')) {
-    //             activeFilters.splice(activeFilters.indexOf('noFruits'), 1);
-    //         }
-    //         if (filter === 'noFruits' && activeFilters.includes('hasFruits')) {
-    //             activeFilters.splice(activeFilters.indexOf('hasFruits'), 1);
-    //         }
-    //     } else {
-    //         activeFilters.splice(index, 1);
-    //     }
-    //     console.log(activeFilters)
-    //     filterData();
-    // }
-
     // Add event listener for reset button
     document.getElementById('resetButton').addEventListener('click', function() {
         // Clear active filters
         activeFilters = [];
         // Call filterData function to display all plants
         filterData();
+
+        // Update dropdown buttons to be inactive
+        document.querySelectorAll('.dropdown-toggle').forEach(function(button) {
+            button.classList.remove('btn-primary'); // Remove primary class
+            button.classList.add('btn-secondary'); // Add secondary class
+        });
     });
 
     // Set event listener for dropdown button clicks
@@ -372,6 +313,19 @@
         item.addEventListener('click', function(event) {
             event.preventDefault(); // Prevent default link behavior
             toggleFilter(this.id); // Toggle the filter based on clicked item
+
+            // Highlight the selected dropdown button and update others
+            document.querySelectorAll('.dropdown-toggle').forEach(function(button) {
+                if (button.nextElementSibling.contains(item)) {
+                    button.classList.add('btn-primary'); // Add primary class
+                    button.classList.remove('btn-secondary'); // Remove secondary class
+                } else {
+                    if (!button.classList.contains('btn-primary')) {
+                        button.classList.add('btn-secondary'); // Add secondary class if not active
+                    }
+                }
+            });
+
             // Hide the dropdown menu after a selection is made
             this.closest('.dropdown').querySelector('.dropdown-toggle').click();
             // filterData.call(this); // Call filterData with 'this' referring to the clicked item
