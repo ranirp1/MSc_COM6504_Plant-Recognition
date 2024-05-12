@@ -25,7 +25,7 @@
     </div>
     <div class="form-check form-check-reverse">
         <label class="form-check-label fw-lighter">
-            <input class="form-check-input" type="radio" name="sortOrder" value="nearDistance"/> Most Near Sighting
+            <input class="form-check-input" type="radio" name="sortOrder" value="nearestLocation"/> Most Near Sighting
         </label>
     </div>
     <h5 class="jumbotron-heading" style="margin-left: 200px;">Filters: </h5>
@@ -109,9 +109,11 @@
 <script>
 
     var plantData = <%- JSON.stringify(data) %>;
+    var sortBy;
     // Function to sort data by most recent
     function sortByMostRecent() {
         plantData.sort((a, b) => new Date(b.dos) - new Date(a.dos));
+        sortBy = 'mostRecent';
         renderData(plantData);
     }
 
@@ -144,6 +146,7 @@
             // console.log(distanceA - distanceB)
             return distanceA - distanceB;
         });
+        sortBy = 'nearestLocation';
         renderData(plantData);
     }
 
@@ -200,6 +203,15 @@
         plantCards.innerHTML = ''; // Clear existing cards
 
         data.forEach(plant => {
+            var secondaryInfo = '';
+            if (sortBy === 'mostRecent') {
+                // Show time elapsed if sorting by most recent
+                secondaryInfo = plant.dos ? `<small class="text-muted">${getTimeElapsed(plant.dos)}</small>` : '';
+            } else if (sortBy === 'nearestLocation' && currentLocation) {
+                // Calculate distance if sorting by nearest location and currentLocation is available
+                const distance = calculateDistance(currentLocation.lat, currentLocation.lon, plant.lat, plant.lon);
+                secondaryInfo = `<small class="text-muted">Distance: ${distance.toFixed(2)} km</small>`;
+            }
             var cardHtml = `
                 <div class="col-md-4">
                     <div class="card mb-4 box-shadow">
@@ -213,7 +225,7 @@
                                         <button type="submit" class="btn btn-sm btn-outline-secondary">View</button>
                                     </form>
                                 </div>
-                                ${plant.dos ? `<small class="text-muted">${getTimeElapsed(plant.dos)}</small>` : ''}
+                                ${secondaryInfo}
                             </div>
 <!--                        <br/>-->
                         <div style="margin-top: 15px;">Tags: ${generateTags(plant)}</div>
