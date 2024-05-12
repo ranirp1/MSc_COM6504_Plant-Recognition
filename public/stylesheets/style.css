@@ -84,3 +84,7 @@ header {
   height: 300px;
   object-fit: cover;
 }
+
+.tag {
+  margin-right: 5px;
+}
