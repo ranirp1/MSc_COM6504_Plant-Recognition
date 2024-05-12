@@ -58,6 +58,16 @@
                 <li><a class="dropdown-item" href="#" id="noFlowers">No Flowers</a></li>
             </ul>
         </div>
+        <div class="dropdown ms-2">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownSunExposure" data-bs-toggle="dropdown" aria-expanded="false">
+                Sun Exposure
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownSunExposure">
+                <li><a class="dropdown-item" href="#" id="fullSun">Full Sun</a></li>
+                <li><a class="dropdown-item" href="#" id="partialShade">Partial Shade</a></li>
+                <li><a class="dropdown-item" href="#" id="fullShade">Full Shade</a></li>
+            </ul>
+        </div>
         <!--        <button id="resetButton" class="btn btn-primary btn-sm">Reset Filters</button>-->
         <div class="ms-auto">
             <button id="resetButton" class="btn btn-primary btn-sm">Reset Filters</button>
@@ -123,6 +133,14 @@
         } else {
             tags += '<span class="tag badge bg-danger" style="margin-right: 5px;">No Flowers</span>';
         }
+        // Add tags for sun exposure
+        if (plant.sun_exposure === 'fullSun') {
+            tags += '<span class="tag badge bg-warning" style="margin-right: 5px;">Full Sun</span>';
+        } else if (plant.sun_exposure === 'partialShade') {
+            tags += '<span class="tag badge bg-warning" style="margin-right: 5px;">Partial Shade</span>';
+        } else if (plant.sun_exposure === 'fullShade') {
+            tags += '<span class="tag badge bg-warning" style="margin-right: 5px;">Full Shade</span>';
+        }
         return tags;
     }
 
@@ -187,6 +205,16 @@
             if (activeFilters.includes('noFlowers') && plant.flowers) {
                 return false;
             }
+            // Filter based on sun exposure
+            if (activeFilters.includes('fullSun') && plant.sun_exposure !== 'fullSun') {
+                return false;
+            }
+            if (activeFilters.includes('partialShade') && plant.sun_exposure !== 'partialShade') {
+                return false;
+            }
+            if (activeFilters.includes('fullShade') && plant.sun_exposure !== 'fullShade') {
+                return false;
+            }
             // Check for plants that have both leaves and fruits
             if (activeFilters.includes('hasLeaves') && activeFilters.includes('hasFruits')) {
                 return plant.leaves && plant.fruits_or_seeds;
@@ -229,6 +257,25 @@
             }
             if (filter === 'noFlowers' && activeFilters.includes('hasFlowers')) {
                 activeFilters.splice(activeFilters.indexOf('hasFlowers'), 1);
+            }
+            // Add conditions for sun exposure filter
+            if (filter === 'fullSun' && activeFilters.includes('partialShade')) {
+                activeFilters.splice(activeFilters.indexOf('partialShade'), 1);
+            }
+            if (filter === 'fullSun' && activeFilters.includes('fullShade')) {
+                activeFilters.splice(activeFilters.indexOf('fullShade'), 1);
+            }
+            if (filter === 'partialShade' && activeFilters.includes('fullSun')) {
+                activeFilters.splice(activeFilters.indexOf('fullSun'), 1);
+            }
+            if (filter === 'partialShade' && activeFilters.includes('fullShade')) {
+                activeFilters.splice(activeFilters.indexOf('fullShade'), 1);
+            }
+            if (filter === 'fullShade' && activeFilters.includes('fullSun')) {
+                activeFilters.splice(activeFilters.indexOf('fullSun'), 1);
+            }
+            if (filter === 'fullShade' && activeFilters.includes('partialShade')) {
+                activeFilters.splice(activeFilters.indexOf('partialShade'), 1);
             }
         } else {
             activeFilters.splice(index, 1);
