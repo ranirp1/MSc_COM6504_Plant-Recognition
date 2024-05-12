@@ -73,8 +73,7 @@ router.get('/newplant', function(req,res){
 // Route handler for saving plant data
 router.post('/savePlant', upload.single('imageUpload'), async function(req, res, next) {
   try {
-
-    const { dateTime, description, location, plantSize, plantType, fruitType, leavesType, sunExposureType, plantName , plantColor} = req.body;
+    const { dateTime, description, location, plantSize, plantType, fruitType, leavesType, sunExposureType, plantName , plantColor, userName} = req.body;
     const filePath = req.file.path; // Get the path to the uploaded image file
 
     // Call the create function from the controller to save the plant data
@@ -88,14 +87,16 @@ router.post('/savePlant', upload.single('imageUpload'), async function(req, res,
       leaves: leavesType === 'withLeaves',
       sun_exposure: sunExposureType,
       name: plantName,
-      flower_colour: plantColor
+      flower_colour: plantColor,
+      owner_nickname: userName
     }, filePath);
 
    // console.log(result)
 
     // Handle the result
     if (result) {
-      res.json({ success: true });
+      res.send('<p>Redirecting to route2 in 5 seconds...</p><script>setTimeout(function(){window.location.href="/main";}, 2000);</script>');
+      //res.json({ success: true });
     } else {
       res.status(500).send("Error saving plant");
     }

@@ -18,28 +18,39 @@
         <div class="col-md-6">
             <form id="plantForm" action="/savePlant" method="POST" enctype="multipart/form-data">
                 <div class="mb-3">
-                    <label for="plantName" class="form-label"><b>Name</b></label>
-                    <input type="text" class="form-control" id="plantName" name="plantName" placeholder="Enter Plant Name">
+                    <label for="userName" class="form-label"></label>
+                    <input type="text" class="form-control" id="userName" name="userName" placeholder="Enter User Name" required >
+                </div>
+                <div class="mb-3">
+                    <label for="plantName" class="form-label"><b>Plant Name</b></label>
+                    <input type="text" class="form-control" id="plantName" name="plantName" placeholder="Enter Plant Name" required >
                 </div>
                 <div class="mb-3">
                     <label for="dateTime" class="form-label"><b>Date/Time</b></label>
-                    <input type="datetime-local" class="form-control"  name="dateTime" id="dateTime">
+                    <input type="datetime-local" class="form-control"  name="dateTime" id="dateTime" onchange="updateDate()" required>
                 </div>
                 <div class="mb-3">
                     <label for="description" class="form-label"><b>Description</b></label>
-                    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                    <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
                 </div>
                 <div class="mb-3">
                     <label for="location" class="form-label"><b>Location</b></label>
-                    <input type="hidden" class="form-control" id="location" name="location" placeholder="Enter Location">
+                    <input type="hidden" class="form-control" id="location" name="location" placeholder="Enter Location" required>
                 </div>
                 <div class="mb-3">
                     <input type="checkbox" name="currentLocationCheckbox" id="currentLocationCheckbox">
                     <label for="currentLocationCheckbox" >Are you on your current location?</label><br>
                 </div>
                 <div class="mb-3">
-                    <label for="plantSize" class="form-label"><b>Plant Size</b></label>
-                    <input type="text" class="form-control" id="plantSize" name = "plantSize" placeholder="Enter Plant Size">
+                    <label for="plantHeight" class="form-label"><b>Plant Height</b></label>
+<!--                    <label for="plantHeight" class="form-label"><b>Plant Height</b></label>-->
+                    <input type="text" class="form-control" id="plantHeight" name="plantHeight" placeholder="Enter Height in Meters" required ><br>
+
+<!--                    <label for="plantWidth" class="form-label"><b>Plant Width</b></label>-->
+                    <input type="text" class="form-control" id="plantWidth" name="plantWidth" placeholder="Enter width in Meters " required >
+
+                    <!-- Hidden input to hold the concatenated value -->
+                    <input type="hidden" id="plantSize" name="plantSize" required>
                 </div>
                 <div class="mb-3">
                     <label for="plantCharacteristic" class="form-label">Plant Characteristic</label>
@@ -57,7 +68,7 @@
                     <div class="mb-3">
                             <label class="form-check-label"><b>Select Fruit Type:</b></label><br>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="fruitType" id="withFruitSeed" value="withFruitSeed">
+                            <input class="form-check-input" type="radio" name="fruitType" id="withFruitSeed" value="withFruitSeed" checked>
                             <label class="form-check-label" for="withFruitSeed">With Fruit / Seed</label>
                         </div>
                         <div class="form-check form-check-inline">
@@ -68,7 +79,7 @@
                     <div class="mb-3">
                         <label class="form-check-label"><b>Select Leaves Type:</b></label><br>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="leavesType" id="withLeaves" value="withLeaves">
+                            <input class="form-check-input" type="radio" name="leavesType" id="withLeaves" value="withLeaves" checked>
                             <label class="form-check-label" for="withLeaves">With Leaves</label>
                         </div>
                         <div class="form-check form-check-inline">
@@ -79,7 +90,7 @@
                     <div class="mb-3">
                         <label class="form-check-label"><b>Select Sun Exposure Type:</b></label><br>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="sunExposureType" id="fullSun" value="fullSun">
+                            <input class="form-check-input" type="radio" name="sunExposureType" id="fullSun" value="fullSun" checked>
                             <label class="form-check-label" for="fullSun">Full Sun</label>
                         </div>
                         <div class="form-check form-check-inline">
@@ -98,7 +109,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="imageUpload" class="form-label"><b>Upload Image</b></label>
-                    <input type="file" class="form-control" id="imageUpload" name="imageUpload" onchange="previewImage(event)">
+                    <input type="file" class="form-control" id="imageUpload" name="imageUpload" onchange="previewImage(event)" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
@@ -133,46 +144,80 @@
     </div>
 </div>
 <script>
-    document.getElementById('plantForm').addEventListener('submit', function (event) {
+
+    document.getElementById('plantForm').addEventListener('submit', function(event) {
+        // Prevent the default form submission
         event.preventDefault();
-        fetch('/savePlant', {
-            method: 'POST',
-            body: new FormData(this)
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    let alertDiv = document.createElement('div');
-                    alertDiv.className = 'alert alert-success';
-                    alertDiv.setAttribute('role', 'alert');
-                    alertDiv.textContent = 'Plant saved successfully!';
-                    document.getElementById('alertsContainer').innerHTML = alertDiv.outerHTML;
-                    let myModal = new bootstrap.Modal(document.getElementById('alertModal'));
-                    myModal.show(); // Show the modal
-                    setTimeout(function () {
-                        window.location.href = '/main';
-                    }, 3000);
-                } else {
-                    let alertDiv = document.createElement('div');
-                    alertDiv.className = 'alert alert-danger';
-                    alertDiv.setAttribute('role', 'alert');
-                    alertDiv.textContent = 'Error saving plant';
-                    document.getElementById('alertsContainer').innerHTML = alertDiv.outerHTML;
-                    let myModal = new bootstrap.Modal(document.getElementById('alertModal'));
-                    myModal.show(); // Show the modal
-                }
-            })
-            .catch(error => {
-                console.error('Error saving plant:', error);
-                let alertDiv = document.createElement('div');
-                alertDiv.className = 'alert alert-danger';
-                alertDiv.setAttribute('role', 'alert');
-                alertDiv.textContent = 'Error saving plant';
-                document.getElementById('alertsContainer').innerHTML = alertDiv.outerHTML;
-                let myModal = new bootstrap.Modal(document.getElementById('alertModal'));
-                myModal.show(); // Show the modal
-            });
+
+        // Get the height and width values
+        var height = document.getElementById('plantHeight').value;
+        var width = document.getElementById('plantWidth').value;
+
+        // Concatenate the height and width with a separator (e.g., x)
+        var plantSize = height + ' x ' + width;
+
+        // Set the concatenated value in the hidden input field
+        document.getElementById('plantSize').value = plantSize;
+
+        // Submit the form
+        this.submit();
     });
+
+    function updateDate() {
+        // Get the current date and time
+        let now = new Date();
+        // Format the current date and time
+        let formattedNow = now.toISOString().slice(0,16);
+
+        // Update the max attribute of the datetime-local input
+        document.getElementById('dateTime').setAttribute('max', formattedNow);
+    }
+
+    window.onload = function() {
+        updateDate();
+    };
+
+
+    // document.getElementById('plantForm').addEventListener('submit', function (event) {
+    //     event.preventDefault();
+    //     fetch('/savePlant', {
+    //         method: 'POST',
+    //         body: new FormData(this)
+    //     })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             if (data.success) {
+    //                 let alertDiv = document.createElement('div');
+    //                 alertDiv.className = 'alert alert-success';
+    //                 alertDiv.setAttribute('role', 'alert');
+    //                 alertDiv.textContent = 'Plant saved successfully!';
+    //                 document.getElementById('alertsContainer').innerHTML = alertDiv.outerHTML;
+    //                 let myModal = new bootstrap.Modal(document.getElementById('alertModal'));
+    //                 myModal.show(); // Show the modal
+    //                 setTimeout(function () {
+    //                     window.location.href = '/main';
+    //                 }, 3000);
+    //             } else {
+    //                 let alertDiv = document.createElement('div');
+    //                 alertDiv.className = 'alert alert-danger';
+    //                 alertDiv.setAttribute('role', 'alert');
+    //                 alertDiv.textContent = 'Error saving plant';
+    //                 document.getElementById('alertsContainer').innerHTML = alertDiv.outerHTML;
+    //                 let myModal = new bootstrap.Modal(document.getElementById('alertModal'));
+    //                 myModal.show(); // Show the modal
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.error('Error saving plant:', error);
+    //             let alertDiv = document.createElement('div');
+    //             alertDiv.className = 'alert alert-danger';
+    //             alertDiv.setAttribute('role', 'alert');
+    //             alertDiv.textContent = 'Error saving plant';
+    //             document.getElementById('alertsContainer').innerHTML = alertDiv.outerHTML;
+    //             let myModal = new bootstrap.Modal(document.getElementById('alertModal'));
+    //             myModal.show(); // Show the modal
+    //         });
+    // });
 
 
     document.getElementById('plantColor').addEventListener('change', function() {
@@ -194,7 +239,7 @@
 
     function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
-            center: { lat: 54.3781, lng: -2.2902 },
+            center: { lat: 53.3811, lng: -1.4701 },
             zoom: 8
         });
 
@@ -250,6 +295,6 @@
     </script>
     <!-- Bootstrap JS -->
 <!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5/6en8XCp+HHAAK5GSLf2xlYtvJ8U2Q4U+9cuEnJoa3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 </body>
 </html>
