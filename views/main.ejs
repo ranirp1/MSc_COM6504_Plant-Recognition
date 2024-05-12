@@ -24,8 +24,8 @@
         </label>
     </div>
     <div class="form-check form-check-reverse">
-        <label class="form-check-label fw-light">
-            <input class="form-check-input" type="radio" name="sortOrder" value="other"/> Other Sorting Scheme
+        <label class="form-check-label fw-lighter">
+            <input class="form-check-input" type="radio" name="sortOrder" value="nearDistance"/> Most Near Sighting
         </label>
     </div>
     <h5 class="jumbotron-heading" style="margin-left: 200px;">Filters: </h5>
@@ -70,7 +70,7 @@
         </div>
         <!--        <button id="resetButton" class="btn btn-primary btn-sm">Reset Filters</button>-->
         <div class="ms-auto">
-            <button id="resetButton" class="btn btn-primary btn-sm">Reset Filters</button>
+            <button id="resetButton" class="btn btn-outline-dark btn-sm">Reset Filters</button>
         </div>
     </div>
 </div>
@@ -113,6 +113,53 @@
     function sortByMostRecent() {
         plantData.sort((a, b) => new Date(b.dos) - new Date(a.dos));
         renderData(plantData);
+    }
+
+    // Function to calculate distance between two points using Haversine formula
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // Radius of the Earth in kilometers
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+         // Distance in kilometers
+        // console.log(R * c)
+        return R * c;
+    }
+
+    // Function to sort data by nearest location
+    function sortByNearestLocation(currentLocation) {
+        // Split location string into latitude and longitude for each plant
+        for (const plant of plantData) {
+            const [lat, lon] = plant.location.split(',').map(parseFloat);
+            plant.lat = lat;
+            plant.lon = lon;
+        }
+        plantData.sort((a, b) => {
+            const distanceA = calculateDistance(currentLocation.lat, currentLocation.lon, a.lat, a.lon);
+            const distanceB = calculateDistance(currentLocation.lat, currentLocation.lon, b.lat, b.lon);
+            // console.log(distanceA - distanceB)
+            return distanceA - distanceB;
+        });
+        renderData(plantData);
+    }
+
+    let currentLocation;
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position){
+                currentLocation = {
+                    lat: position.coords.latitude,
+                    lon: position.coords.longitude
+                };
+            });
+        } else {
+            console.log("Geolocation not supported by browser.")
+        }
     }
 
     // Function to generate tags based on plant data
@@ -339,11 +386,13 @@
                 sortByMostRecent();
             } else {
                 // Add other sorting schemes here
-                console.log("Hello sorting 2")
+                sortByNearestLocation(currentLocation);
+                // console.log("Hello sorting 2")
             }
         });
     });
     sortByMostRecent();
+    getLocation();
 </script>
 </body>
 </html>
