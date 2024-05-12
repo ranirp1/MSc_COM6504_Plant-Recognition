@@ -52,6 +52,19 @@ function sortByNearestLocation(currentLocation) {
     renderData(plantData);
 }
 
+function resetFilters(){
+    // Clear active filters
+    activeFilters = [];
+    // Call filterData function to display all plants
+    filterData();
+
+    // Update dropdown buttons to be inactive
+    document.querySelectorAll('.dropdown-toggle').forEach(function(button) {
+        button.classList.remove('btn-primary'); // Remove primary class
+        button.classList.add('btn-secondary'); // Add secondary class
+    });
+}
+
 let currentLocation;
 
 function getLocation() {
