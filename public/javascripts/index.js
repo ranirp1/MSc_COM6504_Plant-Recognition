@@ -24,6 +24,8 @@ document.addEventListener("DOMContentLoaded", function() {
         // Logic to validate username
         if (isValidLogin(username)) {
             storeUserData(username);
+            // Redirect to the homepage
+            window.location.href = "/homepage";
         }
     };
 
