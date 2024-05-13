@@ -1,5 +1,64 @@
 document.addEventListener("DOMContentLoaded", function() {
 
+        // Function to display user profile circle with username initials
+        const displayUserProfile = (username) => {
+            const userProfile = document.getElementById("userProfile");
+            if (userProfile) {
+                const profileCircle = document.createElement("div");
+                profileCircle.classList.add("profile-circle");
+
+                // Displaying first two letters of username as initials
+                const initials = username.substring(0, 2).toUpperCase();
+                profileCircle.innerText = initials;
+
+                userProfile.appendChild(profileCircle);
+            } else {
+                console.error("User profile element not found");
+            }
+        };
+
+    // Function to retrieve username from IndexedDB
+    const retrieveUsername = () => {
+        const dbName = "plant-recognition";
+        const request = indexedDB.open(dbName);
+
+        request.onerror = function(event) {
+            console.error("Database error: " + event.target.errorCode);
+        };
+
+        request.onsuccess = function(event) {
+            const db = event.target.result;
+            const transaction = db.transaction(["user"], "readonly"); // Ensure the object store name matches exactly
+            const objectStore = transaction.objectStore("user");
+
+            // Open a cursor to iterate through all entries in the object store
+            const cursorRequest = objectStore.openCursor();
+
+            cursorRequest.onsuccess = function(event) {
+                const cursor = event.target.result;
+                if (cursor) {
+                    const userData = cursor.value;
+                    const username = userData.username;
+                    displayUserProfile(username);
+                    cursor.continue(); // Move to the next entry
+                } else {
+                    console.log("Username retrieval complete.");
+                }
+            };
+
+            cursorRequest.onerror = function(event) {
+                console.error("Error retrieving usernames from IndexedDB: ", event.target.error);
+            };
+        };
+
+        request.onupgradeneeded = function(event) {
+            console.log("Database upgrade needed.");
+        };
+    };
+
+    retrieveUsername();
+
+
     // Function to display a welcome message
     const displayWelcomeMessage = (username) => {
         const welcomeElement = document.getElementById("welcome-message");
@@ -33,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     };
 
-// Function to check if the username already exists in IndexedDB
+    // Function to check if the username already exists in IndexedDB
     const checkUsernameExists = (username) => {
         const todoIDB = requestIDB.result;
         const transaction = todoIDB.transaction(["user"]);
@@ -136,7 +195,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     };
 
-    /// Function to retrieve user and plant data from IndexedDB
+    // Function to retrieve user and plant data from IndexedDB
     const retrieveUserData = () => {
         const todoIDB = requestIDB.result;
         const transaction = todoIDB.transaction(["user", "plants"]);
