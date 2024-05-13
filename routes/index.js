@@ -129,7 +129,8 @@ router.post('/savePlant', upload.single('imageUpload'), async function(req, res,
       sun_exposure: sunExposureType,
       name: plantName,
       flower_colour: plantColor,
-      owner_nickname: userName
+      owner_nickname: userName,
+      plant_status: false
     }, filePath);
 
    // console.log(result)
@@ -153,12 +154,64 @@ const plantdetails = require('../controllers/plants');
 
 router.post('/plantdetails', function(req, res) {
   const plantId = req.body.plantId;
+
   plantdetails.getById(plantId)
     .then((plant) => {
       if (plant) {
         //res.json(plant);// Send the retrieved plant data in JSON format
         //console.log(res.locals.plant);
-        res.render('plantdetails', { plant: plant }); 
+        const resource = `http://dbpedia.org/resource/${encodeURIComponent(plant.name)}`;
+        const endpointUrl = 'https://dbpedia.org/sparql';
+        const sparqlQuery = `
+          PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+          PREFIX dbo: <http://dbpedia.org/ontology/>
+          PREFIX dbp: <http://dbpedia.org/property/>
+          SELECT ?label ?description
+          WHERE {
+          <http://dbpedia.org/resource/${encodeURIComponent(plant.name)}> rdfs:label ?label .
+          <http://dbpedia.org/resource/${encodeURIComponent(plant.name)}> dbo:abstract ?description .
+          FILTER(langMatches(lang(?label),"en") && langMatches(lang(?description),"en"))
+          }
+           `;
+
+        const encodedQuery = encodeURIComponent(sparqlQuery);
+        const url = `${endpointUrl}?query=${encodedQuery}&format=json`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+              console.log("Fetched data:", data); // Log the fetched data
+              let bindings = data.results.bindings;
+
+             // Check if the data is found
+              if (bindings.length === 0) {
+                console.log("Data not found");
+                // Render the 'plantdetails' page without specific data
+                res.render('plantdetails', { plant: plant });
+                return;
+              }
+
+              let result = JSON.stringify(bindings)
+
+              // Check if the description exists before rendering
+              //let description = bindings[0].description? bindings[0].description.value : null;
+
+              res.render('plantdetails', {
+                name: bindings[0]?.label?.value || 'Data not found',
+                description: bindings[0]?.description?.value || 'Description not found',
+                JSONresult: result,
+                plant: plant
+              });
+
+
+            })
+            .catch(error => {
+              console.error('Error fetching data:', error);
+              res.render('plantdetails', { title: 'Plant Details', plant: plant }); // Render the page without data in case of an error
+            });
+
+
+       // res.render('plantdetails', { plant: plant });
       } else {
         res.status(404).send("Plant not found."); // Send a 404 Not Found response
       }
@@ -166,6 +219,45 @@ router.post('/plantdetails', function(req, res) {
     .catch((err) => {
       console.error(err);
       res.status(500).send("Error retrieving plant."); // Send a 500 Internal Server Error response
+    });
+});
+
+
+const chat = require('../controllers/chat');
+
+router.post('/plantdetails/:plantId/chat', function(req, res) {
+  const plantId = req.params.plantId;
+  const chatData = req.body;
+
+  chat.create(plantId, chatData)
+    .then((plant) => {
+      if (plant) {
+        res.status(201).send("Chat message saved successfully!");
+      } else {
+        res.status(404).send("Plant not found.");
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error saving chat message.");
+    });
+});
+
+// Route handler for getting chat data
+router.get('/plantdetails/:plantId/chat', function(req, res) {
+  const plantId = req.params.plantId;
+
+  chat.getById(plantId)
+    .then((chat) => {
+      if (chat) {
+        res.json(chat); // Send the retrieved chat data in JSON format
+      } else {
+        res.status(404).send("Plant not found."); // Send a 404 Not Found response
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error retrieving chat."); // Send a 500 Internal Server Error response
     });
 });
 
