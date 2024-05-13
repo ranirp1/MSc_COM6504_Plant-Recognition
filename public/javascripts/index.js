@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
+
     // Function to display a welcome message
     const displayWelcomeMessage = (username) => {
         const welcomeElement = document.getElementById("welcome-message");
@@ -108,37 +109,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     };
 
-    // Flag to track object store creation
-    let objectStoreCreated = false;
-
-    // Function to handle IndexedDB upgrade (if needed)
-    const handleUpgrade = (ev) => {
-        const db = ev.target.result;
-        // Create object store for user data (with auto-incrementing key)
-        db.createObjectStore("user", {keyPath: "id", autoIncrement: true});
-        objectStoreCreated = true;
-        addMessage("Upgraded object store (if necessary)...", false, false);
-    };
-
-    // Function to handle success during IndexedDB initialization
-    const handleSuccess = () => {
-        if (objectStoreCreated) {
-            retrieveUserData();
-        }
-    };
-
-    // Open IndexedDB with the name "plant-recognition"
-    const requestIDB = indexedDB.open("plant-recognition");
-    requestIDB.addEventListener("upgradeneeded", handleUpgrade);
-    requestIDB.addEventListener("success", handleSuccess);
-    requestIDB.addEventListener("error", (err) => {
-        addMessage("ERROR: " + JSON.stringify(err));
-    });
-
-    // Attach event listener to login form submit button
-    const loginForm = document.getElementById("login-form");
-    loginForm.addEventListener("submit", handleLogin);
-
     // Function to handle plant form submission
     const handlePlantSubmission = (event) => {
         event.preventDefault(); // Prevent default form submission
@@ -153,7 +123,6 @@ document.addEventListener("DOMContentLoaded", function() {
         const plantWidth = document.getElementById("plantWidth").value;
         const plantSize = `${plantHeight} x ${plantWidth}`;
         const plantColor = document.getElementById("plantColor").value;
-        // Get other form fields similarly
 
         // Validate form data
         if (isValidPlantSubmission(userName, plantName, dateTime, description, location, plantSize, plantColor)) {
@@ -184,9 +153,41 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     };
 
+    // Flag to track object store creation
+    let objectStoreCreated = false;
+
+    // Function to handle IndexedDB upgrade (if needed)
+    const handleUpgrade = (ev) => {
+        const db = ev.target.result;
+        // Create object store for user data (with auto-incrementing key)
+        db.createObjectStore("user", {keyPath: "id", autoIncrement: true});
+        // Create object store for plant data
+        db.createObjectStore("plants", {keyPath: "id", autoIncrement: true});
+        objectStoreCreated = true;
+        addMessage("Upgraded object store (if necessary)...", false, false);
+    };
+
+    // Function to handle success during IndexedDB initialization
+    const handleSuccess = () => {
+        if (objectStoreCreated) {
+            retrieveUserData();
+        }
+    };
+
+    // Open IndexedDB with the name "plant-recognition"
+    const requestIDB = indexedDB.open("plant-recognition");
+    requestIDB.addEventListener("upgradeneeded", handleUpgrade);
+    requestIDB.addEventListener("success", handleSuccess);
+    requestIDB.addEventListener("error", (err) => {
+        addMessage("ERROR: " + JSON.stringify(err));
+    });
+
+    // Attach event listener to login form submit button
+    const loginForm = document.getElementById("login-form");
+    loginForm.addEventListener("submit", handleLogin);
+
     // Attach event listener to plant form submit button
     const plantForm = document.getElementById("plantForm");
     plantForm.addEventListener("submit", handlePlantSubmission);
-
 
 });
