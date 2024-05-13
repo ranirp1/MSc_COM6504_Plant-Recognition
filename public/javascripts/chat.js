@@ -21,7 +21,9 @@ function init() {
             hideLoginInterface(room, userId);
         } else {
             // notifies that someone has joined the room
-            writeOnHistory('<b>'+userId+'</b>' + ' joined room ' + room);
+           //loop through the chat messages and display the
+
+          writeOnHistory('<b>'+userId+'</b>' + ' joined room ' + room);
         }
     });
     // called when a message is received
@@ -38,7 +40,8 @@ function init() {
  */
 function sendChatText() {
     let chatText = document.getElementById('chat_input').value;
-    socket.emit('chat', roomNo, name, chatText);
+    if(navigator.onLine){     
+    socket.emit('chat', roomNo, name, chatText); 
      // Make an HTTP POST request to the server
      fetch(`/plantdetails/${plantID}/chat`, {
         method: 'POST',
@@ -61,6 +64,14 @@ function sendChatText() {
         console.error('Error:', error);
         // Handle error
     });
+    }
+    else{
+        openSyncChatIDB().then((db) => {
+            addNewChatToSync(db, chatText).then(() => {
+                console.log("Chat added to IDB")
+            })
+        });
+    }
 }
 
 /**
@@ -96,5 +107,64 @@ function hideLoginInterface(room, userId) {
     document.getElementById('chat_interface').style.display = 'block';
     document.getElementById('who_you_are').innerHTML= userId;
     document.getElementById('in_room').innerHTML= ' '+room;
+    fetch(`/plantdetails/${plantID}/chat`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to retrieve chat messages');
+                    }
+                    return response.json();
+                })
+                .then(chatMessages => {
+                    for (const chatMessage of chatMessages) {
+                        writeOnHistory('<b>' + chatMessage.sender + ':</b> ' + chatMessage.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Handle error
+                });
 }
+
+window.addEventListener('online', () => {
+    alert("You are online. You can now send chat messages.");
+    document.getElementById('chat_input').value = '';
+    // Send any saved chat messages to mongoDB
+    openSyncChatIDB().then((db) => {
+        getAllSyncChats(db).then((chats) => {
+            for (const chat of chats) {
+                fetch(`/plantdetails/${plantID}/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        sender: name,
+                        message: chat.text
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to save chat message');
+                    }
+                    deleteSyncChatFromIDB(db, chat.id);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Handle error
+                });
+            }
+        });
+    });
+    console.log('Online');
+});
+
+window.addEventListener('offline', () => {
+    openSyncChatIDB().then((db) => {
+        addNewChatToSync(db, chatText).then(() => {
+            console.log("Chat added to IDB")
+        })
+    });
+    alert("You are offline. Your chat messages will be saved and sent when you are back online.");
+    console.log('Offline');
+});
 
