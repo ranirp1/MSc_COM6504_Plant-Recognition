@@ -2,7 +2,11 @@ document.addEventListener("DOMContentLoaded", function() {
     // Function to display a welcome message
     const displayWelcomeMessage = (username) => {
         const welcomeElement = document.getElementById("welcome-message");
-        welcomeElement.innerText = `Welcome back, ${username}`;
+        if (welcomeElement) {
+            welcomeElement.innerText = `Welcome back, ${username}`;
+        } else {
+            console.error("Welcome message element not found");
+        }
     };
 
     const addMessage = (txt, clear = false, visible = true) => {
@@ -23,10 +27,34 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Logic to validate username
         if (isValidLogin(username)) {
-            storeUserData(username);
-            // Redirect to the homepage
-            window.location.href = "/homepage";
+            // Check if the username already exists in IndexedDB
+            checkUsernameExists(username);
         }
+    };
+
+// Function to check if the username already exists in IndexedDB
+    const checkUsernameExists = (username) => {
+        const todoIDB = requestIDB.result;
+        const transaction = todoIDB.transaction(["user"]);
+        const userStore = transaction.objectStore("user");
+        const getRequest = userStore.getAll();
+
+        getRequest.addEventListener("success", (event) => {
+            const userData = event.target.result;
+            const usernames = userData.map(user => user.username);
+
+            // If the username exists, display a welcome message and redirect to the homepage
+            if (usernames.includes(username)) {
+                displayWelcomeMessage(username);
+                setTimeout(() => {
+                    window.location.href = "/homepage";
+                }, 1000); // Redirect after 1 second
+            } else {
+                // If the username doesn't exist, store it in IndexedDB and redirect to the homepage
+                storeUserData(username);
+                window.location.href = "/homepage";
+            }
+        });
     };
 
     // Function to validate the username
