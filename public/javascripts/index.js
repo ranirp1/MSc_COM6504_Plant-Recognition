@@ -96,4 +96,56 @@ document.addEventListener("DOMContentLoaded", function() {
     const loginForm = document.getElementById("login-form");
     loginForm.addEventListener("submit", handleLogin);
 
+    // Function to handle plant form submission
+    const handlePlantSubmission = (event) => {
+        event.preventDefault(); // Prevent default form submission
+
+        // Get form data
+        const userName = document.getElementById("userName").value;
+        const plantName = document.getElementById("plantName").value;
+        const dateTime = document.getElementById("dateTime").value;
+        const description = document.getElementById("description").value;
+        const location = document.getElementById("location").value;
+        const plantHeight = document.getElementById("plantHeight").value;
+        const plantWidth = document.getElementById("plantWidth").value;
+        const plantSize = `${plantHeight} x ${plantWidth}`;
+        const plantColor = document.getElementById("plantColor").value;
+        // Get other form fields similarly
+
+        // Validate form data
+        if (isValidPlantSubmission(userName, plantName, dateTime, description, location, plantSize, plantColor)) {
+            storePlantData(userName, plantName, dateTime, description, location, plantSize, plantColor); // Store plant data in IndexedDB
+        }
+    };
+
+    // Function to validate plant submission
+    const isValidPlantSubmission = (userName, plantName, dateTime, description, location, plantSize, plantColor) => {
+        // Perform validation here, e.g., check if required fields are not empty
+        return userName.trim() !== "" && plantName.trim() !== "" && dateTime.trim() !== "" && description.trim() !== "" && location.trim() !== "" && plantSize.trim() !== "" && plantColor.trim() !== "";
+    };
+
+    // Function to store plant data in IndexedDB
+    const storePlantData = (userName, plantName, dateTime, description, location, plantSize, plantColor) => {
+        const todoIDB = requestIDB.result;
+        const transaction = todoIDB.transaction(["plants"], "readwrite");
+        const plantStore = transaction.objectStore("plants");
+        const plantData = { userName, plantName, dateTime, description, location, plantSize, plantColor };
+        const addRequest = plantStore.add(plantData);
+
+        addRequest.addEventListener("success", () => {
+            console.log("Plant data added successfully");
+            // Optionally, you can display a success message or redirect the user
+        });
+
+        addRequest.addEventListener("error", (event) => {
+            console.error("Error storing plant data:", event.target.error);
+            // Optionally, you can display an error message to the user
+        });
+    };
+
+    // Attach event listener to plant form submit button
+    const plantForm = document.getElementById("plantForm");
+    plantForm.addEventListener("submit", handlePlantSubmission);
+
+
 });
