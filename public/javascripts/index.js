@@ -67,16 +67,29 @@ document.addEventListener("DOMContentLoaded", function() {
         const todoIDB = requestIDB.result;
         const transaction = todoIDB.transaction(["user"], "readwrite");
         const userStore = transaction.objectStore("user");
-        const userData = { username: username };
-        const addRequest = userStore.add(userData);
 
-        addRequest.addEventListener("success", () => {
-            console.log("User data added successfully");
-            retrieveUserData(); // Retrieve data after storing
+        // Clear existing user data
+        const clearRequest = userStore.clear();
+
+        clearRequest.addEventListener("success", () => {
+            console.log("User data cleared successfully");
+
+            // Add the new username
+            const userData = { username: username };
+            const addRequest = userStore.add(userData);
+
+            addRequest.addEventListener("success", () => {
+                console.log("User data added successfully");
+                retrieveUserData(); // Retrieve data after storing
+            });
+
+            addRequest.addEventListener("error", (event) => {
+                console.error("Error storing user data:", event.target.error);
+            });
         });
 
-        addRequest.addEventListener("error", (event) => {
-            console.error("Error storing user data:", event.target.error);
+        clearRequest.addEventListener("error", (event) => {
+            console.error("Error clearing user data:", event.target.error);
         });
     };
 
