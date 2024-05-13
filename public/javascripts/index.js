@@ -79,21 +79,8 @@ document.addEventListener("DOMContentLoaded", function() {
         message.style.display = visible ? 'block' : 'none';
     };
 
-    // Function to handle successful login
-    const handleLogin = (event) => {
-        event.preventDefault(); // Prevent default form submission
-
-        const username = document.getElementById("username").value;
-
-        // Logic to validate username
-        if (isValidLogin(username)) {
-            // Check if the username already exists in IndexedDB
-            checkUsernameExists(username);
-        }
-    };
-
     // Function to check if the username already exists in IndexedDB
-    const checkUsernameExists = (username) => {
+    const checkUsernameExists = (username, requestIDB) => {
         const todoIDB = requestIDB.result;
         const transaction = todoIDB.transaction(["user"]);
         const userStore = transaction.objectStore("user");
@@ -111,10 +98,23 @@ document.addEventListener("DOMContentLoaded", function() {
                 }, 1000); // Redirect after 1 second
             } else {
                 // If the username doesn't exist, store it in IndexedDB and redirect to the homepage
-                storeUserData(username);
+                storeUserData(username, requestIDB);
                 window.location.href = "/homepage";
             }
         });
+    };
+
+    // Function to handle successful login
+    const handleLogin = (event) => {
+        event.preventDefault(); // Prevent default form submission
+
+        const username = document.getElementById("username").value;
+
+        // Logic to validate username
+        if (isValidLogin(username)) {
+            // Check if the username already exists in IndexedDB
+            checkUsernameExists(username, requestIDB);
+        }
     };
 
     // Function to validate the username
