@@ -11,8 +11,6 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
-const openDatabase = require('./indexdb/indexdb');
-
 // view engine setup
   app.set('views', path.join(__dirname, 'views'));
   app.set('view engine', 'ejs');
@@ -47,15 +45,6 @@ const openDatabase = require('./indexdb/indexdb');
     res.status(err.status || 500);
     res.render('error');
   });
-
-(async () => {
-  try {
-    const db = await openDatabase();
-    console.log('IndexedDB is working!');
-  } catch (error) {
-    console.error('Error:', error);
-  }
-})();
 
 module.exports = app;
 
