@@ -8,29 +8,7 @@
           integrity="sha384-1BmE4kWBq7V2FOQKf5fzQmZUu9gT0j/c5GL/FB2Fmdns1b6S2Ys/kS0H9IODG5K2" crossorigin="anonymous">
 
     <style>
-        .intro-container {
-            padding: 10px;
-            position: fixed;
-            text-align: center;
-            width: 15%;
-            top: 70px;
-            left: 20px;
-            font-size: 20px;
-            color: #ffffff;
-            margin: 0;
-        }
 
-        .recent_sightings {
-            background-color: #323030;
-            padding: 10px;
-            position: fixed;
-            text-align: center;
-            top: 380px;
-            left: 20px;
-            width: 15%;
-            font-size: 20px;
-            color: #ffffff;
-        }
 
 
 
@@ -42,35 +20,6 @@
         <%- include('navbar.ejs') %>
     </header>
 
-    <script>
-        document.getElementById('image-input').addEventListener('change', function(event) {
-            var input = event.target;
-            var label = document.getElementById('image-label');
-
-            if (input.files && input.files[0]) {
-                label.textContent = input.files[0].name;
-                previewImage(event);
-            } else {
-                label.textContent = 'Add/insert an image';
-            }
-        });
-
-        function previewImage(event) {
-            var input = event.target;
-            var preview = document.getElementById('image-preview');
-
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-
-                reader.onload = function (e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block'; // Show the image preview
-                };
-
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-    </script>
 
     <div class="intro-container">
         <div class="Intro"> Explore our </div>
