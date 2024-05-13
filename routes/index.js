@@ -88,7 +88,8 @@ router.post('/savePlant', upload.single('imageUpload'), async function(req, res,
       sun_exposure: sunExposureType,
       name: plantName,
       flower_colour: plantColor,
-      owner_nickname: userName
+      owner_nickname: userName,
+      plant_status: false
     }, filePath);
 
    // console.log(result)
