@@ -94,62 +94,67 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     };
 
-
-    // Function to retrieve user data from IndexedDB
-    const retrieveUserData = () => {
-        const todoIDB = requestIDB.result;
-        const transaction = todoIDB.transaction(["user"]);
-        const userStore = transaction.objectStore("user");
-        const getRequest = userStore.getAll();
-
-        getRequest.addEventListener("success", (event) => {
-            const userData = event.target.result;
-            const usernames = userData.map(user => user.username);
-            console.log("Retrieved user data:", event.target.result);
-        });
-    };
-
-    // Function to handle plant form submission
+    // Function to handle plant details submission
     const handlePlantSubmission = (event) => {
         event.preventDefault(); // Prevent default form submission
 
         // Get form data
-        const userName = document.getElementById("userName").value;
         const plantName = document.getElementById("plantName").value;
-        const dateTime = document.getElementById("dateTime").value;
         const description = document.getElementById("description").value;
         const location = document.getElementById("location").value;
-        const plantHeight = document.getElementById("plantHeight").value;
-        const plantWidth = document.getElementById("plantWidth").value;
-        const plantSize = `${plantHeight} x ${plantWidth}`;
-        const plantColor = document.getElementById("plantColor").value;
 
         // Validate form data
-        if (isValidPlantSubmission(userName, plantName, dateTime, description, location, plantSize, plantColor)) {
-            storePlantData(userName, plantName, dateTime, description, location, plantSize, plantColor); // Store plant data in IndexedDB
+        if (isValidPlantSubmission(plantName, description, location)) {
+            // Store plant data in IndexedDB
+            storePlantData(plantName, description, location);
         }
     };
 
     // Function to validate plant submission
-    const isValidPlantSubmission = (userName, plantName, dateTime, description, location, plantSize, plantColor) => {
+    const isValidPlantSubmission = (plantName, description, location) => {
         // check if required fields are not empty
-        return userName.trim() !== "" && plantName.trim() !== "" && dateTime.trim() !== "" && description.trim() !== "" && location.trim() !== "" && plantSize.trim() !== "" && plantColor.trim() !== "";
+        return plantName.trim() !== "" && description.trim() !== "" && location.trim() !== "";
     };
 
     // Function to store plant data in IndexedDB
-    const storePlantData = (userName, plantName, dateTime, description, location, plantSize, plantColor) => {
+    const storePlantData = (plantName, description, location) => {
         const todoIDB = requestIDB.result;
         const transaction = todoIDB.transaction(["plants"], "readwrite");
         const plantStore = transaction.objectStore("plants");
-        const plantData = { userName, plantName, dateTime, description, location, plantSize, plantColor };
+
+        // Add the new plant details
+        const plantData = { plantName: plantName, description: description, location: location };
         const addRequest = plantStore.add(plantData);
 
         addRequest.addEventListener("success", () => {
             console.log("Plant data added successfully");
+            retrieveUserData(); // Retrieve data after storing
         });
 
         addRequest.addEventListener("error", (event) => {
             console.error("Error storing plant data:", event.target.error);
+        });
+    };
+
+    /// Function to retrieve user and plant data from IndexedDB
+    const retrieveUserData = () => {
+        const todoIDB = requestIDB.result;
+        const transaction = todoIDB.transaction(["user", "plants"]);
+        const userStore = transaction.objectStore("user");
+        const plantStore = transaction.objectStore("plants");
+
+        const getUserRequest = userStore.getAll();
+        const getPlantRequest = plantStore.getAll();
+
+        getUserRequest.addEventListener("success", (event) => {
+            const userData = event.target.result;
+            const usernames = userData.map(user => user.username);
+            console.log("Retrieved user data:", event.target.result);
+        });
+
+        getPlantRequest.addEventListener("success", (event) => {
+            const plantData = event.target.result;
+            console.log("Retrieved plant data:", plantData);
         });
     };
 
@@ -161,7 +166,6 @@ document.addEventListener("DOMContentLoaded", function() {
         const db = ev.target.result;
         // Create object store for user data (with auto-incrementing key)
         db.createObjectStore("user", {keyPath: "id", autoIncrement: true});
-        // Create object store for plant data
         db.createObjectStore("plants", {keyPath: "id", autoIncrement: true});
         objectStoreCreated = true;
         addMessage("Upgraded object store (if necessary)...", false, false);
