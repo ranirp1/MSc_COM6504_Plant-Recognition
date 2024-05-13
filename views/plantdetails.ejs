@@ -39,7 +39,12 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">Name - <%= plant.name %></li>
                         <li class="list-group-item">Status - <%= plant.plant_status %></li>
-                        <li class="list-group-item">Information - </li>
+                        <% if (typeof description!== 'undefined') { %>
+                            <li class="list-group-item">Information - <%= description %></li>
+                        <% } else { %>
+                            <li class="list-group-item">Information - No description available</li>
+                        <% } %>
+                        <li class="list-group-item">URI: <a href="http://dbpedia.org/resource/<%= plant.name %>">http://dbpedia.org/resource/<%= plant.name %></a></li>
                     </ul>
                 </li>
             </ul>
