@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Function to validate plant submission
     const isValidPlantSubmission = (userName, plantName, dateTime, description, location, plantSize, plantColor) => {
-        // Perform validation here, e.g., check if required fields are not empty
+        // check if required fields are not empty
         return userName.trim() !== "" && plantName.trim() !== "" && dateTime.trim() !== "" && description.trim() !== "" && location.trim() !== "" && plantSize.trim() !== "" && plantColor.trim() !== "";
     };
 
@@ -134,12 +134,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
         addRequest.addEventListener("success", () => {
             console.log("Plant data added successfully");
-            // Optionally, you can display a success message or redirect the user
         });
 
         addRequest.addEventListener("error", (event) => {
             console.error("Error storing plant data:", event.target.error);
-            // Optionally, you can display an error message to the user
         });
     };
 
