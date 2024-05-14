@@ -223,6 +223,14 @@ document.addEventListener("DOMContentLoaded", function() {
     // Function to handle IndexedDB upgrade (if needed)
     const handleUpgrade = (ev) => {
         const db = ev.target.result;
+
+        // Check if the old version exists and delete it if it does
+        if (ev.oldVersion > 0) {
+            db.deleteObjectStore("user");
+            db.deleteObjectStore("plants");
+            addMessage("Deleted previous version of object stores...", false, false);
+        }
+
         // Create object store for user data (with auto-incrementing key)
         db.createObjectStore("user", {keyPath: "id", autoIncrement: true});
         db.createObjectStore("plants", {keyPath: "id", autoIncrement: true});
