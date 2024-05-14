@@ -8,136 +8,148 @@
   <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <%- include('navbar.ejs') %>
-<body onload="init()" class="gradient-background">
-  <div class = "container bg-white py-2 rounded shadow" style="margin-top: 30px;">
-  <main class="container">
-    <div class="row mb-4">
-      <div class="card pr-3 py-2 px-2" style="width: 33rem;">
-        <img src="<%= plant.img %>" class="card-img object-fit-cover img-fluid rounded shadow">
-      </div>
-      <div class="col-md-6">
-        <h3 class="fs-3">
-          <%= plant.name %>
-        </h3>
-        <p class="text-muted">Sighted by - </p>
-        <p class="mb-3">
-          <%= plant.description %>
-        </p>
-        <div class="row">
-          <div class="col-12">
-            <h4 class="fs-4 mb-6">Plant Characteristic</h4>
-            <div class="d-flex justify-content-between">
-              <div class="col-md-2 mb-3 d-flex flex-column">
-                <img src="/images/flower.gif" alt="Flower GIF" class="img-fluid rounded"
-                  style="width: 100px; height: 100px;">
-                <% if(plant.flower){ %>
-                  <span class="tag badge bg-success" style="margin-right: 5px;">Flowering</span>
-                  <% } else { %>
-                    <span class="tag badge bg-danger" style="margin-right: 5px;">Non Flowering</span>
-                    <% } %>
+
+  <body onload="init()" class="gradient-background">
+    <div class="container bg-white py-2 rounded shadow" style="margin-top: 30px;">
+      <main class="row">
+        <div class="col mb-6 mb-4">
+          <div class="card pr-3 py-2 px-2" style="width: 33rem;">
+            <img src="<%= plant.img %>" class="card-img object-fit-cover img-fluid rounded shadow">
+          </div>
+          <div class="col-md-6">
+            <div class="row mb-4">
+            <h3 class="fs-3">
+              <%= plant.name %>
+            </h3>
+            <p class="text-muted">Sighted by - </p>
+            <p class="mb-3">
+              <%= plant.description %>
+            </p>
+            <div class="row">
+              <div class="col-12">
+                <h4 class="fs-4 mb-6">Plant Characteristic</h4>
+                <div class="d-flex justify-content-between">
+                  <div class="col-md-2 mb-3 d-flex flex-column">
+                    <img src="/images/flower.gif" alt="Flower GIF" class="img-fluid rounded"
+                      style="width: 100px; height: 100px;">
+                    <% if(plant.flower){ %>
+                      <span class="tag badge bg-success" style="margin-right: 5px;">Flowering</span>
+                      <% } else { %>
+                        <span class="tag badge bg-danger" style="margin-right: 5px;">Non Flowering</span>
+                        <% } %>
+                  </div>
+                  <div class="col-md-2 mb-3 d-flex flex-column">
+                    <img src="/images/leaf.gif" alt="Leaf GIF" class="img-fluid rounded"
+                      style="width: 100px; height: 100px;">
+                    <% if(plant.leaves){ %>
+                      <span class="tag badge bg-success" style="margin-right: 5px;">Leaves</span>
+                      <% } else { %>
+                        <span class="tag badge bg-danger" style="margin-right: 5px;">No Leaves</span>
+                        <% } %>
+                  </div>
+                  <div class="col-md-2 mb-3 d-flex flex-column">
+                    <img src="/images/seed.gif" alt="Fruit GIF" class="img-fluid rounded"
+                      style="width: 100px; height: 100px;">
+                    <% if(plant.fruits_or_seeds){ %>
+                      <span class="tag badge bg-success" style="margin-right: 5px;">Fruits and Seeds</span>
+                      <% } else { %>
+                        <span class="tag badge bg-danger" style="margin-right: 5px;">No Fruits and Seeds</span>
+                        <% } %>
+                  </div>
+                  <div class="col-md-2 mb-3 d-flex flex-column">
+                    <img src="/images/sun.gif" alt="Sun GIF" class="img-fluid rounded"
+                      style="width: 100px; height: 100px;">
+                    <% if (plant.sun_exposure==='fullSun' ) { %>
+                      <span class="tag badge bg-warning" style="margin-right: 5px;">Full Sun</span>
+                      <% } else if (plant.sun_exposure==='partialShade' ) { %>
+                        <span class="tag badge bg-warning" style="margin-right: 5px;">Partial Shade</span>
+                        <% } else if (plant.sun_exposure==='fullShade' ) { %>
+                          <span class="tag badge bg-warning" style="margin-right: 5px;">Full Shade</span>
+                          <% } %>
+                  </div>
+                  <div class="col-md-2 mb-3 d-flex flex-column">
+                    <img src="/images/color.gif" alt="Color GIF" class="img-fluid rounded"
+                      style="width: 100px; height: 100px;">
+                    <span class="badge-color" style="background-color: var(--plant-color);">
+                      <%= plant.flower %>
+                    </span>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="fs-4 mb-6">Plant Identification</h4>
+                  <div class="col-md-2 mb-3 d-flex align-items-center">
+                    <p class="me-2 mb-0">Name: </p>
+                    <input type="text" class="form-control" id="plantName" value="<%= plant.name %>"
+                      style="width: 300px;">
+                    <span class="input-group-text" id="basic-addon1">
+                      <i class="bi bi-pencil"></i> </span>
+                  </div>
+                  <div class="col-md-2 mb-3 d-flex align-items-center">
+                    <p class="me-2 mb-0">Status: <%= plant.plant_status %>
+                    </p>
+                  </div>
+                  <div class="col-md-2 mb-3 d-flex align-items-center">
+                    <p class="me-2 mb-0">Information: </p>
+                    <% if (typeof description!=='undefined' ) { %>
+                      <%= description %>
+                        <% } else { %>
+                          No description available
+                          <% } %>
+                  </div>
+                  <div class="col-md-2 mb-3 d-flex align-items-center">
+                    <p>URI: <a href="http://dbpedia.org/resource/<%= plant.name %>">http://dbpedia.org/resource/<%=plant.name %></a></p>
+                  </div>
+                </div>
               </div>
-              <div class="col-md-2 mb-3 d-flex flex-column">
-                <img src="/images/leaf.gif" alt="Leaf GIF" class="img-fluid rounded"
-                  style="width: 100px; height: 100px;">
-                <% if(plant.leaves){ %>
-                  <span class="tag badge bg-success" style="margin-right: 5px;">Leaves</span>
-                  <% } else { %>
-                    <span class="tag badge bg-danger" style="margin-right: 5px;">No Leaves</span>
-                    <% } %>
-              </div>
-              <div class="col-md-2 mb-3 d-flex flex-column">
-                <img src="/images/seed.gif" alt="Fruit GIF" class="img-fluid rounded"
-                  style="width: 100px; height: 100px;">
-                <% if(plant.fruits_or_seeds){ %>
-                  <span class="tag badge bg-success" style="margin-right: 5px;">Fruits and Seeds</span>
-                  <% } else { %>
-                    <span class="tag badge bg-danger" style="margin-right: 5px;">No Fruits and Seeds</span>
-                    <% } %>
-              </div>
-              <div class="col-md-2 mb-3 d-flex flex-column">
-                <img src="/images/sun.gif" alt="Sun GIF" class="img-fluid rounded" style="width: 100px; height: 100px;">
-                <% if (plant.sun_exposure==='fullSun' ) { %>
-                  <span class="tag badge bg-warning" style="margin-right: 5px;">Full Sun</span>
-                  <% } else if (plant.sun_exposure==='partialShade' ) { %>
-                    <span class="tag badge bg-warning" style="margin-right: 5px;">Partial Shade</span>
-                    <% } else if (plant.sun_exposure==='fullShade' ) { %>
-                      <span class="tag badge bg-warning" style="margin-right: 5px;">Full Shade</span>
-                      <% } %>
-              </div>
-              <div class="col-md-2 mb-3 d-flex flex-column">
-                <img src="/images/color.gif" alt="Color GIF" class="img-fluid rounded" style="width: 100px; height: 100px;">
-                <span class="badge-color" style="background-color: var(--plant-color);">  <%= plant.flower %>
-                </span>
-              </div>                           
             </div>
-            <div>
-              <h4 class="fs-4 mb-6">Plant Identification</h4>
-              <div class="col-md-2 mb-3 d-flex align-items-center">
-                <p class="me-2 mb-0">Name: </p>
-                  <input type="text" class="form-control" id="plantName" value="<%= plant.name %>" style="width: 300px;">
-                  <span class="input-group-text" id="basic-addon1">
-                    <i class="bi bi-pencil"></i> </span>
-              </div> 
-              <div class="col-md-2 mb-3 d-flex align-items-center">
-                <p class="me-2 mb-0">Status: <%= plant.plant_status %></p>
-                <li class="list-group-item">Status: <%= plant.plant_status %></li>
-                <% if (typeof description!== 'undefined') { %>
-                    <li class="list-group-item">Information - <%= description %></li>
-                <% } else { %>
-                    <li class="list-group-item">Information - No description available</li>
-                <% } %>
-                <li class="list-group-item">URI: <a href="http://dbpedia.org/resource/<%= plant.name %>">http://dbpedia.org/resource/<%= plant.name %></a></li>
-              </div> 
-              <div class="col-md-2 mb-3 d-flex align-items-center">
-                <p class="me-2 mb-0">Information: </p>
-              </div>                           
+            <div class="col-md-6 shadow">
+              <div id="map">
+              </div>
             </div>
           </div>
         </div>
-
-        <div class="col-md-6 shadow">
-            <div id="map"></div>
         </div>
-            </div>
-    </div>
         <%- include('chat.ejs',{plantID:plant._id}) %>
-  </main>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+      </main>
+      </div>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+      <script>
+        let coordinates = " <%=plant.location%>";
+        let locationParts = coordinates.split(',');
+        let latitude = locationParts[0];
+        let longitude = locationParts[1];
 
-</main>
-<script>
-  let coordinates = " <%=plant.location%>";
-  let locationParts = coordinates.split(',');
-  let latitude = locationParts[0];
-  let longitude = locationParts[1];
+        // console.log("Latitude:", latitude);
+        // console.log("Longitude:", longitude);
 
-  // console.log("Latitude:", latitude);
-  // console.log("Longitude:", longitude);
+        function initMap() {
+          var map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: parseFloat(latitude), lng: parseFloat(longitude) },
+            zoom: 8,
+            draggable: false
+          });
 
-  function initMap() {
-      var map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: parseFloat(latitude), lng: parseFloat(longitude)},
-          zoom: 8,
-          draggable: false
-      });
-
-      var marker = new google.maps.Marker({
-          position: {lat: parseFloat(latitude), lng: parseFloat(longitude)},
-          map: map,
-          draggable: false // Allow the marker to be dragged initially
-      });
-  }
-</script>
-<script async defer
+          var marker = new google.maps.Marker({
+            position: { lat: parseFloat(latitude), lng: parseFloat(longitude) },
+            map: map,
+            draggable: false // Allow the marker to be dragged initially
+          });
+        }
+      </script>
+      <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuqPAkMS8XSE0XCU2iFpA-M_znQ-rmSFg&callback=initMap">
-</script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-</div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-    crossorigin="anonymous"></script>
-</body>
+        </script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+      crossorigin="anonymous"></script>
+  </body>
+
 </html>
