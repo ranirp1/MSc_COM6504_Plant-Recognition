@@ -77,7 +77,7 @@
             getRequest.addEventListener("success", (event) => {
                 const userData = event.target.result;
                 if (userData.length > 0) {
-                    const username = userData[0].username; // Assuming there's only one user entry
+                    const username = userData[0].username;
                     const userProfile = document.getElementById("userProfile");
                     if (userProfile) {
                         userProfile.innerText = username.substring(0, 2).toUpperCase();
