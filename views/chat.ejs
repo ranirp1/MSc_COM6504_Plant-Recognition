@@ -10,15 +10,11 @@
     var plantID = "<%= plantID %>";
 </script>
 <body onload="init()">
-<div class="card text-center p-2" id="initial_form" style="display: block">
+<div class="card text-center p-2 w-100" style="display: block">
     <form onsubmit="return false;">
         <p><label for="name"> Your name </label>
             <input type="text" id="name" name="name">
         </p>
-<!--        <p>-->
-<!--            <label for="roomNo"> Your room </label>-->
-<!--            <input type="text" id="roomNo" name="roomNo">-->
-<!--        </p>-->
         <div class="card-footer text-muted">
             <button id="connect" type="button" class="btn btn-primary" onclick="connectToRoom()">Lets Chat!!</button>
         </div>
