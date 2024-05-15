@@ -3,25 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
+    <title> Plant Recognition </title>
     <style>
-        body {
-            background-image: url('<%= backgroundImage %>');
-            background-size: cover;
-            background-position: center;
-            height: 100vh;
-            margin: 10%;
-            padding: 20%;
+        .tagline {
+            text-align: center; /* Center the text */
+            line-height: 1; /* Ensure each line is spaced evenly */
         }
-        /* Add any additional styles here */
+        .tagline span {
+            display: block; /* Display each word on a separate line */
+        }
+
     </style>
 </head>
+
 <body>
 <!-- Include the navbar -->
 <%- include('navbar.ejs') %>
+    <div class="tagline">
+        <span>Uncover</span>
+        <span>Verdant</span>
+        <span>Wonders</span>
+    </div>
 
-<!-- Your homepage content goes here -->
-<h1>Welcome to Our Website</h1>
-<p>This is the homepage content.</p>
+
 </body>
 </html>
