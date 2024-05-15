@@ -46,9 +46,53 @@ const getTimeElapsed = (plantDOS) => {
   }
 }
 
-/* GET home page. */
+/* GET login page. */
 router.get('/', function(req, res, next) {
   res.render('loginpage', { title: 'Express' });
+});
+
+/* POST login page. */
+router.post('/', function(req, res, next) {
+  const username = req.body.username;
+
+  // Check if the username already exists in IndexedDB
+  const transaction = requestIDB.result.transaction(["user"]);
+  const userStore = transaction.objectStore("user");
+  const getRequest = userStore.getAll();
+
+  getRequest.addEventListener("success", (event) => {
+    const userData = event.target.result;
+    const usernames = userData.map(user => user.username);
+
+    // Check if the username exists
+    if (usernames.includes(username)) {
+      // Username already exists, redirect to homepage
+      res.redirect('/homepage');
+    } else {
+      // Username does not exist, store it in IndexedDB
+      const addRequest = userStore.add({ username: username });
+
+      addRequest.addEventListener("success", () => {
+        console.log("User data added successfully");
+        // Redirect to homepage
+        res.redirect('/homepage');
+      });
+
+      addRequest.addEventListener("error", (event) => {
+        console.error("Error storing user data:", event.target.error);
+        res.status(500).send("Error storing user data");
+      });
+    }
+  });
+});
+
+
+/* GET home page. */
+router.get('/homepage', function(req, res, next) {
+  res.render('homepage', {
+    backgroundImage: 'images/bg.jpg',
+    title: 'Express'
+  });
 });
 
 /* Plant Details */
