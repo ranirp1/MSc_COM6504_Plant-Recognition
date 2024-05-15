@@ -1,5 +1,27 @@
-
-
-
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <style>
+        body {
+            background-image: url('<%= backgroundImage %>');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            margin: 10%;
+            padding: 20%;
+        }
+        /* Add any additional styles here */
+    </style>
+</head>
+<body>
+<!-- Include the navbar -->
 <%- include('navbar.ejs') %>
+
+<!-- Your homepage content goes here -->
+<h1>Welcome to Our Website</h1>
+<p>This is the homepage content.</p>
+</body>
+</html>
