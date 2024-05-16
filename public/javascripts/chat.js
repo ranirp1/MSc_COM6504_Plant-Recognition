@@ -88,10 +88,21 @@ function sendChatText() {
  * interface
  */
 function connectToRoom() {
-    roomNo = plantID;
-    name = document.getElementById('name').value;
-    if (!name) name = 'Unknown-' + Math.random();
-    socket.emit('create or join', roomNo, name);
+    getUsername().then((username) => {
+        if (username) {
+            name = username;
+            console.log("connectToRoom");
+            roomNo = plantID;
+            if (!name) name = 'Unknown-' + Math.random();
+            socket.emit('create or join', roomNo, name);        } 
+    }
+    );
+
+    // console.log("connectToRoom");
+    // roomNo = plantID;
+    // name = document.getElementById('name').value;
+    // if (!name) name = 'Unknown-' + Math.random();
+    // socket.emit('create or join', roomNo, name);
 }
 
 /**
@@ -184,3 +195,40 @@ function closeChat() {
         chatInterface.style.display = 'none';
       }
   }
+
+  const getUsername = () => {
+    // Open IndexedDB with the name "plant-recognition"
+    const requestIDB = indexedDB.open("plant-recognition");
+  
+    return new Promise((resolve, reject) => {
+      requestIDB.addEventListener("success", () => {
+        const db = requestIDB.result;
+        const transaction = db.transaction(["user"], "readonly");
+        const objectStore = transaction.objectStore("user");
+        const getRequest = objectStore.getAll();
+  
+        getRequest.addEventListener("success", (event) => {
+          const userData = event.target.result;
+          if (userData.length > 0) {
+            const username = userData[0].username;
+            const userName = document.getElementById('who_you_are');
+            if (userName) {
+              userName.innerText = username;
+            }
+            resolve(username);  
+          } else {
+            resolve(null); 
+          }
+        });
+          getRequest.addEventListener("error", (error) => {
+          console.error("Error retrieving username from IndexedDB:", error);
+          reject(error);  
+        });
+      });
+  
+      requestIDB.addEventListener("error", (error) => {
+        console.error("Error opening IndexedDB:", error);
+        reject(error);  
+      });
+    });
+  };
