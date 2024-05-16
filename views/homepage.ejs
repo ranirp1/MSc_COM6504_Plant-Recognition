@@ -1,30 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Plant Recognition </title>
-    <style>
-        .tagline {
-            text-align: center; /* Center the text */
-            line-height: 1; /* Ensure each line is spaced evenly */
-        }
-        .tagline span {
-            display: block; /* Display each word on a separate line */
-        }
-
-    </style>
-</head>
+<title>Homepage</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+    body {font-family: "Lato", sans-serif}
+    .Slides {display: none}
+</style>
 
 <body>
-<!-- Include the navbar -->
+
+<!-- Navbar -->
 <%- include('navbar.ejs') %>
-    <div class="tagline">
-        <span>Uncover</span>
-        <span>Verdant</span>
-        <span>Wonders</span>
+
+<!-- HomePage -->
+<div class="page" style="max-width:2000px;margin-top:46px">
+
+    <!-- Automatic Slideshow Images -->
+    <div class="Slides page-display-container page-center" style="position: relative;">
+        <img src="images/img 1.png" style="width:100%">
+        <div class="page-display-bottommiddle page-container page-text-white page-padding-32 page-hide-small"
+             style="position: absolute; bottom:20%; left: 50%; transform: translateX(-50%); text-align: center;">
+            <h1 style="color: white;">Verdant Wonders</h1>
+            <p style="color: white;"><b>Where Nature's Beauty Reveals Itself</b></p>
+        </div>
+    </div>
+    <div class="Slides page-display-container page-center" style="position: relative;">
+        <img src="images/img 3.jpg" style="width:100%">
+        <div class="page-display-bottommiddle page-container page-text-white page-padding-32 page-hide-small"
+             style="position: absolute; bottom: 20%; left: 50%; transform: translateX(-50%); text-align: center;">
+            <h1 style="color: white;">Verdant Wonders</h1>
+            <p style="color: white;"><b>Where Every Leaf Holds a Story</b></p>
+        </div>
+    </div>
+    <div class="Slides page-display-container page-center" style="position: relative;">
+        <img src="images/img 2.jpg" style="width:100%">
+        <div class="page-display-bottommiddle page-container page-text-white page-padding-32 page-hide-small"
+             style="position: absolute; bottom: 20%; left: 50%; transform: translateX(-50%); text-align: center;">
+            <h1 style="color: white;">Explore, Discover, and</h1>
+            <p style="color: white;"><b>Embrace the Verdant Wonders</b></p>
+        </div>
     </div>
 
+
+    <!-- Second Section -->
+    <div class="page-container page-content page-center page-padding-64" style="max-width:800px" id="band">
+        <h2 class="page-wide"></h2>
+        <p class="page-opacity"><i></i></p>
+        <p class="page-justify"></p>
+
+    </div>
+
+
+
+</div>
+
+<script>
+    // Automatic Slideshow - change image every 4 seconds
+    var myIndex = 0;
+    carousel();
+
+    function carousel() {
+        var i;
+        var x = document.getElementsByClassName("Slides");
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        myIndex++;
+        if (myIndex > x.length) {myIndex = 1}
+        x[myIndex-1].style.display = "block";
+        setTimeout(carousel, 4000);
+    }
+
+
+</script>
 
 </body>
 </html>
