@@ -34,6 +34,21 @@
         height: 40vh;
     }
 
+    .image-carousel-container {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    .image-carousel {
+        width: calc(50% - 10px);
+    }
+
+    .image-carousel img {
+        width: 100%;
+        height: auto;
+    }
+
 </style>
 
 <body>
@@ -83,11 +98,24 @@
         <img src="images/Plant-img.png" alt="photo">
     </div>
 
-
-
-
-
-
+    <div class="image-carousel-container">
+        <div class="image-carousel">
+            <% const images1 = images.slice(0, 3); %>
+            <% images1.forEach(image => { %>
+                <div class="Slides" style="position: relative;">
+                    <img src="<%= image %>" style="width:100%">
+                </div>
+            <% }) %>
+        </div>
+        <div class="image-carousel">
+            <% const images2 = images.slice(3, 6); %>
+            <% images2.forEach(image => { %>
+                <div class="Slides" style="position: relative;">
+                    <img src="<%= image %>" style="width:100%">
+                </div>
+            <% }) %>
+        </div>
+    </div>
 
 </div>
 
@@ -108,6 +136,32 @@
         setTimeout(carousel, 4000);
     }
 
+    // Fetch random images from backend
+    fetch('/random-images')
+        .then(response => response.json())
+        .then(images => {
+            const images1 = images.slice(0, 3); // First set of images
+            const images2 = images.slice(3, 6); // Second set of images
+            // Render images in carousels
+            renderImages(images1, '.image-carousel:nth-of-type(1)');
+            renderImages(images2, '.image-carousel:nth-of-type(2)');
+        })
+        .catch(error => console.error(error));
+
+    // Function to render images in the specified carousel
+    function renderImages(images, carouselSelector) {
+        const carousel = document.querySelector(carouselSelector);
+        images.forEach(imageUrl => {
+            const slide = document.createElement('div');
+            slide.classList.add('Slides');
+            slide.style.position = 'relative';
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            img.style.width = '100%';
+            slide.appendChild(img);
+            carousel.appendChild(slide);
+        });
+    }
 
 </script>
 

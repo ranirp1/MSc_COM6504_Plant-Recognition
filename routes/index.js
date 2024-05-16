@@ -20,6 +20,21 @@ var storage = multer.diskStorage({
 
 let upload = multer({ storage: storage });
 
+// Fetch random images route
+router.get('/random-images', async (req, res) => {
+  try {
+    // Fetch random images from MongoDB
+    const randomImages = await plants.getRandomImages(6); // Adjust the number of images as needed
+
+    // Send the image URLs as JSON response
+    res.json(randomImages);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
 /**
  * used to return dynamic time when plant was submitted
  */
