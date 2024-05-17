@@ -10,20 +10,27 @@
     var plantID = "<%= plantID %>";
 </script>
 <body onload="init()">
-<div class="container" id="chat_interface">
-    <div>
+
+
+    <div class="d-flex justify-content-center align-items-center">
+        <button id="connect" type="button" class="btn btn-primary" onclick="connectToRoom()">Lets Chat!!</button>
+      </div>
+      
+
+
+<div class="card text-center" id="chat_interface" style="display: none">
+    <div class="card-header">
         <div id="who_you_are" style="display: inline"></div>, you are in room: <div id="in_room" style="display: inline"></div>
     </div>
     <div id="history" class="boxed"></div>
     <div id="input" class="bottom boxed">
         <form onsubmit="return false;" style="width: 100%">
             <div class="card-footer text-muted">
-                <p style="display: flex; align-items: center;">
-                    <input type="text" id="chat_input" name="chat_input" style="flex: 1">
-                    <button id="chat_send" type="button" class="btn btn-primary" onclick="sendChatText()">
-                      <i id="chat_send" class="bi bi-chat-dots"></i> Send
-                    </button>
-                  </p>  
+            <p>
+                <label for="name"> chat: </label>
+                <input type="text" id="chat_input" name="chat_input" style="width: 80%">
+                <button id="chat_send" type="button" class="btn btn-primary" onclick="sendChatText()">Send</button>
+            </p>
             </div>
         </form>
     </div>

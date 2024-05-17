@@ -11,11 +11,16 @@ let socket = io();
 function init() {
     console.log("plantID",plantID);
     // it sets up the interface so that userId and room are selected
-   // document.getElementById('initial_form').style.display = 'block';
-    //document.getElementById('chat_interface').style.display = 'none';
+    // document.getElementById('initial_form')
+    // document.getElementById('chat_interface').style.display = 'none';
 
-    
-    connectToRoom();
+    const chatInterface = document.getElementById('chat_interface');
+    const openChatButton = document.getElementById('connect');
+
+openChatButton.addEventListener('click', () => {
+  chatInterface.classList.toggle('hidden'); // Toggle hidden class on click
+});
+  
 
     // called when someone joins the room. If it is someone else it notifies the joining of the room
     socket.on('joined', function (room, userId) {
@@ -117,6 +122,7 @@ function writeOnHistory(text) {
  * @param userId the user name
  */
 function hideLoginInterface(room, userId) {
+    document.getElementById('initial_form');
     document.getElementById('chat_interface').style.display = 'block';
     document.getElementById('who_you_are').innerHTML= userId;
     document.getElementById('in_room').innerHTML= ' '+room;
