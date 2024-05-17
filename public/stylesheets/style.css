@@ -1,6 +1,8 @@
+
 body {
     padding: 50px;
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    height: 100%;
 }
 
 a {
@@ -23,12 +25,6 @@ a {
   padding-bottom: 3%;
 }
 
-body {
-  /*background-color: #e8f5e9;*/
-  /* Light green background */
-  /*color: #333;*/
-  /* Dark text for better contrast */
-}
 
 .btn-primary {
   background-color: #4caf50;
@@ -88,3 +84,29 @@ header {
 .tag {
   margin-right: 5px;
 }
+
+.card-img{
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+}
+
+.gradient-background {
+  background-image: linear-gradient(-225deg, #7085B6 100%, #87A7D9 50%, #DEF3F8 100%);}
+
+#chat_interface {
+  display: flex; /* Enable flexbox layout */
+  flex-grow: 1;
+  /* Added properties for scrolling */
+  height: calc(90vh - 100px); /* Set height to viewport height minus top offset */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.boxed {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px;
+  overflow-y: auto; /* Enable vertical scrolling if content exceeds container height */
+}
+
+

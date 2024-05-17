@@ -342,6 +342,7 @@ function toggleFilter(filter) {
     }
     filterData();
 }
+
 //
 // // Add event listener for reset button
 // document.getElementById('resetButton').addEventListener('click', function() {
