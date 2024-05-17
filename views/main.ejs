@@ -7,45 +7,44 @@
     <title>Plant Sightings</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="icon" href="images/logo.png" type="image/x-icon"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <script src="/javascripts/elapsedtime.js"></script>
     <script src="/javascripts/plantdetail.js"></script>
-    <!--    <link rel="stylesheet" type="text/css" href='/stylesheets/style.css'>-->
+    <!-- Link to external CSS file -->
+    <link href="/stylesheets/style.css" rel="stylesheet">
 </head>
-
-<body>
-    <%- include('navbar.ejs') %>
-        <div class="col-md-9 col-xl-10 px-md-4 py-5 mt-5">
-            <section class="jumbotron text-left">
-                <div class="container">
-                    <h1 class="jumbotron-heading">Plant Sightings</h1>
-                    <!--            <p class="lead text-muted">Contains all plant sightings as described by users.</p>-->
-                </div>
-            </section>
-            <label class="list-group form-check-reverse fw-semibold fst-italic">Sort By:</label>
-            <div class="form-check form-check-reverse">
-                <label class="form-check-label fw-lighter">
-                    <input class="form-check-input" type="radio" name="sortOrder" value="mostRecent" checked /> Most
-                    Recent
-                </label>
-            </div>
-            <div class="form-check form-check-reverse">
-                <label class="form-check-label fw-lighter">
-                    <input class="form-check-input" type="radio" name="sortOrder" value="nearestLocation" /> Most Near
-                    Sighting
-                </label>
-            </div>
-            <h5 class="jumbotron-heading" style="margin-left: 200px;">Filters: </h5>
-            <div class="d-flex" style="margin-left: 200px; margin-top: 10px; ">
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownLeaves"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Leaves
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownLeaves">
-                        <li><a class="dropdown-item" href="#" id="hasLeaves">Has Leaves</a></li>
-                        <li><a class="dropdown-item" href="#" id="noLeaves">No Leaves</a></li>
-                    </ul>
-                </div>
+<body class="gradient-background">
+<%- include('navbar.ejs') %>
+<div class="col-md-9 col-xl-10 px-md-4 py-5 mt-5">
+    <section class="jumbotron text-left">
+        <div class="container">
+            <h1 class="jumbotron-heading">Plant Sightings</h1>
+<!--            <p class="lead text-muted">Contains all plant sightings as described by users.</p>-->
+        </div>
+    </section>
+    <label class="list-group form-check-reverse fw-semibold fst-italic">Sort By:</label>
+    <div class="form-check form-check-reverse">
+        <label class="form-check-label fw-lighter">
+            <input class="form-check-input" type="radio" name="sortOrder" value="mostRecent" checked/> Most Recent
+        </label>
+    </div>
+    <div class="form-check form-check-reverse">
+        <label class="form-check-label fw-lighter">
+            <input class="form-check-input" type="radio" name="sortOrder" value="nearestLocation"/> Most Near Sighting
+        </label>
+    </div>
+    <h5 class="jumbotron-heading" style="margin-left: 200px;">Filters: </h5>
+    <div class="d-flex" style="margin-left: 200px; margin-top: 10px; ">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownLeaves" data-bs-toggle="dropdown" aria-expanded="false">
+                Leaves
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownLeaves">
+                <li><a class="dropdown-item" href="#" id="hasLeaves">Has Leaves</a></li>
+                <li><a class="dropdown-item" href="#" id="noLeaves">No Leaves</a></li>
+            </ul>
+        </div>
 
                 <div class="dropdown ms-2">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownFruits"
@@ -119,56 +118,54 @@
                         </div>
                         <% }); %>
 
-                </div>
-            </div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-            crossorigin="anonymous"></script>
-        <script>
-            if (navigator.onLine) {
-                initializePlantData(<% - JSON.stringify(data) %>);
-            }
-            else {
-                retrievePlants()
-            }
-            // Add event listener for reset button
-            document.getElementById('resetButton').addEventListener('click', resetFilters);
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+<script>
+    if(navigator.onLine){
+        initializePlantData(<%- JSON.stringify(data) %>);
+    }
+    else{
+        retrievePlants()
+    }
+    // Add event listener for reset button
+    document.getElementById('resetButton').addEventListener('click', resetFilters);
 
-            // Set event listener for dropdown button clicks
-            document.querySelectorAll('.dropdown-toggle').forEach(function (button) {
-                button.addEventListener('click', function () {
-                    // Toggle the dropdown menu
-                    // console.log("Clicked the button - function")
-                    let dropdownMenu = this.nextElementSibling;
-                    dropdownMenu.classList.toggle('show');
-                });
+    // Set event listener for dropdown button clicks
+    document.querySelectorAll('.dropdown-toggle').forEach(function(button) {
+        button.addEventListener('click', function () {
+            // Toggle the dropdown menu
+            // console.log("Clicked the button - function")
+            let dropdownMenu = this.nextElementSibling;
+            dropdownMenu.classList.toggle('show');
+        });
+    });
+
+    // Set event listener for dropdown item clicks
+    document.querySelectorAll('.dropdown-item').forEach(function(item) {
+        // item.addEventListener('click', filterData.bind(item));
+        item.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default link behavior
+            toggleFilter(this.id); // Toggle the filter based on clicked item
+
+            // Highlight the selected dropdown button and update others
+            document.querySelectorAll('.dropdown-toggle').forEach(function(button) {
+                if (button.nextElementSibling.contains(item)) {
+                    button.classList.add('btn-primary'); // Add primary class
+                    button.classList.remove('btn-secondary'); // Remove secondary class
+                } else {
+                    if (!button.classList.contains('btn-primary')) {
+                        button.classList.add('btn-secondary'); // Add secondary class if not active
+                    }
+                }
             });
 
-            // Set event listener for dropdown item clicks
-            document.querySelectorAll('.dropdown-item').forEach(function (item) {
-                // item.addEventListener('click', filterData.bind(item));
-                item.addEventListener('click', function (event) {
-                    event.preventDefault(); // Prevent default link behavior
-                    toggleFilter(this.id); // Toggle the filter based on clicked item
-
-                    // Highlight the selected dropdown button and update others
-                    document.querySelectorAll('.dropdown-toggle').forEach(function (button) {
-                        if (button.nextElementSibling.contains(item)) {
-                            button.classList.add('btn-primary'); // Add primary class
-                            button.classList.remove('btn-secondary'); // Remove secondary class
-                        } else {
-                            if (!button.classList.contains('btn-primary')) {
-                                button.classList.add('btn-secondary'); // Add secondary class if not active
-                            }
-                        }
-                    });
-
-                    // Hide the dropdown menu after a selection is made
-                    this.closest('.dropdown').querySelector('.dropdown-toggle').click();
-                    // filterData.call(this); // Call filterData with 'this' referring to the clicked item
-                });
-            });
+            // Hide the dropdown menu after a selection is made
+            this.closest('.dropdown').querySelector('.dropdown-toggle').click();
+            // filterData.call(this); // Call filterData with 'this' referring to the clicked item
+        });
+    });
 
             // Set event listener for radio button change
             document.querySelectorAll('input[type="radio"][name="sortOrder"]').forEach(function (radio) {
@@ -188,306 +185,6 @@
             getLocation();
             let username = document.getElementById('username');
             console.log(username);
-        </script>
-        <!--<script>-->
-
-        <!--    var sortBy;-->
-        <!--    // Function to sort data by most recent-->
-        <!--    function sortByMostRecent() {-->
-        <!--        plantData.sort((a, b) => new Date(b.dos) - new Date(a.dos));-->
-        <!--        sortBy = 'mostRecent';-->
-        <!--        renderData(plantData);-->
-        <!--    }-->
-
-        <!--    // Function to calculate distance between two points using Haversine formula-->
-        <!--    function calculateDistance(lat1, lon1, lat2, lon2) {-->
-        <!--        const R = 6371; // Radius of the Earth in kilometers-->
-        <!--        const dLat = (lat2 - lat1) * Math.PI / 180;-->
-        <!--        const dLon = (lon2 - lon1) * Math.PI / 180;-->
-        <!--        const a =-->
-        <!--            Math.sin(dLat / 2) * Math.sin(dLat / 2) +-->
-        <!--            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *-->
-        <!--            Math.sin(dLon / 2) * Math.sin(dLon / 2);-->
-        <!--        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));-->
-        <!--         // Distance in kilometers-->
-        <!--        // console.log(R * c)-->
-        <!--        return R * c;-->
-        <!--    }-->
-
-        <!--    // Function to sort data by nearest location-->
-        <!--    function sortByNearestLocation(currentLocation) {-->
-        <!--        // Split location string into latitude and longitude for each plant-->
-        <!--        for (const plant of plantData) {-->
-        <!--            const [lat, lon] = plant.location.split(',').map(parseFloat);-->
-        <!--            plant.lat = lat;-->
-        <!--            plant.lon = lon;-->
-        <!--        }-->
-        <!--        plantData.sort((a, b) => {-->
-        <!--            const distanceA = calculateDistance(currentLocation.lat, currentLocation.lon, a.lat, a.lon);-->
-        <!--            const distanceB = calculateDistance(currentLocation.lat, currentLocation.lon, b.lat, b.lon);-->
-        <!--            // console.log(distanceA - distanceB)-->
-        <!--            return distanceA - distanceB;-->
-        <!--        });-->
-        <!--        sortBy = 'nearestLocation';-->
-        <!--        renderData(plantData);-->
-        <!--    }-->
-
-        <!--    let currentLocation;-->
-
-        <!--    function getLocation() {-->
-        <!--        if (navigator.geolocation) {-->
-        <!--            navigator.geolocation.getCurrentPosition(function(position){-->
-        <!--                currentLocation = {-->
-        <!--                    lat: position.coords.latitude,-->
-        <!--                    lon: position.coords.longitude-->
-        <!--                };-->
-        <!--            });-->
-        <!--        } else {-->
-        <!--            console.log("Geolocation not supported by browser.")-->
-        <!--        }-->
-        <!--    }-->
-
-        <!--    // Function to generate tags based on plant data-->
-        <!--    function generateTags(plant) {-->
-        <!--        let tags = '';-->
-        <!--        if (plant.leaves) {-->
-        <!--            tags += '<span class="tag badge bg-success" style="margin-right: 5px;">Leaves</span>';-->
-        <!--        } else {-->
-        <!--            tags += '<span class="tag badge bg-danger" style="margin-right: 5px;">No Leaves</span>';-->
-        <!--        }-->
-        <!--        if (plant.fruits_or_seeds) {-->
-        <!--            tags += '<span class="tag badge bg-success" style="margin-right: 5px;">Fruits</span>';-->
-        <!--        } else {-->
-        <!--            tags += '<span class="tag badge bg-danger" style="margin-right: 5px;">No Fruits</span>';-->
-        <!--        }-->
-        <!--        if (plant.flowers) {-->
-        <!--            tags += '<span class="tag badge bg-success" style="margin-right: 5px;">Flowers</span>';-->
-        <!--        } else {-->
-        <!--            tags += '<span class="tag badge bg-danger" style="margin-right: 5px;">No Flowers</span>';-->
-        <!--        }-->
-        <!--        // Add tags for sun exposure-->
-        <!--        if (plant.sun_exposure === 'fullSun') {-->
-        <!--            tags += '<span class="tag badge bg-warning" style="margin-right: 5px;">Full Sun</span>';-->
-        <!--        } else if (plant.sun_exposure === 'partialShade') {-->
-        <!--            tags += '<span class="tag badge bg-warning" style="margin-right: 5px;">Partial Shade</span>';-->
-        <!--        } else if (plant.sun_exposure === 'fullShade') {-->
-        <!--            tags += '<span class="tag badge bg-warning" style="margin-right: 5px;">Full Shade</span>';-->
-        <!--        }-->
-        <!--        return tags;-->
-        <!--    }-->
-
-        <!--    // Function to render data-->
-        <!--    function renderData(data) {-->
-        <!--        // Clear existing HTML-->
-        <!--        // Render data-->
-        <!--        // This part depends on how you're rendering the data-->
-        <!--        var plantCards = document.getElementById('plantCards');-->
-        <!--        plantCards.innerHTML = ''; // Clear existing cards-->
-
-        <!--        data.forEach(plant => {-->
-        <!--            var secondaryInfo = '';-->
-        <!--            if (sortBy === 'mostRecent') {-->
-        <!--                // Show time elapsed if sorting by most recent-->
-        <!--                secondaryInfo = plant.dos ? `<small class="text-muted">${getTimeElapsed(plant.dos)}</small>` : '';-->
-        <!--            } else if (sortBy === 'nearestLocation' && currentLocation) {-->
-        <!--                // Calculate distance if sorting by nearest location and currentLocation is available-->
-        <!--                const distance = calculateDistance(currentLocation.lat, currentLocation.lon, plant.lat, plant.lon);-->
-        <!--                secondaryInfo = `<small class="text-muted">Distance: ${distance.toFixed(2)} km</small>`;-->
-        <!--            }-->
-        <!--            var cardHtml = `-->
-        <!--                <div class="col-md-4">-->
-        <!--                    <div class="card mb-4 box-shadow">-->
-        <!--                        ${plant.img ? `<img class="card-img-top" src="${plant.img}" alt="Card image cap" style="width: 100%; height: 300px; object-fit: cover;">` : ''}-->
-        <!--                        <div class="card-body">-->
-        <!--                            <p class="card-text">${plant.description}</p>-->
-        <!--                            <div class="d-flex justify-content-between align-items-center">-->
-        <!--                                <div class="btn-group">-->
-        <!--                                    <form action="/plantdetails" method="POST">-->
-        <!--                                        <input type="hidden" name="plantId" value="${plant._id}">-->
-        <!--                                        <button type="submit" class="btn btn-sm btn-outline-secondary">View</button>-->
-        <!--                                    </form>-->
-        <!--                                </div>-->
-        <!--                                ${secondaryInfo}-->
-        <!--                            </div>-->
-        <!--&lt;!&ndash;                        <br/>&ndash;&gt;-->
-        <!--                        <div style="margin-top: 15px;">Tags: ${generateTags(plant)}</div>-->
-        <!--                        </div>-->
-        <!--                    </div>-->
-        <!--                </div>-->
-        <!--            `;-->
-        <!--            plantCards.innerHTML += cardHtml;-->
-        <!--        });-->
-        <!--    }-->
-
-        <!--    // Define an array to hold active filters-->
-        <!--    let activeFilters = [];-->
-
-        <!--    function filterData() {-->
-        <!--        let filteredData = plantData;-->
-        <!--        filteredData = filteredData.filter(plant => {-->
-        <!--            // Filter based on leaves-->
-        <!--            if (activeFilters.includes('hasLeaves') && !plant.leaves) {-->
-        <!--                return false;-->
-        <!--            }-->
-        <!--            if (activeFilters.includes('noLeaves') && plant.leaves) {-->
-        <!--                return false;-->
-        <!--            }-->
-        <!--            // Filter based on fruits-->
-        <!--            if (activeFilters.includes('hasFruits') && !plant.fruits_or_seeds) {-->
-        <!--                return false;-->
-        <!--            }-->
-        <!--            if (activeFilters.includes('noFruits') && plant.fruits_or_seeds) {-->
-        <!--                return false;-->
-        <!--            }-->
-        <!--            // Filter based on flowers-->
-        <!--            if (activeFilters.includes('hasFlowers') && !plant.flowers) {-->
-        <!--                return false;-->
-        <!--            }-->
-        <!--            if (activeFilters.includes('noFlowers') && plant.flowers) {-->
-        <!--                return false;-->
-        <!--            }-->
-        <!--            // Filter based on sun exposure-->
-        <!--            if (activeFilters.includes('fullSun') && plant.sun_exposure !== 'fullSun') {-->
-        <!--                return false;-->
-        <!--            }-->
-        <!--            if (activeFilters.includes('partialShade') && plant.sun_exposure !== 'partialShade') {-->
-        <!--                return false;-->
-        <!--            }-->
-        <!--            if (activeFilters.includes('fullShade') && plant.sun_exposure !== 'fullShade') {-->
-        <!--                return false;-->
-        <!--            }-->
-        <!--            // Check for plants that have both leaves and fruits-->
-        <!--            if (activeFilters.includes('hasLeaves') && activeFilters.includes('hasFruits')) {-->
-        <!--                return plant.leaves && plant.fruits_or_seeds;-->
-        <!--            }-->
-        <!--            // Check for plants that have no leaves and no fruits-->
-        <!--            if (activeFilters.includes('noLeaves') && activeFilters.includes('noFruits')) {-->
-        <!--                return !plant.leaves && !plant.fruits_or_seeds;-->
-        <!--            }-->
-        <!--            // Check for mix and match of other filters-->
-        <!--            return true;-->
-        <!--        });-->
-        <!--        renderData(filteredData);-->
-        <!--        if (filteredData.length === 0) {-->
-        <!--            var plantCards = document.getElementById('plantCards');-->
-        <!--            var cardHtml = `-->
-        <!--        <h4 class="jumbotron-heading">No plants due to filters, please reset the filters to see plants again</h4>-->
-        <!--        `;-->
-        <!--            plantCards.innerHTML += cardHtml;-->
-        <!--        }-->
-        <!--    }-->
-
-        <!--    function toggleFilter(filter) {-->
-        <!--        const index = activeFilters.indexOf(filter);-->
-        <!--        if (index === -1) {-->
-        <!--            activeFilters.push(filter);-->
-        <!--            if (filter === 'hasLeaves' && activeFilters.includes('noLeaves')) {-->
-        <!--                activeFilters.splice(activeFilters.indexOf('noLeaves'), 1);-->
-        <!--            }-->
-        <!--            if (filter === 'noLeaves' && activeFilters.includes('hasLeaves')) {-->
-        <!--                activeFilters.splice(activeFilters.indexOf('hasLeaves'), 1);-->
-        <!--            }-->
-        <!--            if (filter === 'hasFruits' && activeFilters.includes('noFruits')) {-->
-        <!--                activeFilters.splice(activeFilters.indexOf('noFruits'), 1);-->
-        <!--            }-->
-        <!--            if (filter === 'noFruits' && activeFilters.includes('hasFruits')) {-->
-        <!--                activeFilters.splice(activeFilters.indexOf('hasFruits'), 1);-->
-        <!--            }-->
-        <!--            if (filter === 'hasFlowers' && activeFilters.includes('noFlowers')) {-->
-        <!--                activeFilters.splice(activeFilters.indexOf('noFlowers'), 1);-->
-        <!--            }-->
-        <!--            if (filter === 'noFlowers' && activeFilters.includes('hasFlowers')) {-->
-        <!--                activeFilters.splice(activeFilters.indexOf('hasFlowers'), 1);-->
-        <!--            }-->
-        <!--            // Add conditions for sun exposure filter-->
-        <!--            if (filter === 'fullSun' && activeFilters.includes('partialShade')) {-->
-        <!--                activeFilters.splice(activeFilters.indexOf('partialShade'), 1);-->
-        <!--            }-->
-        <!--            if (filter === 'fullSun' && activeFilters.includes('fullShade')) {-->
-        <!--                activeFilters.splice(activeFilters.indexOf('fullShade'), 1);-->
-        <!--            }-->
-        <!--            if (filter === 'partialShade' && activeFilters.includes('fullSun')) {-->
-        <!--                activeFilters.splice(activeFilters.indexOf('fullSun'), 1);-->
-        <!--            }-->
-        <!--            if (filter === 'partialShade' && activeFilters.includes('fullShade')) {-->
-        <!--                activeFilters.splice(activeFilters.indexOf('fullShade'), 1);-->
-        <!--            }-->
-        <!--            if (filter === 'fullShade' && activeFilters.includes('fullSun')) {-->
-        <!--                activeFilters.splice(activeFilters.indexOf('fullSun'), 1);-->
-        <!--            }-->
-        <!--            if (filter === 'fullShade' && activeFilters.includes('partialShade')) {-->
-        <!--                activeFilters.splice(activeFilters.indexOf('partialShade'), 1);-->
-        <!--            }-->
-        <!--        } else {-->
-        <!--            activeFilters.splice(index, 1);-->
-        <!--        }-->
-        <!--        filterData();-->
-        <!--    }-->
-
-        <!--    // Add event listener for reset button-->
-        <!--    document.getElementById('resetButton').addEventListener('click', function() {-->
-        <!--        // Clear active filters-->
-        <!--        activeFilters = [];-->
-        <!--        // Call filterData function to display all plants-->
-        <!--        filterData();-->
-
-        <!--        // Update dropdown buttons to be inactive-->
-        <!--        document.querySelectorAll('.dropdown-toggle').forEach(function(button) {-->
-        <!--            button.classList.remove('btn-primary'); // Remove primary class-->
-        <!--            button.classList.add('btn-secondary'); // Add secondary class-->
-        <!--        });-->
-        <!--    });-->
-
-        <!--    // Set event listener for dropdown button clicks-->
-        <!--    document.querySelectorAll('.dropdown-toggle').forEach(function(button) {-->
-        <!--        button.addEventListener('click', function () {-->
-        <!--            // Toggle the dropdown menu-->
-        <!--            // console.log("Clicked the button - function")-->
-        <!--            let dropdownMenu = this.nextElementSibling;-->
-        <!--            dropdownMenu.classList.toggle('show');-->
-        <!--        });-->
-        <!--    });-->
-
-        <!--    // Set event listener for dropdown item clicks-->
-        <!--    document.querySelectorAll('.dropdown-item').forEach(function(item) {-->
-        <!--        // item.addEventListener('click', filterData.bind(item));-->
-        <!--        item.addEventListener('click', function(event) {-->
-        <!--            event.preventDefault(); // Prevent default link behavior-->
-        <!--            toggleFilter(this.id); // Toggle the filter based on clicked item-->
-
-        <!--            // Highlight the selected dropdown button and update others-->
-        <!--            document.querySelectorAll('.dropdown-toggle').forEach(function(button) {-->
-        <!--                if (button.nextElementSibling.contains(item)) {-->
-        <!--                    button.classList.add('btn-primary'); // Add primary class-->
-        <!--                    button.classList.remove('btn-secondary'); // Remove secondary class-->
-        <!--                } else {-->
-        <!--                    if (!button.classList.contains('btn-primary')) {-->
-        <!--                        button.classList.add('btn-secondary'); // Add secondary class if not active-->
-        <!--                    }-->
-        <!--                }-->
-        <!--            });-->
-
-        <!--            // Hide the dropdown menu after a selection is made-->
-        <!--            this.closest('.dropdown').querySelector('.dropdown-toggle').click();-->
-        <!--            // filterData.call(this); // Call filterData with 'this' referring to the clicked item-->
-        <!--        });-->
-        <!--    });-->
-
-        <!--    // Set event listener for radio button change-->
-        <!--    document.querySelectorAll('input[type="radio"][name="sortOrder"]').forEach(function(radio) {-->
-        <!--        radio.addEventListener('change', function () {-->
-        <!--            if (this.value === 'mostRecent') {-->
-        <!--                sortByMostRecent();-->
-        <!--            } else {-->
-        <!--                // Add other sorting schemes here-->
-        <!--                sortByNearestLocation(currentLocation);-->
-        <!--                // console.log("Hello sorting 2")-->
-        <!--            }-->
-        <!--        });-->
-        <!--    });-->
-        <!--    sortByMostRecent();-->
-        <!--    getLocation();-->
-        <!--</script>-->
+</script>
 </body>
-
 </html>

@@ -12,6 +12,7 @@ a {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  background-color: #528856;
 }
 
 .form-container .col-md-6 {
@@ -23,6 +24,8 @@ a {
   padding-right: 10%;
   padding-left: 5%;
   padding-bottom: 3%;
+  padding-top: 3%;
+  background-color: #e6ece6;
 }
 
 
@@ -92,7 +95,7 @@ header {
 }
 
 .gradient-background {
-  background-image: linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%);;
+  background-image: linear-gradient(120deg, #c8ecce 0%, #75d081 100%);;
 }
 
 #chat_interface {
