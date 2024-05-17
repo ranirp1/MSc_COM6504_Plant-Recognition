@@ -1,6 +1,10 @@
 // Import the plant model
 const plantModel = require('../models/plants');
 
+// Import the Plant
+const Plant = require('../models/plants');
+
+
 // Function to create new plants
 exports.create = function (plantData, filePath) {
     // Create a new plant instance using the provided user data
@@ -21,7 +25,9 @@ exports.create = function (plantData, filePath) {
         URI: plantData.URI,
         img: filePath,
         owner_nickname: plantData.owner_nickname,
-        chat: plantData.chat || []
+        chat: plantData.chat || [],
+        suggestions: plantData.suggestions || []
+
     });
 
     // Save the plant to the database and handle success or failure
@@ -53,6 +59,21 @@ exports.getAll = function () {
         // Return null in case of an error
         return null;
     });
+};
+
+// Function to fetch random images from the database
+exports.getRandomImages = async function (count) {
+    try {
+        // Query the database to fetch random images
+        const randomPlants = await Plant.aggregate([{ $sample: { size: count } }]);
+
+        // Extract image URLs from the fetched plants
+        const images = randomPlants.map(plant => plant.img);
+
+        return images;
+    } catch (error) {
+        throw error;
+    }
 };
 
 //function to get plant based on id

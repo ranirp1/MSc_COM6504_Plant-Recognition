@@ -49,6 +49,7 @@ let PlantSchema = new Schema(
         owner_nickname: {type: String},
         // Define the plant's chat field with type array
         chat: [],
+        suggestions: []
     }
 );
 

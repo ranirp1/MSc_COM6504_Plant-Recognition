@@ -11,8 +11,11 @@ let socket = io();
 function init() {
     console.log("plantID",plantID);
     // it sets up the interface so that userId and room are selected
-    document.getElementById('initial_form').style.display = 'block';
-    document.getElementById('chat_interface').style.display = 'none';
+   // document.getElementById('initial_form').style.display = 'block';
+    //document.getElementById('chat_interface').style.display = 'none';
+
+    
+    connectToRoom();
 
     // called when someone joins the room. If it is someone else it notifies the joining of the room
     socket.on('joined', function (room, userId) {
@@ -79,10 +82,21 @@ function sendChatText() {
  * interface
  */
 function connectToRoom() {
-    roomNo = plantID;
-    name = document.getElementById('name').value;
-    if (!name) name = 'Unknown-' + Math.random();
-    socket.emit('create or join', roomNo, name);
+    getUsername().then((username) => {
+        if (username) {
+            name = username;
+            console.log("connectToRoom");
+            roomNo = plantID;
+            if (!name) name = 'Unknown-' + Math.random();
+            socket.emit('create or join', roomNo, name);        } 
+    }
+    );
+
+    // console.log("connectToRoom");
+    // roomNo = plantID;
+    // name = document.getElementById('name').value;
+    // if (!name) name = 'Unknown-' + Math.random();
+    // socket.emit('create or join', roomNo, name);
 }
 
 /**
@@ -103,7 +117,6 @@ function writeOnHistory(text) {
  * @param userId the user name
  */
 function hideLoginInterface(room, userId) {
-    document.getElementById('initial_form').style.display = 'none';
     document.getElementById('chat_interface').style.display = 'block';
     document.getElementById('who_you_are').innerHTML= userId;
     document.getElementById('in_room').innerHTML= ' '+room;
@@ -168,3 +181,47 @@ window.addEventListener('offline', () => {
     console.log('Offline');
 });
 
+function closeChat() {
+    console.log("close chat button clicked");
+    const chatInterface = document.getElementById('chat_interface');
+    if (!chatInterface.classList.contains('hidden')) {
+        chatInterface.style.display = 'none';
+      }
+  }
+
+  const getUsername = () => {
+    // Open IndexedDB with the name "plant-recognition"
+    const requestIDB = indexedDB.open("plant-recognition");
+  
+    return new Promise((resolve, reject) => {
+      requestIDB.addEventListener("success", () => {
+        const db = requestIDB.result;
+        const transaction = db.transaction(["user"], "readonly");
+        const objectStore = transaction.objectStore("user");
+        const getRequest = objectStore.getAll();
+  
+        getRequest.addEventListener("success", (event) => {
+          const userData = event.target.result;
+          if (userData.length > 0) {
+            const username = userData[0].username;
+            const userName = document.getElementById('who_you_are');
+            if (userName) {
+              userName.innerText = username;
+            }
+            resolve(username);  
+          } else {
+            resolve(null); 
+          }
+        });
+          getRequest.addEventListener("error", (error) => {
+          console.error("Error retrieving username from IndexedDB:", error);
+          reject(error);  
+        });
+      });
+  
+      requestIDB.addEventListener("error", (error) => {
+        console.error("Error opening IndexedDB:", error);
+        reject(error);  
+      });
+    });
+  };

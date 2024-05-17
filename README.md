@@ -1,45 +1,64 @@
 # MSC11 - Plant Recognition
 
-## Add your files
-```
-cd existing_repo
-git remote add origin https://git.shefcompsci.org.uk/acp23rk/msc11-plant-recognition.git
-git branch -M main
-git push -uf origin main
-```
+## Description 
 
-### plants document example
+The Plant Recognition Web App is a platform designed to help users identify various plant species. Leveraging the DBPedia knowledge graph, the application provides users with valuable information about plants, including common names, scientific names, English language descriptions, and URIs linking to detailed DBPedia pages about each plant. Following are some main features provided by Plant Recognition : 
 
-{
-"_id": {
-"$oid": "" #This will be a new one when creating a document in Compass, remove this comment before adding
-},
-"dos": {
-"$date": "2024-04-30T00:00:00.000Z"
-},
-"location": "Sheffield, UK",
-"description": "This is African Iris",
-"plant_size": "Height 2m, Width 2m",
-"flowers": true,
-"leaves": false,
-"fruits_or_seeds": false,
-"sun_exposure": "Full coverage",
-"flower_colour": "Red",
-"name": "african_iris",
-"plant_status": false,
-"img": "public/images/uploads/african_iris.jpg",
-"__v": 0
-}
+#### 1.Plant Information 
+#### 2.Photo Gallery 
+#### 3.User Engagement
+#### 4.Comments and Discussions
+
+
+## Installation
+
+To run this project locally, you'll need to have Node.js, npm (Node Package Manager) and MongoDB installed on your machine. You can download and install them from 
+
+- [Node.js](https://nodejs.org/)
+- [MongoDB](https://www.mongodb.com/try/download/community)
+
+### 1. Clone this repository to your local machine:
+
+- git clone : <https://git.shefcompsci.org.uk/acp23rk/msc11-plant-recognition.git>
+
+### 2. Navigate to the project directory  
+
+- cd <project_directory>
+
+### 3. Install dependencies using npm  
+
+- npm install
+
+### 4. Ensure MongoDB is running on your local machine. If it's not already running, start the MongoDB server.
+
+### 5. Configure MongoDB connection
+
+ - (MONGODB_URI=mongodb://localhost:27017/my_database)
+
+### 6. Once the installation is complete and MongoDB is running, you can start the application 
+
+- npm start
+
+### 7. This will start the Node.js server using Express.js as the engine. You can access the application in your web browser at :
+ - http://localhost:3000 .
+
+
+### Screenshots 
+
+![Homepage](screenshots/homepage.png)
+
+
+![Plant Detail](screenshots/plant_detail.png)
+
+
+### Demo 
+
+- Link here
+
+### Wireframe
+
+- https://www.figma.com/file/mUL9jkeoZYasACQbwSixAv/Plant-Recognition?type=design&node-id=0%3A1&mode=design&t=jP1DME0Lbuo9G4ju-1
 
 ### Bootstrap Components
 
 - https://getbootstrap.com/docs/5.2/getting-started/introduction/
-
-##### Notion Workspace
-
-- https://www.notion.so/Meeting-M-O-M-e4c039032707445fb0ede9a5074dca37?pvs=4
-
-
-##### Wireframe
-
-- https://www.figma.com/file/mUL9jkeoZYasACQbwSixAv/Plant-Recognition?type=design&node-id=0%3A1&mode=design&t=jP1DME0Lbuo9G4ju-1

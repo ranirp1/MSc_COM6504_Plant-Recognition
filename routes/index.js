@@ -136,7 +136,7 @@ router.post('/savePlant', upload.single('imageUpload'), async function(req, res,
       plant_status: false
     }, filePath);
 
-   // console.log(result)
+   console.log(result)
 
     // Handle the result
     if (result) {
@@ -157,6 +157,7 @@ const plantdetails = require('../controllers/plants');
 
 router.post('/plantdetails', function(req, res) {
   const plantId = req.body.plantId;
+  const username = req.body.username;
 
   plantdetails.getById(plantId)
     .then((plant) => {
@@ -203,7 +204,8 @@ router.post('/plantdetails', function(req, res) {
                 name: bindings[0]?.label?.value || 'Data not found',
                 description: bindings[0]?.description?.value || 'Description not found',
                 JSONresult: result,
-                plant: plant
+                plant: plant,
+                username: username
               });
 
 
@@ -261,6 +263,64 @@ router.get('/plantdetails/:plantId/chat', function(req, res) {
     .catch((err) => {
       console.error(err);
       res.status(500).send("Error retrieving chat."); // Send a 500 Internal Server Error response
+    });
+});
+
+const suggestions = require('../controllers/suggestion');
+
+router.post('/plantdetails/:plantId/suggestions', function(req, res) {
+  const plantId = req.params.plantId;
+  const suggestionData = req.body;
+
+  suggestions.suggest(plantId, suggestionData)
+    .then((plant) => {
+      if (plant) {
+        res.status(201).send("suggested name saved successfully!");
+      } else {
+        res.status(404).send("Plant not found.");
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error saving suggested name.");
+    });
+});
+
+// Route handler for getting suggestions data
+router.get('/plantdetails/:plantId/suggestions', function(req, res) {
+  const plantId = req.params.plantId;
+
+  suggestions.getSuggestion(plantId)
+    .then((suggestions) => {
+      if (suggestions) {
+        res.json(suggestions); // Send the retrieved chat data in JSON format
+      } else {
+        res.status(404).send("Plant not found."); // Send a 404 Not Found response
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error retrieving Suggestion."); // Send a 500 Internal Server Error response
+    });
+});
+
+// Route handler for approving a suggested name and updating the plant name
+router.post('/plantdetails/:plantId/approvesuggestions', function(req, res) {
+  const plantId = req.params.plantId;
+  const suggestedName = req.body.suggestedName;
+
+  console.log(plantId, suggestedName);
+  suggestions.approve(plantId, suggestedName)
+    .then((plant) => {
+      if (plant) {
+        res.status(200).send("Suggested name approved successfully!");
+      } else {
+        res.status(404).send("Plant not found.");
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error approving suggested name.");
     });
 });
 

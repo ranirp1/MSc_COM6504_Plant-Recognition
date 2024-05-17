@@ -10,33 +10,20 @@
     var plantID = "<%= plantID %>";
 </script>
 <body onload="init()">
-<div class="card text-center p-2" id="initial_form" style="display: block">
-    <form onsubmit="return false;">
-        <p><label for="name"> Your name </label>
-            <input type="text" id="name" name="name">
-        </p>
-<!--        <p>-->
-<!--            <label for="roomNo"> Your room </label>-->
-<!--            <input type="text" id="roomNo" name="roomNo">-->
-<!--        </p>-->
-        <div class="card-footer text-muted">
-            <button id="connect" type="button" class="btn btn-primary" onclick="connectToRoom()">Lets Chat!!</button>
-        </div>
-    </form>
-</div>
-<div class="card text-center" id="chat_interface" style="display: none">
-    <div class="card-header">
+<div class="container" id="chat_interface">
+    <div>
         <div id="who_you_are" style="display: inline"></div>, you are in room: <div id="in_room" style="display: inline"></div>
     </div>
     <div id="history" class="boxed"></div>
     <div id="input" class="bottom boxed">
         <form onsubmit="return false;" style="width: 100%">
             <div class="card-footer text-muted">
-            <p>
-                <label for="name"> chat: </label>
-                <input type="text" id="chat_input" name="chat_input" style="width: 80%">
-                <button id="chat_send" type="button" class="btn btn-primary" onclick="sendChatText()">Send</button>
-            </p>
+                <p style="display: flex; align-items: center;">
+                    <input type="text" id="chat_input" name="chat_input" style="flex: 1">
+                    <button id="chat_send" type="button" class="btn btn-primary" onclick="sendChatText()">
+                      <i id="chat_send" class="bi bi-chat-dots"></i> Send
+                    </button>
+                  </p>  
             </div>
         </form>
     </div>
