@@ -23,83 +23,67 @@
               <div id="map" class="ard-img object-fit-cover img-fluid rounded shadow"></div>
             </div>
           </div>
-            <div class="col-md-6">
-              <div class="row mb-4">
-                <h3 class="fs-3">
-                  Plant Details
-                </h3>
-                <ul class="list-group mb-3">
-                  <li class="list-group-item">Name: <%= plant.name %></li>
-                  <li class="list-group-item">Description: <%= plant.description %></li>
-                  <li class="list-group-item">Date and Time: <%= plant.dos %></li>
-                  <li class="list-group-item">Plant Size: <%= plant.plant_size %></li>
-                  <li class="list-group-item">Plant Characteristic: 
-                    <div class="d-flex justify-content-between">
-                      <div class="col-md-2 mb-3 d-flex flex-column">
-                        <img src="/images/flower.gif" alt="Flower GIF" class="img-fluid rounded"
-                          style="width: 100px; height: 100px;">
-                        <% if(plant.flower){ %>
-                          <span class="tag badge bg-success" style="margin-right: 5px;">Flowering</span>
-                          <% } else { %>
-                            <span class="tag badge bg-danger" style="margin-right: 5px;">Non Flowering</span>
-                            <% } %>
-                      </div>
-                      <div class="col-md-2 mb-3 d-flex flex-column">
-                        <img src="/images/leaf.gif" alt="Leaf GIF" class="img-fluid rounded"
-                          style="width: 100px; height: 100px;">
-                        <% if(plant.leaves){ %>
-                          <span class="tag badge bg-success" style="margin-right: 5px;">Leaves</span>
-                          <% } else { %>
-                            <span class="tag badge bg-danger" style="margin-right: 5px;">No Leaves</span>
-                            <% } %>
-                      </div>
-                      <div class="col-md-2 mb-3 d-flex flex-column">
-                        <img src="/images/seed.gif" alt="Fruit GIF" class="img-fluid rounded"
-                          style="width: 100px; height: 100px;">
-                        <% if(plant.fruits_or_seeds){ %>
-                          <span class="tag badge bg-success" style="margin-right: 5px;">Fruits and Seeds</span>
-                          <% } else { %>
-                            <span class="tag badge bg-danger" style="margin-right: 5px;">No Fruits and Seeds</span>
-                            <% } %>
-                      </div>
-                      <div class="col-md-2 mb-3 d-flex flex-column">
-                        <img src="/images/sun.gif" alt="Sun GIF" class="img-fluid rounded"
-                          style="width: 100px; height: 100px;">
-                        <% if (plant.sun_exposure==='fullSun' ) { %>
-                          <span class="tag badge bg-warning" style="margin-right: 5px;">Full Sun</span>
-                          <% } else if (plant.sun_exposure==='partialShade' ) { %>
-                            <span class="tag badge bg-warning" style="margin-right: 5px;">Partial Shade</span>
-                            <% } else if (plant.sun_exposure==='fullShade' ) { %>
-                              <span class="tag badge bg-warning" style="margin-right: 5px;">Full Shade</span>
-                              <% } %>
-                      </div>
+          <div class="col-md-6">
+            <div class="row mb-4">
+              <h3 class="fs-3">
+                Plant Details
+              </h3>
+              <ul class="list-group mb-3">
+                <li class="list-group-item">Name: <%= plant.name %>
+                </li>
+                <li class="list-group-item">Description: <%= plant.description %>
+                </li>
+                <li class="list-group-item">Date and Time: <%= plant.dos %>
+                </li>
+                <li class="list-group-item">Plant Size: <%= plant.plant_size %>
+                </li>
+                <li class="list-group-item">Plant Characteristic:
+                  <div class="d-flex justify-content-between">
+                    <div class="col-md-2 mb-3 d-flex flex-column">
+                      <img src="/images/flower.gif" alt="Flower GIF" class="img-fluid rounded"
+                        style="width: 100px; height: 100px;">
+                      <% if(plant.flower){ %>
+                        <span class="tag badge bg-success" style="margin-right: 5px;">Flowering</span>
+                        <% } else { %>
+                          <span class="tag badge bg-danger" style="margin-right: 5px;">Non Flowering</span>
+                          <% } %>
                     </div>
-                  </li>
+                    <div class="col-md-2 mb-3 d-flex flex-column">
+                      <img src="/images/leaf.gif" alt="Leaf GIF" class="img-fluid rounded"
+                        style="width: 100px; height: 100px;">
+                      <% if(plant.leaves){ %>
+                        <span class="tag badge bg-success" style="margin-right: 5px;">Leaves</span>
+                        <% } else { %>
+                          <span class="tag badge bg-danger" style="margin-right: 5px;">No Leaves</span>
+                          <% } %>
+                    </div>
+                    <div class="col-md-2 mb-3 d-flex flex-column">
+                      <img src="/images/seed.gif" alt="Fruit GIF" class="img-fluid rounded"
+                        style="width: 100px; height: 100px;">
+                      <% if(plant.fruits_or_seeds){ %>
+                        <span class="tag badge bg-success" style="margin-right: 5px;">Fruits and Seeds</span>
+                        <% } else { %>
+                          <span class="tag badge bg-danger" style="margin-right: 5px;">No Fruits and Seeds</span>
+                          <% } %>
+                    </div>
+                    <div class="col-md-2 mb-3 d-flex flex-column">
+                      <img src="/images/sun.gif" alt="Sun GIF" class="img-fluid rounded"
+                        style="width: 100px; height: 100px;">
+                      <% if (plant.sun_exposure==='fullSun' ) { %>
+                        <span class="tag badge bg-warning" style="margin-right: 5px;">Full Sun</span>
+                        <% } else if (plant.sun_exposure==='partialShade' ) { %>
+                          <span class="tag badge bg-warning" style="margin-right: 5px;">Partial Shade</span>
+                          <% } else if (plant.sun_exposure==='fullShade' ) { %>
+                            <span class="tag badge bg-warning" style="margin-right: 5px;">Full Shade</span>
+                            <% } %>
+                    </div>
+                  </div>
+                </li>
               </ul>
               <h3 class="fs-3"> Plant DBPedia Details </h3>
               <ul class="list-group mb-3">
-                <!-- <li class="list-group-item">
-                  <div class="d-flex align-items-center">
-                    <p class="me-2 mb-0">Name: </p>
-                    <input type="text" class="form-control" id="plantName" value="" placeholder="suggest plant name"
-                      style="width: 300px;">
-                    <span class="input-group-text" id="basic-addon1">
-                      <button id="btnsuggest" onclick="sendSuggestedName()"><i class="bi bi-pencil"></i></button> </span>
-                  </div>
-                </li> 
-               <li class="list-group list-group-flush">Suggested Names:
-                  <% plant.suggestions.forEach(plant => { %> 
-                    <li class="list-group-item">
-                      <div class="suggestion d-flex align-items-center justify-content-between">
-                        <p class="m-0"><%= plant.sender %> : <%= plant.message %></p>
-                        <div class="ml-auto">
-                            <button class="btn btn-success ml-2" onclick="updatePlantName('<%= plant.message %>')">Accept</button>
-                        </div>
-                    </div>
-                  </li>
-                    <% }) %>
-                </li> -->
-                <li class="list-group-item">Plant Status: <%= plant.plant_status %></li>
+                <li class="list-group-item">Plant Status: <%= plant.plant_status %>
+                </li>
                 <li class="list-group-item">
                   <div class=" d-flex align-items-center">
                     <p class="me-2 mb-0">Information: </p>
@@ -111,18 +95,20 @@
                   </div>
                 </li>
                 <li class="list-group-item">
-                <div class="d-flex align-items-center">
-                  <p> URI:  
-                  <a href="http://dbpedia.org/resource/<%= plant.name %>">http://dbpedia.org/resource/
-                      <%=plant.name %></a> </p>
-                </div>
-              </li>
+                  <div class="d-flex align-items-center">
+                    <p> URI:
+                      <a href="http://dbpedia.org/resource/<%= plant.name %>">http://dbpedia.org/resource/
+                        <%=plant.name %>
+                      </a>
+                    </p>
+                  </div>
+                </li>
               </ul>
               <div>
                 <%- include('chat.ejs',{plantID:plant._id}) %>
               </div>
-              </div>
             </div>
+          </div>
         </div>
       </main>
     </div>
@@ -134,9 +120,6 @@
       let locationParts = coordinates.split(',');
       let latitude = locationParts[0];
       let longitude = locationParts[1];
-
-      // console.log("Latitude:", latitude);
-      // console.log("Longitude:", longitude);
 
       function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {

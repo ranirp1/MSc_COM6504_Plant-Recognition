@@ -80,22 +80,22 @@ exports.getRandomImages = async function (count) {
 exports.getById = function (plantId) {
     // Validate the provided plant ID (optional)
     // You can add checks here to ensure the ID is a valid format (e.g., ObjectId)
-  
+
     // Find the plant with the specified ID
     return plantModel.findById(plantId)
-      .then((plant) => {
-        // Check if a plant was found
-        if (!plant) {
-          return null; // Return null if plant not found
-        }
-  
-        // Return the plant object as it is (no need for JSON.stringify)
-        return plant;
-      })
-      .catch((err) => {
-        console.error("Error finding plant by ID:", err);
-        return null; // Return null in case of an error
-      });
-  };
-  
+        .then((plant) => {
+            // Check if a plant was found
+            if (!plant) {
+                return null; // Return null if plant not found
+            }
+
+            // Return the plant object as it is (no need for JSON.stringify)
+            return plant;
+        })
+        .catch((err) => {
+            console.error("Error finding plant by ID:", err);
+            return null; // Return null in case of an error
+        });
+};
+
 

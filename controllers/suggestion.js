@@ -1,4 +1,4 @@
-const Plant = require('../models/plants'); 
+const Plant = require('../models/plants');
 
 exports.suggest = async function (plantId, suggestionData) {
     try {

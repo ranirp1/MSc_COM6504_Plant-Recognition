@@ -1,5 +1,5 @@
 
-exports.init = function(io) {
+exports.init = function (io) {
     io.sockets.on('connection', function (socket) {
         console.log("try");
         try {
@@ -15,7 +15,7 @@ exports.init = function(io) {
                 io.sockets.to(room).emit('chat', room, userId, chatText);
             });
 
-            socket.on('disconnect', function(){
+            socket.on('disconnect', function () {
                 console.log('someone disconnected');
             });
         } catch (e) {

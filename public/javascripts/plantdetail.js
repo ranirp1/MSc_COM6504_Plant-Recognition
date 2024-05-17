@@ -8,9 +8,9 @@ function initializePlantData(data) {
     // For example:
     plantData = data;
     openPlantIDB().then((db) => {
-        deletePlantFromIDB(db).then( (db) => {
+        deletePlantFromIDB(db).then((db) => {
             console.log("plantdata")
-            storeAllPlantIDB(db, plantData).then( () => {
+            storeAllPlantIDB(db, plantData).then(() => {
                 console.log("Everything done")
             })
         });
@@ -21,7 +21,7 @@ function initializePlantData(data) {
 }
 
 window.addEventListener('offline', () => {
-    retrievePlants().then( (result) => {
+    retrievePlants().then((result) => {
         // console.log(result[0])
         renderData(result[0]);
     });
@@ -29,9 +29,9 @@ window.addEventListener('offline', () => {
     console.log('Offline');
 });
 
-function retrievePlants(){
-    return new Promise((resolve,reject)=> {
-        openPlantIDB().then( (db) => {
+function retrievePlants() {
+    return new Promise((resolve, reject) => {
+        openPlantIDB().then((db) => {
             const transaction = db.transaction(["plants"], "readwrite");
             const plantStore = transaction.objectStore("plants");
             const getAllRequest = plantStore.getAll();
@@ -48,12 +48,12 @@ function retrievePlants(){
     });
 }
 
-function storeAllPlantIDB(plantIDB, plantData){
+function storeAllPlantIDB(plantIDB, plantData) {
     const transaction = plantIDB.transaction(["plants"], "readwrite");
     const plantStore = transaction.objectStore("plants");
     const addRequest = plantStore.add(plantData);
 
-    return new Promise((resolve,reject)=>{
+    return new Promise((resolve, reject) => {
         addRequest.addEventListener("success", () => {
             console.log("Plant data added successfully");
         });
@@ -78,7 +78,7 @@ const deletePlantFromIDB = (plantIDB) => {
         });
     });
 }
-function openPlantIDB (){
+function openPlantIDB() {
     return new Promise((resolve, reject) => {
         const requestIDB = indexedDB.open("plant-recognition");
         requestIDB.onerror = function (event) {
@@ -87,7 +87,7 @@ function openPlantIDB (){
 
         requestIDB.onupgradeneeded = function (event) {
             const db = event.target.result;
-            db.createObjectStore('plants', {keyPath: 'id', autoIncrement: true});
+            db.createObjectStore('plants', { keyPath: 'id', autoIncrement: true });
         };
 
         requestIDB.onsuccess = function (event) {
@@ -138,14 +138,14 @@ function sortByNearestLocation(currentLocation) {
     renderData(plantData);
 }
 
-function resetFilters(){
+function resetFilters() {
     // Clear active filters
     activeFilters = [];
     // Call filterData function to display all plants
     filterData();
 
     // Update dropdown buttons to be inactive
-    document.querySelectorAll('.dropdown-toggle').forEach(function(button) {
+    document.querySelectorAll('.dropdown-toggle').forEach(function (button) {
         button.classList.remove('btn-primary'); // Remove primary class
         button.classList.add('btn-secondary'); // Add secondary class
     });
@@ -155,7 +155,7 @@ let currentLocation;
 
 function getLocation() {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position){
+        navigator.geolocation.getCurrentPosition(function (position) {
             currentLocation = {
                 lat: position.coords.latitude,
                 lon: position.coords.longitude

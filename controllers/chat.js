@@ -1,5 +1,5 @@
 // function to add chat to plant
-const Plant = require('../models/plants'); 
+const Plant = require('../models/plants');
 
 exports.create = async function (plantId, chatData) {
     try {

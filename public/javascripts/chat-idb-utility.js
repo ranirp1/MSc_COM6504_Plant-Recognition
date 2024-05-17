@@ -4,13 +4,13 @@ const addNewChatToSync = (syncChatIDB, txt_val) => {
     if (txt_val !== "") {
         const transaction = syncChatIDB.transaction(["sync-chats"], "readwrite")
         const chatStore = transaction.objectStore("sync-chats")
-        const addRequest = chatStore.add({text: txt_val})
+        const addRequest = chatStore.add({ text: txt_val })
         addRequest.addEventListener("success", () => {
             console.log("Added " + "#" + addRequest.result + ": " + txt_val)
             const getRequest = chatStore.get(addRequest.result)
             getRequest.addEventListener("success", () => {
                 console.log("Found " + JSON.stringify(getRequest.result))
-            
+
             })
         })
     }
@@ -53,7 +53,7 @@ function openSyncChatIDB() {
 
         request.onupgradeneeded = function (event) {
             const db = event.target.result;
-            db.createObjectStore('sync-chats', {keyPath: 'id', autoIncrement: true});
+            db.createObjectStore('sync-chats', { keyPath: 'id', autoIncrement: true });
         };
 
         request.onsuccess = function (event) {
