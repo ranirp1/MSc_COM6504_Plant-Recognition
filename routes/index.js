@@ -157,6 +157,7 @@ const plantdetails = require('../controllers/plants');
 
 router.post('/plantdetails', function(req, res) {
   const plantId = req.body.plantId;
+  const username = req.body.username;
 
   plantdetails.getById(plantId)
     .then((plant) => {
@@ -203,7 +204,8 @@ router.post('/plantdetails', function(req, res) {
                 name: bindings[0]?.label?.value || 'Data not found',
                 description: bindings[0]?.description?.value || 'Description not found',
                 JSONresult: result,
-                plant: plant
+                plant: plant,
+                username: username
               });
 
 

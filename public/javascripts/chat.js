@@ -15,13 +15,7 @@ function init() {
     //document.getElementById('chat_interface').style.display = 'none';
 
     
-    const chatInterface = document.getElementById('chat_interface');
-    const openChatButton = document.getElementById('open_chat');
- 
-    openChatButton.addEventListener('click', () => {
-        console.log("open chat button clicked");
-        chatInterface.classList.toggle('hidden'); // Toggle hidden class on click
-    });
+    connectToRoom();
 
     // called when someone joins the room. If it is someone else it notifies the joining of the room
     socket.on('joined', function (room, userId) {
@@ -123,7 +117,6 @@ function writeOnHistory(text) {
  * @param userId the user name
  */
 function hideLoginInterface(room, userId) {
-    document.getElementById('initial_form');
     document.getElementById('chat_interface').style.display = 'block';
     document.getElementById('who_you_are').innerHTML= userId;
     document.getElementById('in_room').innerHTML= ' '+room;

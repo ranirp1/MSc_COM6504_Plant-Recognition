@@ -99,12 +99,13 @@
                   <% plant.suggestions.forEach(plant => { %> 
                     <li class="list-group-item">
                       <div class="suggestion d-flex align-items-center justify-content-between">
+                        <% if (username === plant.owner_nickname) { %>
                         <p class="m-0"><%= plant.sender %> : <%= plant.message %></p>
                         <div class="ml-auto">
                             <button class="btn btn-success ml-2" onclick="updatePlantName('<%= plant.message %>')">Accept</button>
                         </div>
+                        <% } %>
                     </div>
-                    
                   </li>
                     <% }) %>
                 </li>
