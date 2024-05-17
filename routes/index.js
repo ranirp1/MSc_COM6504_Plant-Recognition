@@ -4,6 +4,8 @@ var plants = require('../controllers/plants')
 var multer = require('multer');
 
 
+
+
 // storage defines the storage options to be used for file upload with multer
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -20,20 +22,21 @@ var storage = multer.diskStorage({
 
 let upload = multer({ storage: storage });
 
-// Fetch random images route
-router.get('/random-images', async (req, res) => {
+
+// Function to fetch random images from the database
+async function getRandomImages(count) {
   try {
-    // Fetch random images from MongoDB
-    const randomImages = await plants.getRandomImages(6); // Adjust the number of images as needed
+    // Query the database to fetch random images
+    const randomPlants = await Plant.aggregate([{ $sample: { size: count } }]);
 
-    // Send the image URLs as JSON response
-    res.json(randomImages);
+    // Extract image URLs from the fetched plants
+    const images = randomPlants.map(plant => plant.img);
+
+    return images;
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+    throw error; // Propagate the error to the caller
   }
-});
-
+}
 
 /**
  * used to return dynamic time when plant was submitted
@@ -103,12 +106,20 @@ router.post('/', function(req, res, next) {
 
 
 /* GET home page. */
-router.get('/homepage', function(req, res, next) {
-  res.render('homepage', {
-    backgroundImage: 'images/bg.jpg',
-    title: 'Express'
-  });
+router.get('/homepage', async (req, res, next) => {
+  try {
+    const images = await plants.getRandomImages(6);
+    res.render('homepage', {
+      backgroundImage: 'images/bg.jpg',
+      title: 'Express',
+      images: images
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error fetching images');
+  }
 });
+
 
 /* Plant Details */
 router.get('/plantdetails', function(req, res, next) {
@@ -279,7 +290,11 @@ router.get('/plantdetails/:plantId/chat', function(req, res) {
     });
 });
 
+
 module.exports = router;
+
+module.exports.getRandomImages = getRandomImages;
+
 
 
 

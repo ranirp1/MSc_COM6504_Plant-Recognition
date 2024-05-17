@@ -19,3 +19,13 @@ mongoose.connect(mongoDB).then(result => {
     console.log("Connection Failed!", err);
 });
 
+// Define the schema for the Plant model
+const plantSchema = new mongoose.Schema({
+    img: String
+});
+
+// Define the Plant model
+const Plant = mongoose.model('Plant', plantSchema);
+
+// Export the Plant model
+module.exports = Plant;
