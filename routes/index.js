@@ -89,7 +89,10 @@ router.post('/', function(req, res, next) {
 
 /* GET home page. */
 router.get('/homepage', function(req, res, next) {
-  res.render('homepage', {title: 'Express'});
+  res.render('homepage', {
+    backgroundImage: 'images/bg.jpg',
+    title: 'Express'
+  });
 });
 
 /* Plant Details */
@@ -133,7 +136,7 @@ router.post('/savePlant', upload.single('imageUpload'), async function(req, res,
       plant_status: false
     }, filePath);
 
-    // console.log(result)
+   console.log(result)
 
     // Handle the result
     if (result) {
@@ -157,13 +160,13 @@ router.post('/plantdetails', function(req, res) {
   const username = req.body.username;
 
   plantdetails.getById(plantId)
-      .then((plant) => {
-        if (plant) {
-          //res.json(plant);// Send the retrieved plant data in JSON format
-          //console.log(res.locals.plant);
-          const resource = `http://dbpedia.org/resource/${encodeURIComponent(plant.name)}`;
-          const endpointUrl = 'https://dbpedia.org/sparql';
-          const sparqlQuery = `
+    .then((plant) => {
+      if (plant) {
+        //res.json(plant);// Send the retrieved plant data in JSON format
+        //console.log(res.locals.plant);
+        const resource = `http://dbpedia.org/resource/${encodeURIComponent(plant.name)}`;
+        const endpointUrl = 'https://dbpedia.org/sparql';
+        const sparqlQuery = `
           PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
           PREFIX dbo: <http://dbpedia.org/ontology/>
           PREFIX dbp: <http://dbpedia.org/property/>
@@ -175,27 +178,27 @@ router.post('/plantdetails', function(req, res) {
           }
            `;
 
-          const encodedQuery = encodeURIComponent(sparqlQuery);
-          const url = `${endpointUrl}?query=${encodedQuery}&format=json`;
+        const encodedQuery = encodeURIComponent(sparqlQuery);
+        const url = `${endpointUrl}?query=${encodedQuery}&format=json`;
 
-          fetch(url)
-              .then(response => response.json())
-              .then(data => {
-                console.log("Fetched data:", data); // Log the fetched data
-                let bindings = data.results.bindings;
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+              console.log("Fetched data:", data); // Log the fetched data
+              let bindings = data.results.bindings;
 
-                // Check if the data is found
-                if (bindings.length === 0) {
-                  console.log("Data not found");
-                  // Render the 'plantdetails' page without specific data
-                  res.render('plantdetails', { plant: plant });
-                  return;
-                }
+             // Check if the data is found
+              if (bindings.length === 0) {
+                console.log("Data not found");
+                // Render the 'plantdetails' page without specific data
+                res.render('plantdetails', { plant: plant });
+                return;
+              }
 
-                let result = JSON.stringify(bindings)
+              let result = JSON.stringify(bindings)
 
-                // Check if the description exists before rendering
-                //let description = bindings[0].description? bindings[0].description.value : null;
+              // Check if the description exists before rendering
+              //let description = bindings[0].description? bindings[0].description.value : null;
 
               res.render('plantdetails', {
                 name: bindings[0]?.label?.value || 'Data not found',
@@ -206,22 +209,22 @@ router.post('/plantdetails', function(req, res) {
               });
 
 
-              })
-              .catch(error => {
-                console.error('Error fetching data:', error);
-                res.render('plantdetails', { title: 'Plant Details', plant: plant }); // Render the page without data in case of an error
-              });
+            })
+            .catch(error => {
+              console.error('Error fetching data:', error);
+              res.render('plantdetails', { title: 'Plant Details', plant: plant }); // Render the page without data in case of an error
+            });
 
 
-          // res.render('plantdetails', { plant: plant });
-        } else {
-          res.status(404).send("Plant not found."); // Send a 404 Not Found response
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).send("Error retrieving plant."); // Send a 500 Internal Server Error response
-      });
+       // res.render('plantdetails', { plant: plant });
+      } else {
+        res.status(404).send("Plant not found."); // Send a 404 Not Found response
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error retrieving plant."); // Send a 500 Internal Server Error response
+    });
 });
 
 
@@ -232,17 +235,17 @@ router.post('/plantdetails/:plantId/chat', function(req, res) {
   const chatData = req.body;
 
   chat.create(plantId, chatData)
-      .then((plant) => {
-        if (plant) {
-          res.status(201).send("Chat message saved successfully!");
-        } else {
-          res.status(404).send("Plant not found.");
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).send("Error saving chat message.");
-      });
+    .then((plant) => {
+      if (plant) {
+        res.status(201).send("Chat message saved successfully!");
+      } else {
+        res.status(404).send("Plant not found.");
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error saving chat message.");
+    });
 });
 
 // Route handler for getting chat data
