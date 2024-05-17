@@ -43,10 +43,9 @@
                 </div>
                 <div class="mb-3">
                     <label for="plantHeight" class="form-label"><b>Plant Height</b></label>
-<!--                    <label for="plantHeight" class="form-label"><b>Plant Height</b></label>-->
+
                     <input type="text" class="form-control" id="plantHeight" name="plantHeight" placeholder="Enter Height in Meters" required ><br>
 
-<!--                    <label for="plantWidth" class="form-label"><b>Plant Width</b></label>-->
                     <input type="text" class="form-control" id="plantWidth" name="plantWidth" placeholder="Enter width in Meters " required >
 
                     <!-- Hidden input to hold the concatenated value -->
@@ -184,7 +183,6 @@
 
     document.getElementById('plantColor').addEventListener('change', function() {
         var selectedColor = this.value;
-        console.log("Selected Color:", selectedColor);
     });
 
         function previewImage(event) {
@@ -194,7 +192,6 @@
             output.src = reader.result;
             // Show the card when image previewed
             document.getElementById('imagePreviewCard').classList.add('show');
-            console.log("Image preview loaded");
         }
         reader.readAsDataURL(event.target.files[0]);
     }
@@ -219,7 +216,6 @@
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function (position) {
                     coordinates = position.coords.latitude + ", " + position.coords.longitude;
-                    console.log("Coordinates:", coordinates);
                     marker.setPosition({ lat: position.coords.latitude, lng: position.coords.longitude });
                     document.getElementById("location").value = coordinates;
                 });
@@ -230,7 +226,6 @@
 
         google.maps.event.addListener(marker, 'dragend', function (event) {
             coordinates = event.latLng.lat() + ", " + event.latLng.lng(); // Update the coordinates variable
-            console.log("Coordinates:", coordinates); // Print the coordinates to the console
             document.getElementById("location").value = coordinates;
         });
 
@@ -316,7 +311,6 @@
 <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuqPAkMS8XSE0XCU2iFpA-M_znQ-rmSFg&callback=initMap">
     </script>
-    <!-- Bootstrap JS -->
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
