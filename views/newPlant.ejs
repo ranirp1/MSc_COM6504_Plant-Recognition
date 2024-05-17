@@ -442,6 +442,13 @@
             plantColor: formData.get("plantColor"),
             imageUpload: formData.get("imageUpload").name // Save the file name, handle file separately
         };
+        // const imageFile = formData.get("imageUpload");
+        // const reader = new FileReader();
+        // reader.onload = function(event) {
+        //     // Convert the loaded data to a Blob
+        //     const imageBlob = new Blob([event.target.result], { type: imageFile.type });
+        //     plantData.imageUpload()
+        // }
         return plantData;
     }
 </script>
