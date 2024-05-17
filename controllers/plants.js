@@ -21,7 +21,9 @@ exports.create = function (plantData, filePath) {
         URI: plantData.URI,
         img: filePath,
         owner_nickname: plantData.owner_nickname,
-        chat: plantData.chat || []
+        chat: plantData.chat || [],
+        suggestions: plantData.suggestions || []
+
     });
 
     // Save the plant to the database and handle success or failure

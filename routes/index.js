@@ -264,13 +264,13 @@ router.get('/plantdetails/:plantId/chat', function(req, res) {
     });
 });
 
-const suggestion = require('../controllers/suggestion');
+const suggestions = require('../controllers/suggestion');
 
-router.post('/plantdetails/:plantId/suggestion', function(req, res) {
+router.post('/plantdetails/:plantId/suggestions', function(req, res) {
   const plantId = req.params.plantId;
   const suggestionData = req.body;
 
-  suggestion.suggest(plantId, suggestionData)
+  suggestions.suggest(plantId, suggestionData)
     .then((plant) => {
       if (plant) {
         res.status(201).send("suggested name saved successfully!");
