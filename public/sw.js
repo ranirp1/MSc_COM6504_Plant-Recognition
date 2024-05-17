@@ -2,6 +2,7 @@ importScripts('/javascripts/chat-idb-utility.js');
 
 
 // Use the install event to pre-cache all initial resources.
+console.log('Service Worker Called...');
 self.addEventListener('install', event => {
     console.log('Service Worker: Installing....');
     event.waitUntil((async () => {
