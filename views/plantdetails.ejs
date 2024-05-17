@@ -170,10 +170,14 @@
             if (userData.length > 0) {
               const username = userData[0].username;
               const button = document.getElementById("acceptButton");
+              console.log(username)
+              console.log(plantData.owner_nickname)
               if (username === plantData.owner_nickname){
+                console.log("nickname is equal")
                 button.classList.remove("hidden");
               }
               else{
+                console.log("nickname is not equal")
                 button.classList.add("hidden");
               }
             }
