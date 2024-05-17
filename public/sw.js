@@ -1,7 +1,7 @@
 importScripts('/javascripts/chat-idb-utility.js');
 
-
 // Use the install event to pre-cache all initial resources.
+console.log('Service Worker Called...');
 self.addEventListener('install', event => {
     console.log('Service Worker: Installing....');
     event.waitUntil((async () => {
@@ -9,7 +9,7 @@ self.addEventListener('install', event => {
         console.log('Service Worker: Caching App Shell at the moment......');
         try {
             const cache = await caches.open("static");
-            cache.addAll([
+            await cache.addAll([
                 '/',
                 '/insert',
                 '/manifest.json',
@@ -29,6 +29,7 @@ self.addEventListener('install', event => {
 
 //clear cache on reload
 self.addEventListener('activate', event => {
+    console.log('[Service Worker] : Activated');
 // Remove old caches
     event.waitUntil(
         (async () => {
@@ -85,7 +86,7 @@ self.addEventListener('sync', event => {
                         // Send a notification
                         self.registration.showNotification('Chat Synced', {
                             body: 'Chat synced successfully!',
-                        });
+                        }).then(r => {});
                     }).catch((err) => {
                         console.error('Service Worker: Syncing new Chat: ', syncChat, ' failed');
                     });
