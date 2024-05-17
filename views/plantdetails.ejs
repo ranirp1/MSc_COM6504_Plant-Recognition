@@ -83,7 +83,7 @@
               </ul>
               <h3 class="fs-3"> Plant DBPedia Details </h3>
               <ul class="list-group mb-3">
-                <!-- <li class="list-group-item">
+                <li class="list-group-item">
                   <div class="d-flex align-items-center">
                     <p class="me-2 mb-0">Name: </p>
                     <input type="text" class="form-control" id="plantName" value="" placeholder="suggest plant name"
@@ -91,19 +91,20 @@
                     <span class="input-group-text" id="basic-addon1">
                       <button id="btnsuggest" onclick="sendSuggestedName()"><i class="bi bi-pencil"></i></button> </span>
                   </div>
-                </li> 
+                </li>
+
                <li class="list-group list-group-flush">Suggested Names:
-                  <% plant.suggestions.forEach(plant => { %> 
+                  <% plant.suggestions.forEach(plant => { %>
                     <li class="list-group-item">
                       <div class="suggestion d-flex align-items-center justify-content-between">
                         <p class="m-0"><%= plant.sender %> : <%= plant.message %></p>
                         <div class="ml-auto">
-                            <button class="btn btn-success ml-2" onclick="updatePlantName('<%= plant.message %>')">Accept</button>
+<!--                            <button id="acceptButton" class="btn btn-success ml-2 hidden" onclick="updatePlantName('<%= plant.message %>')">Accept</button>-->
                         </div>
                     </div>
                   </li>
                     <% }) %>
-                </li> -->
+                </li>
                 <li class="list-group-item">Plant Status: <%= plant.plant_status %></li>
                 <li class="list-group-item">
                   <div class=" d-flex align-items-center">
@@ -135,6 +136,7 @@
       integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
       crossorigin="anonymous"></script>
     <script>
+      var plantData = <%- JSON.stringify(plant) %>;
       let coordinates = " <%=plant.location%>";
       let locationParts = coordinates.split(',');
       let latitude = locationParts[0];
@@ -153,6 +155,32 @@
           draggable: false // Allow the marker to be dragged initially
         });
       }
+      function checkUsername (){
+        // Open IndexedDB with the name "plant-recognition"
+        const requestIDB = indexedDB.open("plant-recognition");
+
+        requestIDB.addEventListener("success", () => {
+          const db = requestIDB.result;
+          const transaction = db.transaction(["user"], "readonly");
+          const objectStore = transaction.objectStore("user");
+          const getRequest = objectStore.getAll();
+
+          getRequest.addEventListener("success", (event) => {
+            const userData = event.target.result;
+            if (userData.length > 0) {
+              const username = userData[0].username;
+              const button = document.getElementById("acceptButton");
+              if (username === plantData.owner_nickname){
+                button.classList.remove("hidden");
+              }
+              else{
+                button.classList.add("hidden");
+              }
+            }
+          });
+        });
+      }
+      checkUsername();
     </script>
     <script async defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuqPAkMS8XSE0XCU2iFpA-M_znQ-rmSFg&callback=initMap">
