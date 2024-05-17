@@ -51,7 +51,7 @@ To run this project locally, you'll need to have Node.js, npm (Node Package Mana
 ![All Plant](public/images/main.png)
 
 
-![Plant Detail](public/images/Plant Details.png)
+![Plant Detail](public/images/PlantDetails.png)
 
 
 ### Wireframe
