@@ -7,8 +7,94 @@ function initializePlantData(data) {
     // Now you can use plantData within this function
     // For example:
     plantData = data;
+    openPlantIDB().then((db) => {
+        deletePlantFromIDB(db).then( (db) => {
+            console.log("plantdata")
+            storeAllPlantIDB(db, plantData).then( () => {
+                console.log("Everything done")
+            })
+        });
+    })
+    console.log(plantData)
     renderData(plantData); // Call a function to render the plant data
     // You can also define other functions and perform operations with plantData here
+}
+
+window.addEventListener('offline', () => {
+    retrievePlants().then( (result) => {
+        // console.log(result[0])
+        renderData(result[0]);
+    });
+    alert("You are offline. This is the last cached result from when you were online.");
+    console.log('Offline');
+});
+
+function retrievePlants(){
+    return new Promise((resolve,reject)=> {
+        openPlantIDB().then( (db) => {
+            const transaction = db.transaction(["plants"], "readwrite");
+            const plantStore = transaction.objectStore("plants");
+            const getAllRequest = plantStore.getAll();
+            getAllRequest.addEventListener("success", () => {
+                console.log(getAllRequest.result);
+                resolve(getAllRequest.result);
+            });
+
+            getAllRequest.addEventListener("error", (event) => {
+                console.log(event.target.error);
+                reject(event.target.error);
+            });
+        });
+    });
+}
+
+function storeAllPlantIDB(plantIDB, plantData){
+    const transaction = plantIDB.transaction(["plants"], "readwrite");
+    const plantStore = transaction.objectStore("plants");
+    const addRequest = plantStore.add(plantData);
+
+    return new Promise((resolve,reject)=>{
+        addRequest.addEventListener("success", () => {
+            console.log("Plant data added successfully");
+        });
+
+        addRequest.addEventListener("error", (event) => {
+            console.error("Error storing plant data:", event.target.error);
+        });
+    });
+}
+const deletePlantFromIDB = (plantIDB) => {
+    const transaction = plantIDB.transaction(["plants"], "readwrite");
+    const plantStore = transaction.objectStore("plants");
+    const clearRequest = plantStore.clear();
+
+    return new Promise((resolve, reject) => {
+        clearRequest.addEventListener("success", () => {
+            resolve(plantIDB);
+        });
+
+        clearRequest.addEventListener("error", (event) => {
+            reject(event.target.error);
+        });
+    });
+}
+function openPlantIDB (){
+    return new Promise((resolve, reject) => {
+        const requestIDB = indexedDB.open("plant-recognition");
+        requestIDB.onerror = function (event) {
+            reject(new Error(`Database error: ${event.target}`));
+        };
+
+        requestIDB.onupgradeneeded = function (event) {
+            const db = event.target.result;
+            db.createObjectStore('plants', {keyPath: 'id', autoIncrement: true});
+        };
+
+        requestIDB.onsuccess = function (event) {
+            const db = event.target.result;
+            resolve(db);
+        };
+    });
 }
 
 let sortBy;
