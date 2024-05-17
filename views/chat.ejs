@@ -24,15 +24,15 @@
     </div>
     <div id="history" class="boxed"></div>
     <div id="input" class="bottom boxed">
-        <form onsubmit="return false;" style="width: 100%">
-            <div class="card-footer text-muted">
-            <p>
-                <label for="name"> chat: </label>
-                <input type="text" id="chat_input" name="chat_input" style="width: 80%">
-                <button id="chat_send" type="button" class="btn btn-primary" onclick="sendChatText()">Send</button>
-            </p>
-            </div>
-        </form>
+<form onsubmit="return false;" style="width: 100%">
+    <div class="card-footer text-muted position-relative">
+        <div class="d-flex align-items-center">
+            <input type="text" id="chat_input" name="chat_input" class="form-control me-2">
+        </div>
+        <button id="chat_send" type="button" class="btn btn-primary bi bi-chat-dots position-absolute bottom-0 end-0 mb-2" onclick="sendChatText()">Send</button>
+    </div>            
+</form>
+
     </div>
 </div>
 </body>
