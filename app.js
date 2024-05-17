@@ -23,6 +23,11 @@ var app = express();
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use('/public/images/uploads', express.static(path.join(__dirname, '/public/images/uploads')));
 
+  // Register service worker and request notification permission
+  app.get('/main.js', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'main.js'));
+  });
+
   app.use('/', indexRouter);
   // app.use('/users', usersRouter);
 
