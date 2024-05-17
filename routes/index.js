@@ -111,6 +111,38 @@ router.get('/newplant', function(req,res){
   res.render('newPlant', { title: 'Express' });
 })
 
+router.post('/savePlantNew', function(req, res) {
+  const plant = req.params.plant;
+
+  plants.create({
+    dos: dateTime,
+    description : description,
+    location: location,
+    plant_size: plantSize,
+    flowers: plantType === 'withFlower',
+    fruits_or_seeds: fruitType === 'withFruitSeed',
+    leaves: leavesType === 'withLeaves',
+    sun_exposure: sunExposureType,
+    name: plantName,
+    flower_colour: plantColor,
+    owner_nickname: userName,
+    plant_status: false
+  }, filePath);
+
+  chat.create(plantId, chatData)
+      .then((plant) => {
+        if (plant) {
+          res.status(201).send("Chat message saved successfully!");
+        } else {
+          res.status(404).send("Plant not found.");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send("Error saving chat message.");
+      });
+});
+
 // Route handler for saving plant data
 router.post('/savePlant', upload.single('imageUpload'), async function(req, res, next) {
   try {

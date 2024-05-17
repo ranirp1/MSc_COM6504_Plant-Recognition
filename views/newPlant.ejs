@@ -162,7 +162,90 @@
         document.getElementById('plantSize').value = plantSize;
 
         // Submit the form
-        this.submit();
+        if (navigator.onLine){
+            this.submit();
+        }
+        else{
+            let plantdata = storePlantIndex();
+            console.log("on offline base", plantdata)
+            openSyncPlantIDB().then((db) => {
+                addNewPlantToSync(db,plantdata).then(() => {
+                    console.log("Plant added to IDB")
+                })
+            });
+            // storePlantIndex()
+            // alert("You are offline. Plant is saved and will be synced once online");
+        }
+    });
+
+    window.addEventListener('online', () => {
+        alert("You are online. New added plants have been synced.");
+        // document.getElementById('chat_input').value = '';
+        // Send any saved chat messages to mongoDB
+        openSyncPlantIDB().then((db) => {
+            getAllSyncPlants(db).then((plants) => {
+                for (const plant of plants) {
+                    const formData = new FormData();
+                    // Append each field of the plant object to the FormData object
+                    Object.keys(plant).forEach(key => {
+                        formData.append(key, plant[key]);
+                    });
+                    // Append the image file
+                    fetch('/savePlant', {
+                        method: 'POST',
+                        // headers: {
+                        //     'Content-Type': 'multipart/form-data' //'application/json'
+                        // },
+                        body: formData
+                        // enctype="multipart/form-data",
+                        // body: JSON.stringify(plant) // Assuming 'plant' contains all necessary plant data
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Failed to save plant details');
+                            }
+                            // Optionally, handle success response
+                            deleteSyncPlantFromIDB(db, plant.id);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            // Handle error
+                        });
+                }
+            });
+        });
+        console.log('Online');
+    });
+
+    const deleteSyncPlantFromIDB = (syncPlantIDB, id) => {
+        const transaction = syncPlantIDB.transaction(["sync-plants"], "readwrite")
+        const plantStore = transaction.objectStore("sync-plants");
+        const deleteRequest = plantStore.delete(id);
+
+        deleteRequest.addEventListener("success", () => {
+            console.log("Deleted " + id)
+        })
+    }
+
+    const getAllSyncPlants = (syncPlantIDB) => {
+        return new Promise((resolve, reject) => {
+            const transaction = syncPlantIDB.transaction(["sync-plants"]);
+            const plantStore = transaction.objectStore("sync-plants");
+            const getAllRequest = plantStore.getAll();
+
+            getAllRequest.addEventListener("success", () => {
+                resolve(getAllRequest.result);
+            });
+
+            getAllRequest.addEventListener("error", (event) => {
+                reject(event.target.error);
+            });
+        });
+    }
+
+    window.addEventListener('offline', () => {
+        alert("You are offline. Plant will be saved and will be synced once online");
+        console.log('Offline');
     });
 
     function updateDate() {
@@ -293,63 +376,74 @@
 </script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // IndexedDB setup
-        let db;
-        const requestIDB = indexedDB.open("plant-recognition", 1);
 
-        requestIDB.onupgradeneeded = function(event) {
-            db = event.target.result;
-            if (!db.objectStoreNames.contains("plants")) {
-                db.createObjectStore("plants", { keyPath: "id", autoIncrement: true });
-            }
-        };
+    function openSyncPlantIDB() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open("sync-plants", 1);
 
-        requestIDB.onsuccess = function(event) {
-            db = event.target.result;
-        };
-
-        requestIDB.onerror = function(event) {
-            console.error("IndexedDB error:", event.target.error);
-        };
-
-        // Handle form submission
-        const plantForm = document.getElementById("plantForm");
-        plantForm.addEventListener("submit", function(event) {
-            event.preventDefault(); // Prevent the default form submission
-
-            // Gather form data
-            const formData = new FormData(plantForm);
-            const plantData = {
-                userName: formData.get("userName"),
-                plantName: formData.get("plantName"),
-                dateTime: formData.get("dateTime"),
-                description: formData.get("description"),
-                location: formData.get("location"),
-                plantSize: formData.get("plantSize"),
-                plantType: formData.get("plantType"),
-                fruitType: formData.get("fruitType"),
-                leavesType: formData.get("leavesType"),
-                sunExposureType: formData.get("sunExposureType"),
-                plantColor: formData.get("plantColor"),
-                imageUpload: formData.get("imageUpload").name // Save the file name, handle file separately
+            request.onerror = function (event) {
+                reject(new Error(`Database error: ${event.target}`));
             };
 
-            // Save to IndexedDB
-            const transaction = db.transaction(["plants"], "readwrite");
-            const plantStore = transaction.objectStore("plants");
-            const request = plantStore.add(plantData);
-
-            request.onsuccess = function() {
-                console.log("Plant data saved successfully");
-                alert("Plant data saved successfully! You can check it in IndexedDB");
+            request.onupgradeneeded = function (event) {
+                const db = event.target.result;
+                db.createObjectStore('sync-chats', {keyPath: 'id', autoIncrement: true});
             };
 
-            request.onerror = function(event) {
-                console.error("Error saving plant data:", event.target.error);
+            request.onsuccess = function (event) {
+                const db = event.target.result;
+                resolve(db);
             };
         });
-    });
+    }
+
+    const addNewPlantToSync = (db, plantdata) => {
+        if (Object.keys(plantdata).length != 0){
+            const transaction = db.transaction(["sync-plants"], "readwrite");
+            const plantStore = transaction.objectStore("sync-plants");
+            const addRequest = plantStore.add(plantdata);
+
+            addRequest.addEventListener("success", () => {
+                console.log("Plant data saved to IndexedDB")
+            })
+        }
+    }
+    //
+    // / Assume we have an image data in a variable named imageData
+    // // imageData can be obtained from various sources like file input, canvas, or fetched from a server
+    //
+    // // Convert image data to Blob
+    // const blob = new Blob([imageData], { type: 'image/jpeg' });
+    //
+    // // Open IndexedDB database
+    // const request = indexedDB.open('myDatabase', 1);
+    //
+    // request.onerror = function(event) {
+    //     console.error('IndexedDB error:', event.target.errorCode);
+    // };
+    //
+    // request.onupgradeneeded = function(event) {
+    //     const db = event.targe
+
+    function storePlantIndex() {
+        // Gather form data
+        const formData = new FormData(plantForm);
+        const plantData = {
+            userName: formData.get("userName"),
+            plantName: formData.get("plantName"),
+            dateTime: formData.get("dateTime"),
+            description: formData.get("description"),
+            location: formData.get("location"),
+            plantSize: formData.get("plantSize"),
+            plantType: formData.get("plantType"),
+            fruitType: formData.get("fruitType"),
+            leavesType: formData.get("leavesType"),
+            sunExposureType: formData.get("sunExposureType"),
+            plantColor: formData.get("plantColor"),
+            imageUpload: formData.get("imageUpload").name // Save the file name, handle file separately
+        };
+        return plantData;
+    }
 </script>
 
 
