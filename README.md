@@ -48,11 +48,11 @@ To run this project locally, you'll need to have Node.js, npm (Node Package Mana
 ![Homepage](public/images/HOMEpage.png)
 
 
-![Plant Detail](public/images/main.png)
+![All Plant](public/images/main.png)
 
-### Demo 
 
-- Link here
+![Plant Detail](public/images/Plant Details.png)
+
 
 ### Wireframe
 
