@@ -140,7 +140,7 @@ router.post('/savePlant', upload.single('imageUpload'), async function(req, res,
 
     // Handle the result
     if (result) {
-      res.send('<p>Redirecting to route2 in 5 seconds...</p><script>setTimeout(function(){window.location.href="/main";}, 2000);</script>');
+      res.send('<p> Redirecting to Main.......</p><script>setTimeout(function(){window.location.href="/main";}, 2000);</script>');
       //res.json({ success: true });
     } else {
       res.status(500).send("Error saving plant");
