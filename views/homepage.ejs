@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-<title>Homepage</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Recognition System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+    <style>
     body {font-family: "Lato", sans-serif}
     .Slides {display: none}
 
@@ -34,22 +39,19 @@
         height: 40vh;
     }
 
-    .image-carousel-container {
+    .carousel-container {
         display: flex;
-        justify-content: space-between;
+        justify-content: space-around;
         margin-top: 20px;
     }
-
-    .image-carousel {
-        width: calc(50% - 10px);
+    .carousel {
+        width: 45%;
     }
-
-    .image-carousel img {
+    .carousel img {
         width: 100%;
-        height: auto;
     }
-
-</style>
+    </style>
+</head>
 
 <body>
 
@@ -98,22 +100,19 @@
         <img src="images/Plant-img.png" alt="photo">
     </div>
 
-    <div class="image-carousel-container">
-        <div class="image-carousel">
-            <% const images1 = images.slice(0, 3); %>
-            <% images1.forEach(image => { %>
-                <div class="Slides" style="position: relative;">
-                    <img src="<%= image %>" style="width:100%">
+    <!-- Image Carousels -->
+    <div class="carousel-container">
+        <div class="carousel"> <% plants.slice(0, Math.ceil(plants.length / 2)).forEach(function(plant) { %>
+                <div class="Slides">
+                    <img src="<%= plant.img %>" alt="<%= plant.name %>">
                 </div>
-            <% }) %>
+            <% }); %>
         </div>
-        <div class="image-carousel">
-            <% const images2 = images.slice(3, 6); %>
-            <% images2.forEach(image => { %>
-                <div class="Slides" style="position: relative;">
-                    <img src="<%= image %>" style="width:100%">
+        <div class="carousel"> <% plants.slice(Math.ceil(plants.length / 2)).forEach(function(plant) { %>
+                <div class="Slides">
+                    <img src="<%= plant.img %>" alt="<%= plant.name %>">
                 </div>
-            <% }) %>
+            <% }); %>
         </div>
     </div>
 
@@ -136,34 +135,11 @@
         setTimeout(carousel, 4000);
     }
 
-    // Fetch random images from backend
-    fetch('/random-images')
-        .then(response => response.json())
-        .then(images => {
-            const images1 = images.slice(0, 3); // First set of images
-            const images2 = images.slice(3, 6); // Second set of images
-            // Render images in carousels
-            renderImages(images1, '.image-carousel:nth-of-type(1)');
-            renderImages(images2, '.image-carousel:nth-of-type(2)');
-        })
-        .catch(error => console.error(error));
-
-    // Function to render images in the specified carousel
-    function renderImages(images, carouselSelector) {
-        const carousel = document.querySelector(carouselSelector);
-        images.forEach(imageUrl => {
-            const slide = document.createElement('div');
-            slide.classList.add('Slides');
-            slide.style.position = 'relative';
-            const img = document.createElement('img');
-            img.src = imageUrl;
-            img.style.width = '100%';
-            slide.appendChild(img);
-            carousel.appendChild(slide);
-        });
-    }
-
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
 
 </body>
 </html>

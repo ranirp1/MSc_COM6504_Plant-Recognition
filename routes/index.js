@@ -4,8 +4,6 @@ var plants = require('../controllers/plants')
 var multer = require('multer');
 
 
-
-
 // storage defines the storage options to be used for file upload with multer
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -21,22 +19,6 @@ var storage = multer.diskStorage({
 });
 
 let upload = multer({ storage: storage });
-
-
-// Function to fetch random images from the database
-async function getRandomImages(count) {
-  try {
-    // Query the database to fetch random images
-    const randomPlants = await Plant.aggregate([{ $sample: { size: count } }]);
-
-    // Extract image URLs from the fetched plants
-    const images = randomPlants.map(plant => plant.img);
-
-    return images;
-  } catch (error) {
-    throw error; // Propagate the error to the caller
-  }
-}
 
 /**
  * used to return dynamic time when plant was submitted
@@ -106,17 +88,15 @@ router.post('/', function(req, res, next) {
 
 
 /* GET home page. */
-router.get('/homepage', async (req, res, next) => {
+router.get('/homepage', async function(req, res, next) {
   try {
-    const images = await plants.getRandomImages(6);
-    res.render('homepage', {
-      backgroundImage: 'images/bg.jpg',
-      title: 'Express',
-      images: images
-    });
+    const allPlants = await plants.getAll();
+    const parsedPlants = JSON.parse(allPlants);
+
+    res.render('homepage', { title: 'Express', plants: parsedPlants });
   } catch (error) {
-    console.error(error);
-    res.status(500).send('Error fetching images');
+    console.error("Error fetching plants:", error);
+    res.status(500).send("Error fetching plants");
   }
 });
 
@@ -162,7 +142,7 @@ router.post('/savePlant', upload.single('imageUpload'), async function(req, res,
       plant_status: false
     }, filePath);
 
-   // console.log(result)
+    // console.log(result)
 
     // Handle the result
     if (result) {
@@ -185,13 +165,13 @@ router.post('/plantdetails', function(req, res) {
   const plantId = req.body.plantId;
 
   plantdetails.getById(plantId)
-    .then((plant) => {
-      if (plant) {
-        //res.json(plant);// Send the retrieved plant data in JSON format
-        //console.log(res.locals.plant);
-        const resource = `http://dbpedia.org/resource/${encodeURIComponent(plant.name)}`;
-        const endpointUrl = 'https://dbpedia.org/sparql';
-        const sparqlQuery = `
+      .then((plant) => {
+        if (plant) {
+          //res.json(plant);// Send the retrieved plant data in JSON format
+          //console.log(res.locals.plant);
+          const resource = `http://dbpedia.org/resource/${encodeURIComponent(plant.name)}`;
+          const endpointUrl = 'https://dbpedia.org/sparql';
+          const sparqlQuery = `
           PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
           PREFIX dbo: <http://dbpedia.org/ontology/>
           PREFIX dbp: <http://dbpedia.org/property/>
@@ -203,52 +183,52 @@ router.post('/plantdetails', function(req, res) {
           }
            `;
 
-        const encodedQuery = encodeURIComponent(sparqlQuery);
-        const url = `${endpointUrl}?query=${encodedQuery}&format=json`;
+          const encodedQuery = encodeURIComponent(sparqlQuery);
+          const url = `${endpointUrl}?query=${encodedQuery}&format=json`;
 
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-              console.log("Fetched data:", data); // Log the fetched data
-              let bindings = data.results.bindings;
+          fetch(url)
+              .then(response => response.json())
+              .then(data => {
+                console.log("Fetched data:", data); // Log the fetched data
+                let bindings = data.results.bindings;
 
-             // Check if the data is found
-              if (bindings.length === 0) {
-                console.log("Data not found");
-                // Render the 'plantdetails' page without specific data
-                res.render('plantdetails', { plant: plant });
-                return;
-              }
+                // Check if the data is found
+                if (bindings.length === 0) {
+                  console.log("Data not found");
+                  // Render the 'plantdetails' page without specific data
+                  res.render('plantdetails', { plant: plant });
+                  return;
+                }
 
-              let result = JSON.stringify(bindings)
+                let result = JSON.stringify(bindings)
 
-              // Check if the description exists before rendering
-              //let description = bindings[0].description? bindings[0].description.value : null;
+                // Check if the description exists before rendering
+                //let description = bindings[0].description? bindings[0].description.value : null;
 
-              res.render('plantdetails', {
-                name: bindings[0]?.label?.value || 'Data not found',
-                description: bindings[0]?.description?.value || 'Description not found',
-                JSONresult: result,
-                plant: plant
+                res.render('plantdetails', {
+                  name: bindings[0]?.label?.value || 'Data not found',
+                  description: bindings[0]?.description?.value || 'Description not found',
+                  JSONresult: result,
+                  plant: plant
+                });
+
+
+              })
+              .catch(error => {
+                console.error('Error fetching data:', error);
+                res.render('plantdetails', { title: 'Plant Details', plant: plant }); // Render the page without data in case of an error
               });
 
 
-            })
-            .catch(error => {
-              console.error('Error fetching data:', error);
-              res.render('plantdetails', { title: 'Plant Details', plant: plant }); // Render the page without data in case of an error
-            });
-
-
-       // res.render('plantdetails', { plant: plant });
-      } else {
-        res.status(404).send("Plant not found."); // Send a 404 Not Found response
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send("Error retrieving plant."); // Send a 500 Internal Server Error response
-    });
+          // res.render('plantdetails', { plant: plant });
+        } else {
+          res.status(404).send("Plant not found."); // Send a 404 Not Found response
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send("Error retrieving plant."); // Send a 500 Internal Server Error response
+      });
 });
 
 
@@ -259,17 +239,17 @@ router.post('/plantdetails/:plantId/chat', function(req, res) {
   const chatData = req.body;
 
   chat.create(plantId, chatData)
-    .then((plant) => {
-      if (plant) {
-        res.status(201).send("Chat message saved successfully!");
-      } else {
-        res.status(404).send("Plant not found.");
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send("Error saving chat message.");
-    });
+      .then((plant) => {
+        if (plant) {
+          res.status(201).send("Chat message saved successfully!");
+        } else {
+          res.status(404).send("Plant not found.");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send("Error saving chat message.");
+      });
 });
 
 // Route handler for getting chat data
@@ -277,24 +257,20 @@ router.get('/plantdetails/:plantId/chat', function(req, res) {
   const plantId = req.params.plantId;
 
   chat.getById(plantId)
-    .then((chat) => {
-      if (chat) {
-        res.json(chat); // Send the retrieved chat data in JSON format
-      } else {
-        res.status(404).send("Plant not found."); // Send a 404 Not Found response
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send("Error retrieving chat."); // Send a 500 Internal Server Error response
-    });
+      .then((chat) => {
+        if (chat) {
+          res.json(chat); // Send the retrieved chat data in JSON format
+        } else {
+          res.status(404).send("Plant not found."); // Send a 404 Not Found response
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send("Error retrieving chat."); // Send a 500 Internal Server Error response
+      });
 });
 
-
 module.exports = router;
-
-module.exports.getRandomImages = getRandomImages;
-
 
 
 
