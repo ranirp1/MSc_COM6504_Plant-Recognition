@@ -284,6 +284,44 @@ router.post('/plantdetails/:plantId/suggestions', function(req, res) {
     });
 });
 
+// Route handler for getting suggestions data
+router.get('/plantdetails/:plantId/suggestions', function(req, res) {
+  const plantId = req.params.plantId;
+
+  suggestions.getSuggestion(plantId)
+    .then((suggestions) => {
+      if (suggestions) {
+        res.json(suggestions); // Send the retrieved chat data in JSON format
+      } else {
+        res.status(404).send("Plant not found."); // Send a 404 Not Found response
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error retrieving Suggestion."); // Send a 500 Internal Server Error response
+    });
+});
+
+// Route handler for approving a suggested name and updating the plant name
+router.post('/plantdetails/:plantId/approvesuggestions', function(req, res) {
+  const plantId = req.params.plantId;
+  const suggestedName = req.body.suggestedName;
+
+  console.log(plantId, suggestedName);
+  suggestions.approve(plantId, suggestedName)
+    .then((plant) => {
+      if (plant) {
+        res.status(200).send("Suggested name approved successfully!");
+      } else {
+        res.status(404).send("Plant not found.");
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error approving suggested name.");
+    });
+});
+
 module.exports = router;
 
 
