@@ -136,12 +136,11 @@ router.post('/savePlant', upload.single('imageUpload'), async function(req, res,
       plant_status: false
     }, filePath);
 
-   // console.log(result)
+   console.log(result)
 
     // Handle the result
     if (result) {
-      //res.send("<p>Redirecting to route2 in 5 seconds...</p>")
-       res.send('<p>Redirecting to route2 in 5 seconds...</p><script>setTimeout(function(){window.location.href="/main";}, 2000);</script>');
+      res.send('<p>Redirecting to route2 in 5 seconds...</p><script>setTimeout(function(){window.location.href="/main";}, 2000);</script>');
       //res.json({ success: true });
     } else {
       res.status(500).send("Error saving plant");
@@ -262,6 +261,26 @@ router.get('/plantdetails/:plantId/chat', function(req, res) {
     .catch((err) => {
       console.error(err);
       res.status(500).send("Error retrieving chat."); // Send a 500 Internal Server Error response
+    });
+});
+
+const suggestion = require('../controllers/suggestion');
+
+router.post('/plantdetails/:plantId/suggestion', function(req, res) {
+  const plantId = req.params.plantId;
+  const suggestionData = req.body;
+
+  suggestion.suggest(plantId, suggestionData)
+    .then((plant) => {
+      if (plant) {
+        res.status(201).send("suggested name saved successfully!");
+      } else {
+        res.status(404).send("Plant not found.");
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error saving suggested name.");
     });
 });
 
