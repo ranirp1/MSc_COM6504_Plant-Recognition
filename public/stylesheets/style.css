@@ -92,7 +92,8 @@ header {
 }
 
 .gradient-background {
-  background-image: linear-gradient(-225deg, #7085B6 100%, #87A7D9 50%, #DEF3F8 100%);}
+  background-image: linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%);;
+}
 
 #chat_interface {
   display: flex; /* Enable flexbox layout */
@@ -107,6 +108,26 @@ header {
   padding: 10px;
   margin: 10px;
   overflow-y: auto; /* Enable vertical scrolling if content exceeds container height */
+}
+
+#chat_interface {
+  position: fixed; /* Fix the popup to the viewport */
+  top: 100px; /* Adjust the top position */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Offset to center */
+  display: flex; /* Enable flexbox layout */
+  flex-grow: 1;
+  background: rgba(255, 255, 255, 0.8); /* Adjust transparency (0 for fully transparent) */
+  backdrop-filter: blur(5px); /* Optional blur effect */
+  
+  /* Added properties for scrolling */
+  height: 400px; /* Adjust this value to your preference (e.g., 350px, 300px) */
+  width: 500px; /* Adjust the width as needed */
+  overflow-y: auto;
+}
+
+#chat_interface.hidden {
+  display: none; /* Hide the popup with a class */
 }
 
 

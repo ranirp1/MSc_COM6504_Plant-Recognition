@@ -32,7 +32,6 @@
                 <ul class="list-group mb-3">
                   <li class="list-group-item">Name: <%= plant.name %></li>
                   <li class="list-group-item">Description: <%= plant.description %></li>
-                  <li class="list-group-item">Location: <%= plant.location %></li>
                   <li class="list-group-item">Date and Time: <%= plant.dos %></li>
                   <li class="list-group-item">Plant Size: <%= plant.plant_size %></li>
                   <li class="list-group-item">Plant Characteristic: 
@@ -87,7 +86,7 @@
               </ul>
               <h3 class="fs-3"> Plant DBPedia Details </h3>
               <ul class="list-group mb-3">
-                <li class="list-group-item">
+                <!-- <li class="list-group-item">
                   <div class="d-flex align-items-center">
                     <p class="me-2 mb-0">Name: </p>
                     <input type="text" class="form-control" id="plantName" value="" placeholder="suggest plant name"
@@ -95,21 +94,19 @@
                     <span class="input-group-text" id="basic-addon1">
                       <button id="btnsuggest" onclick="sendSuggestedName()"><i class="bi bi-pencil"></i></button> </span>
                   </div>
-                </li>
-                <li class="list-group list-group-flush">Suggested Names:
+                </li> 
+               <li class="list-group list-group-flush">Suggested Names:
                   <% plant.suggestions.forEach(plant => { %> 
                     <li class="list-group-item">
                       <div class="suggestion d-flex align-items-center justify-content-between">
-                        <% if (username === plant.owner_nickname) { %>
                         <p class="m-0"><%= plant.sender %> : <%= plant.message %></p>
                         <div class="ml-auto">
                             <button class="btn btn-success ml-2" onclick="updatePlantName('<%= plant.message %>')">Accept</button>
                         </div>
-                        <% } %>
                     </div>
                   </li>
                     <% }) %>
-                </li>
+                </li> -->
                 <li class="list-group-item">Plant Status: <%= plant.plant_status %></li>
                 <li class="list-group-item">
                   <div class=" d-flex align-items-center">
