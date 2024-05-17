@@ -45,10 +45,10 @@ To run this project locally, you'll need to have Node.js, npm (Node Package Mana
 
 ### Screenshots 
 
-![Homepage](images/HOMEpage.png)
+![Homepage](public/images/HOMEpage.png)
 
 
-![Plant Detail](images/main.png)
+![Plant Detail](public/images/main.png)
 
 ### Demo 
 
