@@ -1,9 +1,12 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Plant Sightings</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="icon" href="images/logo.png" type="image/x-icon"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <script src="/javascripts/elapsedtime.js"></script>
@@ -43,68 +46,77 @@
             </ul>
         </div>
 
-        <div class="dropdown ms-2">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownFruits" data-bs-toggle="dropdown" aria-expanded="false">
-                Fruits
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownFruits">
-                <li><a class="dropdown-item" href="#" id="hasFruits">Has Fruits</a></li>
-                <li><a class="dropdown-item" href="#" id="noFruits">No Fruits</a></li>
-            </ul>
+                <div class="dropdown ms-2">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownFruits"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Fruits
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownFruits">
+                        <li><a class="dropdown-item" href="#" id="hasFruits">Has Fruits</a></li>
+                        <li><a class="dropdown-item" href="#" id="noFruits">No Fruits</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown ms-2">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownFlowers"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Flowers
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownFlowers">
+                        <li><a class="dropdown-item" href="#" id="hasFlowers">Has Flowers</a></li>
+                        <li><a class="dropdown-item" href="#" id="noFlowers">No Flowers</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown ms-2">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownSunExposure"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Sun Exposure
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownSunExposure">
+                        <li><a class="dropdown-item" href="#" id="fullSun">Full Sun</a></li>
+                        <li><a class="dropdown-item" href="#" id="partialShade">Partial Shade</a></li>
+                        <li><a class="dropdown-item" href="#" id="fullShade">Full Shade</a></li>
+                    </ul>
+                </div>
+                <!--        <button id="resetButton" class="btn btn-primary btn-sm">Reset Filters</button>-->
+                <div class="ms-auto">
+                    <button id="resetButton" class="btn btn-outline-dark btn-sm">Reset Filters</button>
+                </div>
+            </div>
         </div>
-        <div class="dropdown ms-2">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownFlowers" data-bs-toggle="dropdown" aria-expanded="false">
-                Flowers
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownFlowers">
-                <li><a class="dropdown-item" href="#" id="hasFlowers">Has Flowers</a></li>
-                <li><a class="dropdown-item" href="#" id="noFlowers">No Flowers</a></li>
-            </ul>
-        </div>
-        <div class="dropdown ms-2">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownSunExposure" data-bs-toggle="dropdown" aria-expanded="false">
-                Sun Exposure
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownSunExposure">
-                <li><a class="dropdown-item" href="#" id="fullSun">Full Sun</a></li>
-                <li><a class="dropdown-item" href="#" id="partialShade">Partial Shade</a></li>
-                <li><a class="dropdown-item" href="#" id="fullShade">Full Shade</a></li>
-            </ul>
-        </div>
-        <!--        <button id="resetButton" class="btn btn-primary btn-sm">Reset Filters</button>-->
-        <div class="ms-auto">
-            <button id="resetButton" class="btn btn-outline-dark btn-sm">Reset Filters</button>
-        </div>
-    </div>
-</div>
-<div class="album py-5 bg-light"><!--    style="background-color:#70A300">-->
-    <div class="container">
-        <div class="row" id="plantCards">
-            <% data.forEach(plant => { %>
-                <div class="col-md-4">
-                    <div class="card mb-4 box-shadow" >
-                        <% if (plant.img) { %>
-                            <img class="card-img-top" src="<%= plant.img %>" alt="Card image cap" style="width: 100%; height: 300px; object-fit: cover;">
-                        <% } %>
-                        <div class="card-body">
-                            <p class="card-text"><%= plant.description %></p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <form action="/plantdetails" method="POST">
-                                        <!-- Hidden input field to store plant ID -->
-                                        <input type="hidden" name="plantId" value="<%= plant._id %>"/>
-                                        <input type="hidden" name="username" value="sagar"/>
-                                        <button type="submit" class="btn btn-sm btn-outline-secondary">View</button>
-                                    </form>
-                                </div>
-                                <% if (plant.dos) { %>
-                                    <small class="text-muted"><%= getTimeElapsed(plant.dos) %></small>
-                                <% } %>
+        <div class="album py-5 bg-light"><!--    style="background-color:#70A300">-->
+            <div class="container">
+                <div class="row" id="plantCards">
+                    <% data.forEach(plant=> { %>
+                        <div class="col-md-4">
+                            <div class="card mb-4 box-shadow">
+                                <% if (plant.img) { %>
+                                    <img class="card-img-top" src="<%= plant.img %>" alt="Card image cap"
+                                        style="width: 100%; height: 300px; object-fit: cover;">
+                                    <% } %>
+                                        <div class="card-body">
+                                            <p class="card-text">
+                                                <%= plant.description %>
+                                            </p>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="btn-group">
+                                                    <form action="/plantdetails" method="POST">
+                                                        <!-- Hidden input field to store plant ID -->
+                                                        <input type="hidden" name="plantId" value="<%= plant._id %>" />
+                                                        <input type="hidden" name="username" value="sagar" />
+                                                        <button type="submit"
+                                                            class="btn btn-sm btn-outline-secondary">View</button>
+                                                    </form>
+                                                </div>
+                                                <% if (plant.dos) { %>
+                                                    <small class="text-muted">
+                                                        <%= getTimeElapsed(plant.dos) %>
+                                                    </small>
+                                                    <% } %>
+                                            </div>
+                                        </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            <% }); %>
+                        <% }); %>
 
         </div>
     </div>
@@ -155,24 +167,24 @@
         });
     });
 
-    // Set event listener for radio button change
-    document.querySelectorAll('input[type="radio"][name="sortOrder"]').forEach(function(radio) {
-        radio.addEventListener('change', function () {
-            if (this.value === 'mostRecent') {
-                sortByMostRecent();
-                resetFilters();
-            } else {
-                // Add other sorting schemes here
-                sortByNearestLocation(currentLocation);
-                resetFilters();
-                // console.log("Hello sorting 2")
-            }
-        });
-    });
-    sortByMostRecent();
-    getLocation();
-    let username = document.getElementById('username');
-    console.log(username);
+            // Set event listener for radio button change
+            document.querySelectorAll('input[type="radio"][name="sortOrder"]').forEach(function (radio) {
+                radio.addEventListener('change', function () {
+                    if (this.value === 'mostRecent') {
+                        sortByMostRecent();
+                        resetFilters();
+                    } else {
+                        // Add other sorting schemes here
+                        sortByNearestLocation(currentLocation);
+                        resetFilters();
+                        // console.log("Hello sorting 2")
+                    }
+                });
+            });
+            sortByMostRecent();
+            getLocation();
+            let username = document.getElementById('username');
+            console.log(username);
 </script>
 </body>
 </html>

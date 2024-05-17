@@ -124,8 +124,8 @@ header {
   backdrop-filter: blur(5px); /* Optional blur effect */
   
   /* Added properties for scrolling */
-  height: 400px; /* Adjust this value to your preference (e.g., 350px, 300px) */
-  width: 500px; /* Adjust the width as needed */
+  height: 600px; /* Adjust this value to your preference (e.g., 350px, 300px) */
+  width: 400px; /* Adjust the width as needed */
   overflow-y: auto;
 }
 

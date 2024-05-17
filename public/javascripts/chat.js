@@ -9,7 +9,7 @@ let socket = io();
  * plus the associated actions
  */
 function init() {
-    console.log("plantID",plantID);
+    console.log("plantID", plantID);
     // it sets up the interface so that userId and room are selected
     // document.getElementById('initial_form')
     // document.getElementById('chat_interface').style.display = 'none';
@@ -17,11 +17,19 @@ function init() {
     const chatInterface = document.getElementById('chat_interface');
     const openChatButton = document.getElementById('connect');
 
-openChatButton.addEventListener('click', () => {
-  chatInterface.classList.toggle('hidden'); // Toggle hidden class on click
-});
-  
+    openChatButton.addEventListener('click', () => {
+        chatInterface.classList.toggle('hidden'); // Toggle hidden class on click
+    });
 
+    document.addEventListener('click', function (event) {
+        var chatInterface = document.getElementById('chat_interface');
+        var connectButton = document.getElementById('connect');
+
+        // Check if the click occurred outside of the chat interface and the connect button
+        if (!chatInterface.contains(event.target) && event.target !== connectButton) {
+            chatInterface.style.display = 'none'; // Close the chat interface
+        }
+    });
     // called when someone joins the room. If it is someone else it notifies the joining of the room
     socket.on('joined', function (room, userId) {
         if (userId === name) {
@@ -29,9 +37,9 @@ openChatButton.addEventListener('click', () => {
             hideLoginInterface(room, userId);
         } else {
             // notifies that someone has joined the room
-           //loop through the chat messages and display the
+            //loop through the chat messages and display the
 
-          writeOnHistory('<b>'+userId+'</b>' + ' joined room ' + room);
+            writeOnHistory('<b>' + userId + '</b>' + ' joined room ' + room);
         }
     });
     // called when a message is received
@@ -48,32 +56,32 @@ openChatButton.addEventListener('click', () => {
  */
 function sendChatText() {
     let chatText = document.getElementById('chat_input').value;
-    if(navigator.onLine){     
-    socket.emit('chat', roomNo, name, chatText); 
-     // Make an HTTP POST request to the server
-     fetch(`/plantdetails/${plantID}/chat`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            sender: name,
-            message: chatText
+    if (navigator.onLine) {
+        socket.emit('chat', roomNo, name, chatText);
+        // Make an HTTP POST request to the server
+        fetch(`/plantdetails/${plantID}/chat`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                sender: name,
+                message: chatText
+            })
         })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Failed to save chat message');
-        }
-        // Clear the chat input field
-        document.getElementById('chat_input').value = '';
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        // Handle error
-    });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to save chat message');
+                }
+                // Clear the chat input field
+                document.getElementById('chat_input').value = '';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle error
+            });
     }
-    else{
+    else {
         openSyncChatIDB().then((db) => {
             addNewChatToSync(db, chatText).then(() => {
                 console.log("Chat added to IDB")
@@ -93,7 +101,8 @@ function connectToRoom() {
             console.log("connectToRoom");
             roomNo = plantID;
             if (!name) name = 'Unknown-' + Math.random();
-            socket.emit('create or join', roomNo, name);        } 
+            socket.emit('create or join', roomNo, name);
+        }
     }
     );
 
@@ -124,24 +133,24 @@ function writeOnHistory(text) {
 function hideLoginInterface(room, userId) {
     document.getElementById('initial_form');
     document.getElementById('chat_interface').style.display = 'block';
-    document.getElementById('who_you_are').innerHTML= userId;
-    document.getElementById('in_room').innerHTML= ' '+room;
+    document.getElementById('who_you_are').innerHTML = userId;
+    document.getElementById('in_room').innerHTML = ' ' + room;
     fetch(`/plantdetails/${plantID}/chat`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to retrieve chat messages');
-                    }
-                    return response.json();
-                })
-                .then(chatMessages => {
-                    for (const chatMessage of chatMessages) {
-                        writeOnHistory('<b>' + chatMessage.sender + ':</b> ' + chatMessage.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    // Handle error
-                });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to retrieve chat messages');
+            }
+            return response.json();
+        })
+        .then(chatMessages => {
+            for (const chatMessage of chatMessages) {
+                writeOnHistory('<b>' + chatMessage.sender + ':</b> ' + chatMessage.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Handle error
+        });
 }
 
 window.addEventListener('online', () => {
@@ -161,16 +170,16 @@ window.addEventListener('online', () => {
                         message: chat.text
                     })
                 })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to save chat message');
-                    }
-                    deleteSyncChatFromIDB(db, chat.id);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    // Handle error
-                });
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to save chat message');
+                        }
+                        deleteSyncChatFromIDB(db, chat.id);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        // Handle error
+                    });
             }
         });
     });
@@ -192,42 +201,42 @@ function closeChat() {
     const chatInterface = document.getElementById('chat_interface');
     if (!chatInterface.classList.contains('hidden')) {
         chatInterface.style.display = 'none';
-      }
-  }
+    }
+}
 
-  const getUsername = () => {
+const getUsername = () => {
     // Open IndexedDB with the name "plant-recognition"
     const requestIDB = indexedDB.open("plant-recognition");
-  
+
     return new Promise((resolve, reject) => {
-      requestIDB.addEventListener("success", () => {
-        const db = requestIDB.result;
-        const transaction = db.transaction(["user"], "readonly");
-        const objectStore = transaction.objectStore("user");
-        const getRequest = objectStore.getAll();
-  
-        getRequest.addEventListener("success", (event) => {
-          const userData = event.target.result;
-          if (userData.length > 0) {
-            const username = userData[0].username;
-            const userName = document.getElementById('who_you_are');
-            if (userName) {
-              userName.innerText = username;
-            }
-            resolve(username);  
-          } else {
-            resolve(null); 
-          }
+        requestIDB.addEventListener("success", () => {
+            const db = requestIDB.result;
+            const transaction = db.transaction(["user"], "readonly");
+            const objectStore = transaction.objectStore("user");
+            const getRequest = objectStore.getAll();
+
+            getRequest.addEventListener("success", (event) => {
+                const userData = event.target.result;
+                if (userData.length > 0) {
+                    const username = userData[0].username;
+                    const userName = document.getElementById('who_you_are');
+                    if (userName) {
+                        userName.innerText = username;
+                    }
+                    resolve(username);
+                } else {
+                    resolve(null);
+                }
+            });
+            getRequest.addEventListener("error", (error) => {
+                console.error("Error retrieving username from IndexedDB:", error);
+                reject(error);
+            });
         });
-          getRequest.addEventListener("error", (error) => {
-          console.error("Error retrieving username from IndexedDB:", error);
-          reject(error);  
+
+        requestIDB.addEventListener("error", (error) => {
+            console.error("Error opening IndexedDB:", error);
+            reject(error);
         });
-      });
-  
-      requestIDB.addEventListener("error", (error) => {
-        console.error("Error opening IndexedDB:", error);
-        reject(error);  
-      });
     });
-  };
+};

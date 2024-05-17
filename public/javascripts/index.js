@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
 
     // Function to display a welcome message
     const displayWelcomeMessage = (username) => {
@@ -126,8 +126,8 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         // Create object store for user data (with auto-incrementing key)
-        db.createObjectStore("user", {keyPath: "id", autoIncrement: true});
-        db.createObjectStore("plants", {keyPath: "id", autoIncrement: true});
+        db.createObjectStore("user", { keyPath: "id", autoIncrement: true });
+        db.createObjectStore("plants", { keyPath: "id", autoIncrement: true });
         objectStoreCreated = true;
         addMessage("Upgraded object store (if necessary)...", false, false);
     };

@@ -13,7 +13,7 @@ var storage = multer.diskStorage({
     var original = file.originalname;
     var file_extension = original.split(".");
     // Make the file name the date + the file extension
-    filename =  Date.now() + '.' + file_extension[file_extension.length-1];
+    filename = Date.now() + '.' + file_extension[file_extension.length - 1];
     cb(null, filename);
   }
 });
@@ -47,12 +47,12 @@ const getTimeElapsed = (plantDOS) => {
 }
 
 /* GET login page. */
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
   res.render('loginpage', { title: 'Express' });
 });
 
 /* POST login page. */
-router.post('/', function(req, res, next) {
+router.post('/', function (req, res, next) {
   const username = req.body.username;
 
   // Check if the username already exists in IndexedDB
@@ -88,7 +88,7 @@ router.post('/', function(req, res, next) {
 
 
 /* GET home page. */
-router.get('/homepage', function(req, res, next) {
+router.get('/homepage', function (req, res, next) {
   res.render('homepage', {
     backgroundImage: 'images/bg.jpg',
     title: 'Express'
@@ -96,34 +96,34 @@ router.get('/homepage', function(req, res, next) {
 });
 
 /* Plant Details */
-router.get('/plantdetails', function(req, res, next) {
+router.get('/plantdetails', function (req, res, next) {
   res.render('plantdetails', { title: 'Express' });
 });
 
 /* All Plant Page */
-router.get('/main', function(req, res, next) {
+router.get('/main', function (req, res, next) {
   let result = plants.getAll()
   result.then(plants => {
     let data = JSON.parse(plants);
-    res.render('main', { title: 'View All Plants', data: data, getTimeElapsed: getTimeElapsed});
+    res.render('main', { title: 'View All Plants', data: data, getTimeElapsed: getTimeElapsed });
   })
 });
 
-router.get('/newplant', function(req,res){
+router.get('/newplant', function (req, res) {
   // let plant = plants.create(description="This is a plant description", name="African Iris", img="public/images/uploads/african_iris.jpg");
   res.render('newPlant', { title: 'Express' });
 })
 
 // Route handler for saving plant data
-router.post('/savePlant', upload.single('imageUpload'), async function(req, res, next) {
+router.post('/savePlant', upload.single('imageUpload'), async function (req, res, next) {
   try {
-    const { dateTime, description, location, plantSize, plantType, fruitType, leavesType, sunExposureType, plantName , plantColor, userName} = req.body;
+    const { dateTime, description, location, plantSize, plantType, fruitType, leavesType, sunExposureType, plantName, plantColor, userName } = req.body;
     const filePath = req.file.path; // Get the path to the uploaded image file
 
     // Call the create function from the controller to save the plant data
     const result = await plants.create({
       dos: dateTime,
-      description : description,
+      description: description,
       location: location,
       plant_size: plantSize,
       flowers: plantType === 'withFlower',
@@ -136,7 +136,7 @@ router.post('/savePlant', upload.single('imageUpload'), async function(req, res,
       plant_status: false
     }, filePath);
 
-   console.log(result)
+    console.log(result)
 
     // Handle the result
     if (result) {
@@ -155,7 +155,7 @@ router.post('/savePlant', upload.single('imageUpload'), async function(req, res,
 
 const plantdetails = require('../controllers/plants');
 
-router.post('/plantdetails', function(req, res) {
+router.post('/plantdetails', function (req, res) {
   const plantId = req.body.plantId;
   const username = req.body.username;
 
@@ -182,41 +182,41 @@ router.post('/plantdetails', function(req, res) {
         const url = `${endpointUrl}?query=${encodedQuery}&format=json`;
 
         fetch(url)
-            .then(response => response.json())
-            .then(data => {
-              console.log("Fetched data:", data); // Log the fetched data
-              let bindings = data.results.bindings;
+          .then(response => response.json())
+          .then(data => {
+            console.log("Fetched data:", data); // Log the fetched data
+            let bindings = data.results.bindings;
 
-             // Check if the data is found
-              if (bindings.length === 0) {
-                console.log("Data not found");
-                // Render the 'plantdetails' page without specific data
-                res.render('plantdetails', { plant: plant });
-                return;
-              }
+            // Check if the data is found
+            if (bindings.length === 0) {
+              console.log("Data not found");
+              // Render the 'plantdetails' page without specific data
+              res.render('plantdetails', { plant: plant });
+              return;
+            }
 
-              let result = JSON.stringify(bindings)
+            let result = JSON.stringify(bindings)
 
-              // Check if the description exists before rendering
-              //let description = bindings[0].description? bindings[0].description.value : null;
+            // Check if the description exists before rendering
+            //let description = bindings[0].description? bindings[0].description.value : null;
 
-              res.render('plantdetails', {
-                name: bindings[0]?.label?.value || 'Data not found',
-                description: bindings[0]?.description?.value || 'Description not found',
-                JSONresult: result,
-                plant: plant,
-                username: username
-              });
-
-
-            })
-            .catch(error => {
-              console.error('Error fetching data:', error);
-              res.render('plantdetails', { title: 'Plant Details', plant: plant }); // Render the page without data in case of an error
+            res.render('plantdetails', {
+              name: bindings[0]?.label?.value || 'Data not found',
+              description: bindings[0]?.description?.value || 'Description not found',
+              JSONresult: result,
+              plant: plant,
+              username: username
             });
 
 
-       // res.render('plantdetails', { plant: plant });
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+            res.render('plantdetails', { title: 'Plant Details', plant: plant }); // Render the page without data in case of an error
+          });
+
+
+        // res.render('plantdetails', { plant: plant });
       } else {
         res.status(404).send("Plant not found."); // Send a 404 Not Found response
       }
@@ -230,7 +230,7 @@ router.post('/plantdetails', function(req, res) {
 
 const chat = require('../controllers/chat');
 
-router.post('/plantdetails/:plantId/chat', function(req, res) {
+router.post('/plantdetails/:plantId/chat', function (req, res) {
   const plantId = req.params.plantId;
   const chatData = req.body;
 
@@ -249,7 +249,7 @@ router.post('/plantdetails/:plantId/chat', function(req, res) {
 });
 
 // Route handler for getting chat data
-router.get('/plantdetails/:plantId/chat', function(req, res) {
+router.get('/plantdetails/:plantId/chat', function (req, res) {
   const plantId = req.params.plantId;
 
   chat.getById(plantId)
@@ -268,7 +268,7 @@ router.get('/plantdetails/:plantId/chat', function(req, res) {
 
 const suggestions = require('../controllers/suggestion');
 
-router.post('/plantdetails/:plantId/suggestions', function(req, res) {
+router.post('/plantdetails/:plantId/suggestions', function (req, res) {
   const plantId = req.params.plantId;
   const suggestionData = req.body;
 
@@ -287,7 +287,7 @@ router.post('/plantdetails/:plantId/suggestions', function(req, res) {
 });
 
 // Route handler for getting suggestions data
-router.get('/plantdetails/:plantId/suggestions', function(req, res) {
+router.get('/plantdetails/:plantId/suggestions', function (req, res) {
   const plantId = req.params.plantId;
 
   suggestions.getSuggestion(plantId)
@@ -305,7 +305,7 @@ router.get('/plantdetails/:plantId/suggestions', function(req, res) {
 });
 
 // Route handler for approving a suggested name and updating the plant name
-router.post('/plantdetails/:plantId/approvesuggestions', function(req, res) {
+router.post('/plantdetails/:plantId/approvesuggestions', function (req, res) {
   const plantId = req.params.plantId;
   const suggestedName = req.body.suggestedName;
 
@@ -323,6 +323,7 @@ router.post('/plantdetails/:plantId/approvesuggestions', function(req, res) {
       res.status(500).send("Error approving suggested name.");
     });
 });
+
 
 module.exports = router;
 
