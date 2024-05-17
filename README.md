@@ -1,6 +1,6 @@
 # MSC11 - Plant Recognition
 
-# Description 
+## Description 
 
 The Plant Recognition Web App is a platform designed to help users identify various plant species. Leveraging the DBPedia knowledge graph, the application provides users with valuable information about plants, including common names, scientific names, English language descriptions, and URIs linking to detailed DBPedia pages about each plant. Following are some main features provided by Plant Recognition : 
 
@@ -17,33 +17,33 @@ To run this project locally, you'll need to have Node.js, npm (Node Package Mana
 - [Node.js](https://nodejs.org/)
 - [MongoDB](https://www.mongodb.com/try/download/community)
 
-## 1. Clone this repository to your local machine:
+### 1. Clone this repository to your local machine:
 
-git clone : <https://git.shefcompsci.org.uk/acp23rk/msc11-plant-recognition.git>
+- git clone : <https://git.shefcompsci.org.uk/acp23rk/msc11-plant-recognition.git>
 
-## 2. Navigate to the project directory  
+### 2. Navigate to the project directory  
 
-cd <project_directory>
+- cd <project_directory>
 
-## 3. Install dependencies using npm  
+### 3. Install dependencies using npm  
 
 - npm install
 
-## 4. Ensure MongoDB is running on your local machine. If it's not already running, start the MongoDB server.
+### 4. Ensure MongoDB is running on your local machine. If it's not already running, start the MongoDB server.
 
-## 5. Configure MongoDB connection
+### 5. Configure MongoDB connection
 
  - (MONGODB_URI=mongodb://localhost:27017/my_database)
 
-## 6. Once the installation is complete and MongoDB is running, you can start the application 
+### 6. Once the installation is complete and MongoDB is running, you can start the application 
 
 - npm start
 
-## 7. This will start the Node.js server using Express.js as the engine. You can access the application in your web browser at :
+### 7. This will start the Node.js server using Express.js as the engine. You can access the application in your web browser at :
  - http://localhost:3000 .
 
 
-## Screenshots 
+### Screenshots 
 
 ![Homepage](screenshots/homepage.png)
 
@@ -51,7 +51,7 @@ cd <project_directory>
 ![Plant Detail](screenshots/plant_detail.png)
 
 
-## Demo 
+### Demo 
 
 - Link here
 
