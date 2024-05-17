@@ -100,22 +100,6 @@
         <img src="images/Plant-img.png" alt="photo">
     </div>
 
-    <!-- Image Carousels -->
-    <div class="carousel-container">
-        <div class="carousel"> <% plants.slice(0, Math.ceil(plants.length / 2)).forEach(function(plant) { %>
-                <div class="Slides">
-                    <img src="<%= plant.img %>" alt="<%= plant.name %>">
-                </div>
-            <% }); %>
-        </div>
-        <div class="carousel"> <% plants.slice(Math.ceil(plants.length / 2)).forEach(function(plant) { %>
-                <div class="Slides">
-                    <img src="<%= plant.img %>" alt="<%= plant.name %>">
-                </div>
-            <% }); %>
-        </div>
-    </div>
-
 </div>
 
 <script>

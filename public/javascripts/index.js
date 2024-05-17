@@ -99,118 +99,64 @@ document.addEventListener("DOMContentLoaded", function() {
         event.preventDefault(); // Prevent default form submission
 
         // Get form data
-        const userName = document.getElementById("userName").value;
         const plantName = document.getElementById("plantName").value;
-        const dateTime = document.getElementById("dateTime").value;
         const description = document.getElementById("description").value;
         const location = document.getElementById("location").value;
-        const plantHeight = document.getElementById("plantHeight").value;
-        const plantWidth = document.getElementById("plantWidth").value;
-        const plantSize = `${plantHeight} x ${plantWidth}`; // Concatenate height and width
 
         // Validate form data
-        if (isValidPlantSubmission(userName, plantName, dateTime, description, location, plantHeight, plantWidth)) {
+        if (isValidPlantSubmission(plantName, description, location)) {
             // Store plant data in IndexedDB
-            storePlantData(userName, plantName, dateTime, description, location, plantSize);
-        } else {
-            // Display validation error message to the user
-            addMessage("Please fill in all required fields.", true);
+            storePlantData(plantName, description, location);
         }
     };
 
     // Function to validate plant submission
-    const isValidPlantSubmission = (userName, plantName, dateTime, description, location, plantHeight, plantWidth) => {
+    const isValidPlantSubmission = (plantName, description, location) => {
         // check if required fields are not empty
-        return (
-            userName.trim() !== "" &&
-            plantName.trim() !== "" &&
-            dateTime.trim() !== "" &&
-            description.trim() !== "" &&
-            location.trim() !== "" &&
-            plantHeight.trim() !== "" &&
-            plantWidth.trim() !== ""
-        );
+        return plantName.trim() !== "" && description.trim() !== "" && location.trim() !== "";
     };
 
     // Function to store plant data in IndexedDB
-    const storePlantData = (userName, plantName, dateTime, description, location, plantSize) => {
+    const storePlantData = (plantName, description, location) => {
         const todoIDB = requestIDB.result;
         const transaction = todoIDB.transaction(["plants"], "readwrite");
         const plantStore = transaction.objectStore("plants");
 
-        // Generate a unique ID for the plant data
-        const id = Date.now(); // You can use a timestamp as an example, but ensure uniqueness
-
-        // Create an object to store plant data with the unique ID
-        const plantData = {
-            id: id,
-            userName: userName,
-            plantName: plantName,
-            dateTime: dateTime,
-            description: description,
-            location: location,
-            plantSize: plantSize
-        };
-
-        // Add the plant data to the object store
+        // Add the new plant details
+        const plantData = { plantName: plantName, description: description, location: location };
         const addRequest = plantStore.add(plantData);
 
-        // Handle the success and error events
         addRequest.addEventListener("success", () => {
             console.log("Plant data added successfully");
-            // No need to retrieve data here, as it will be triggered by the transaction's "complete" event
+            retrieveUserData(); // Retrieve data after storing
         });
 
         addRequest.addEventListener("error", (event) => {
             console.error("Error storing plant data:", event.target.error);
         });
-
-        // Commit the transaction
-        transaction.addEventListener("complete", () => {
-            console.log("Transaction completed");
-            // Retrieve plant data after the transaction is complete
-            retrievePlantData();
-        });
-
-        transaction.addEventListener("error", (event) => {
-            console.error("Transaction error:", event.target.error);
-        });
     };
 
-    const retrievePlantData = () => {
+    // Function to retrieve user and plant data from IndexedDB
+    const retrieveUserData = () => {
         const todoIDB = requestIDB.result;
-        const transaction = todoIDB.transaction(["plants"]);
+        const transaction = todoIDB.transaction(["user", "plants"]);
+        const userStore = transaction.objectStore("user");
         const plantStore = transaction.objectStore("plants");
-        const getRequest = plantStore.getAll();
 
-        getRequest.onsuccess = function (event) {
+        const getUserRequest = userStore.getAll();
+        const getPlantRequest = plantStore.getAll();
+
+        getUserRequest.addEventListener("success", (event) => {
+            const userData = event.target.result;
+            const usernames = userData.map(user => user.username);
+            console.log("Retrieved user data:", event.target.result);
+        });
+
+        getPlantRequest.addEventListener("success", (event) => {
             const plantData = event.target.result;
-            // Display the plant data on the webpage
-            displayPlantData(plantData);
-        };
-
-        getRequest.onerror = function (event) {
-            console.error("Error retrieving plant data:", event.target.error);
-        };
+            console.log("Retrieved plant data:", plantData);
+        });
     };
-
-    const displayPlantData = (plantData) => {
-        // Assuming there's an element with the id "plantData" to display the data
-        const plantDataElement = document.getElementById("plantData");
-        if (plantDataElement) {
-            // Clear previous data
-            plantDataElement.innerHTML = "";
-            // Display each plant entry
-            plantData.forEach((plant) => {
-                const plantEntry = document.createElement("div");
-                plantEntry.textContent = `Plant: ${plant.plantName}, Location: ${plant.location}`;
-                plantDataElement.appendChild(plantEntry);
-            });
-        } else {
-            console.error("Element to display plant data not found");
-        }
-    };
-
 
     // Flag to track object store creation
     let objectStoreCreated = false;
@@ -255,7 +201,5 @@ document.addEventListener("DOMContentLoaded", function() {
     // Attach event listener to plant form submit button
     const plantForm = document.getElementById("plantForm");
     plantForm.addEventListener("submit", handlePlantSubmission);
-
-
 
 });

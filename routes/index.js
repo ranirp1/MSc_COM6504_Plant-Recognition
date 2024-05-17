@@ -88,18 +88,9 @@ router.post('/', function(req, res, next) {
 
 
 /* GET home page. */
-router.get('/homepage', async function(req, res, next) {
-  try {
-    const allPlants = await plants.getAll();
-    const parsedPlants = JSON.parse(allPlants);
-
-    res.render('homepage', { title: 'Express', plants: parsedPlants });
-  } catch (error) {
-    console.error("Error fetching plants:", error);
-    res.status(500).send("Error fetching plants");
-  }
+router.get('/homepage', function(req, res, next) {
+  res.render('homepage', {title: 'Express'});
 });
-
 
 /* Plant Details */
 router.get('/plantdetails', function(req, res, next) {
