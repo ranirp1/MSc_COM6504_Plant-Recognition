@@ -1,3 +1,5 @@
+const { Toast } = require("bootstrap");
+
 function init() {
     alert("init");
     getSuggestions();
@@ -87,6 +89,7 @@ function updatePlantName(suggestedName) {
             }
             // Clear the chat input field
             document.getElementById('plantName').value = '';
+            alert("Plant name updated");
         })
         .catch(error => {
             console.error('Error:', error);

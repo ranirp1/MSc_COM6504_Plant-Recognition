@@ -1,3 +1,4 @@
+const { Toast } = require('bootstrap');
 const Plant = require('../models/plants');
 
 exports.suggest = async function (plantId, suggestionData) {
