@@ -166,16 +166,18 @@
     function updateDate() {
         // Get the current date and time
         let now = new Date();
-        // Format the current date and time
-        let formattedNow = now.toISOString().slice(0,16);
 
-        // Update the max attribute of the datetime-local input
-        document.getElementById('dateTime').setAttribute('max', formattedNow);
+        // Convert to UK time zone using toLocaleString and parse back to Date
+        let ukTimeString = now.toLocaleString('en-GB', { timeZone: 'Europe/London' });
+        let ukTime = new Date(ukTimeString);
+
+        // Format the UK date and time for datetime-local input
+        let formattedUKTime = ukTime.toISOString().slice(0, 16);
+
+        document.getElementById('dateTime').setAttribute('max', formattedUKTime);
     }
 
-    window.onload = function() {
-        updateDate();
-    };
+    window.onload = updateDate;
 
 
     // document.getElementById('plantForm').addEventListener('submit', function (event) {
