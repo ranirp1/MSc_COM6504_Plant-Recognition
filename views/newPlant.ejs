@@ -305,6 +305,7 @@
 
         requestIDB.onsuccess = function(event) {
             db = event.target.result;
+            fetchPlantData(); // Fetch data on page load
         };
 
         requestIDB.onerror = function(event) {
@@ -347,6 +348,41 @@
                 console.error("Error saving plant data:", event.target.error);
             };
         });
+
+        // Fetch and display plant data from IndexedDB
+        function fetchPlantData() {
+            const transaction = db.transaction(["plants"], "readonly");
+            const plantStore = transaction.objectStore("plants");
+            const request = plantStore.getAll();
+
+            request.onsuccess = function(event) {
+                const plantList = document.getElementById("plantList");
+                plantList.innerHTML = ""; // Clear existing list
+                const plants = event.target.result;
+                plants.forEach(plant => {
+                    const listItem = document.createElement("li");
+                    listItem.className = "list-group-item";
+                    listItem.textContent =
+                        `User: ${plant.userName},
+                        Plant: ${plant.plantName},
+                        Date: ${plant.dateTime},
+                        Description: ${plant.description},
+                        Location: ${plant.location},
+                        Size: ${plant.plantSize},
+                        Type: ${plant.plantType},
+                        Fruit: ${plant.fruitType},
+                        Leaves: ${plant.leavesType},
+                        Sun Exposure: ${plant.sunExposureType},
+                        Color: ${plant.plantColor},
+                        Image: ${plant.imageUpload}`;
+                    plantList.appendChild(listItem);
+                });
+            };
+
+            request.onerror = function(event) {
+                console.error("Error fetching plant data:", event.target.error);
+            };
+        }
     });
 </script>
 
