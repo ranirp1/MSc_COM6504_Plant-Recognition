@@ -1,9 +1,23 @@
 importScripts('/javascripts/chat-idb-utility.js');
 
+// Register the service worker
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker
+            .register('/sw.js')
+            .then(registration => {
+                console.log('Service Worker registered with scope:', registration.scope);
+            })
+            .catch(error => {
+                console.error('Service Worker registration failed:', error);
+            });
+    });
+}
 
 // Use the install event to pre-cache all initial resources.
+console.log('Service Worker Called...');
 self.addEventListener('install', event => {
-    console.log('Service Worker: Installing....');
+    console.log('Service Worker: Installed...');
     event.waitUntil((async () => {
 
         console.log('Service Worker: Caching App Shell at the moment......');
@@ -19,9 +33,8 @@ self.addEventListener('install', event => {
                 '/images/image_icon.png',
             ]);
             console.log('Service Worker: App Shell Cached');
-        }
-        catch{
-            console.log("error occured while caching...")
+        } catch (error) {
+            console.error('Service Worker: Caching App Shell failed:', error);
         }
 
     })());
@@ -29,6 +42,7 @@ self.addEventListener('install', event => {
 
 //clear cache on reload
 self.addEventListener('activate', event => {
+    console.log('Service Worker activated');
 // Remove old caches
     event.waitUntil(
         (async () => {
@@ -59,6 +73,7 @@ self.addEventListener('fetch', event => {
 
 //Sync event to sync the todos
 self.addEventListener('sync', event => {
+    console.log('Syncing:', event.request.url);
     if (event.tag === 'sync-chat') {
         console.log('Service Worker: Syncing new Chats');
         openSyncChatsIDB().then((syncPostDB) => {
